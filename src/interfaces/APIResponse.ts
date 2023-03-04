@@ -1,6 +1,6 @@
 export type DataResSuccess<T> = {
   message: string;
-  result: T;
+  result: T[];
 };
 
 export type APIResSuccess<T> = {
