@@ -14,10 +14,11 @@ import type { EmotionCache } from '@emotion/cache'
 import themeConfig from 'configs/themeConfig'
 
 // ** Component Imports
+import UserLayout from 'layouts/UserLayout'
 import ThemeComponent from '@core/theme/ThemeComponent'
 
 // ** Contexts
-import { SettingsConsumer } from '@core/context/settingsContext'
+import { SettingsConsumer, SettingsProvider } from '@core/context/settingsContext'
 
 // ** Utils Imports
 import { createEmotionCache } from '@core/utils/create-emotion-cache'
@@ -27,13 +28,10 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
-
-import { Fragment } from 'react'
 import type { Page } from '../types/page'
 
 // ** Extend App Props with Emotion
-
-type Props = AppProps & {
+type ExtendedAppProps = AppProps & {
   Component: Page
   emotionCache: EmotionCache
 }
@@ -54,12 +52,11 @@ if (themeConfig.routingLoader) {
 }
 
 // ** Configure JSS & ClassName
-const App = (props: Props) => {
+const App = (props: ExtendedAppProps) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
 
   // Variables
-  const getLayout = Component.getLayout ?? (page => page)
-  const Layout = Component.layout ?? Fragment
+  const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
 
   return (
     <CacheProvider value={emotionCache}>
@@ -73,13 +70,13 @@ const App = (props: Props) => {
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
 
-      <Layout>
+      <SettingsProvider>
         <SettingsConsumer>
           {({ settings }) => {
             return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
           }}
         </SettingsConsumer>
-      </Layout>
+      </SettingsProvider>
     </CacheProvider>
   )
 }
