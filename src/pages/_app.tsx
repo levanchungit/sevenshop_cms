@@ -1,7 +1,6 @@
 // ** Next Imports
 import Head from 'next/head'
 import { Router } from 'next/router'
-import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 
 // ** Loader Import
@@ -15,11 +14,10 @@ import type { EmotionCache } from '@emotion/cache'
 import themeConfig from 'configs/themeConfig'
 
 // ** Component Imports
-import UserLayout from 'layouts/UserLayout'
 import ThemeComponent from '@core/theme/ThemeComponent'
 
 // ** Contexts
-import { SettingsConsumer, SettingsProvider } from '@core/context/settingsContext'
+import { SettingsConsumer } from '@core/context/settingsContext'
 
 // ** Utils Imports
 import { createEmotionCache } from '@core/utils/create-emotion-cache'
@@ -30,9 +28,13 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 // ** Global css styles
 import '../../styles/globals.css'
 
+import { Fragment } from 'react'
+import type { Page } from '../types/page'
+
 // ** Extend App Props with Emotion
-type ExtendedAppProps = AppProps & {
-  Component: NextPage
+
+type Props = AppProps & {
+  Component: Page
   emotionCache: EmotionCache
 }
 
@@ -52,11 +54,12 @@ if (themeConfig.routingLoader) {
 }
 
 // ** Configure JSS & ClassName
-const App = (props: ExtendedAppProps) => {
+const App = (props: Props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
 
   // Variables
-  const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
+  const getLayout = Component.getLayout ?? (page => page)
+  const Layout = Component.layout ?? Fragment
 
   return (
     <CacheProvider value={emotionCache}>
@@ -70,13 +73,13 @@ const App = (props: ExtendedAppProps) => {
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
 
-      <SettingsProvider>
+      <Layout>
         <SettingsConsumer>
           {({ settings }) => {
             return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
           }}
         </SettingsConsumer>
-      </SettingsProvider>
+      </Layout>
     </CacheProvider>
   )
 }
