@@ -21,7 +21,7 @@ const authAPI = {
     return axiosClient.post(API_ROUTES.logout, payload)
   },
 
-  async getProduct() {
+  async getProducts() {
     const result = await axiosClient.get(API_ROUTES.getProducts)
 
     return result

@@ -1,10 +1,10 @@
 // ** React Imports
-import { ChangeEvent, MouseEvent, ReactNode, useState } from 'react'
+import { MouseEvent, ReactNode, useState } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
 
-// import { useRouter } from 'next/router'
+import Router from 'next/router'
 
 // ** MUI Components
 import Box from '@mui/material/Box'
@@ -42,11 +42,6 @@ import FooterIllustrationsV1 from 'views/pages/auth/FooterIllustration'
 import { authAPI } from 'modules'
 import { SignInPayload } from 'interfaces/Auth'
 
-interface State {
-  password: string
-  showPassword: boolean
-}
-
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
@@ -67,31 +62,18 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
 
 const LoginPage = () => {
   // ** State
-  const [values, setValues] = useState<State>({
-    password: '',
-    showPassword: false
-  })
+  const [passwordVisible, setPasswordVisible] = useState(true)
 
-  const [formData] = useState<SignInPayload>({
-    email: 'ryanvo.0162@gmail.com',
-    password: '123456'
+  const [formData, setFormData] = useState<SignInPayload>({
+    email: 'levanchunq123@gmail.com',
+    password: '123'
   })
 
   const onSubmit = async () => {
     try {
       const response = await authAPI.login(formData)
       console.log(response)
-      console.log(response.data.message)
-    } catch (e: any) {
-      console.log(e.response?.data?.message)
-    }
-  }
-
-  const onGetMe = async () => {
-    try {
-      const response = await authAPI.me()
-      console.log(response)
-      console.log(response.data.message)
+      Router.push('/')
     } catch (e: any) {
       console.log(e.response?.data?.message)
     }
@@ -100,14 +82,6 @@ const LoginPage = () => {
   // ** Hook
   // const theme = useTheme()
   // const router = useRouter()
-
-  const handleChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
-  }
 
   const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -144,24 +118,36 @@ const LoginPage = () => {
             <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='email' label='Email' sx={{ marginBottom: 4 }} />
+            <TextField
+              value={formData.email}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                setFormData({ ...formData, email: event.target.value })
+              }
+              autoFocus
+              fullWidth
+              id='email'
+              label='Email'
+              sx={{ marginBottom: 4 }}
+            />
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
               <OutlinedInput
                 label='Password'
-                value={values.password}
+                value={formData.password}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  setFormData({ ...formData, password: event.target.value })
+                }
                 id='auth-login-password'
-                onChange={handleChange('password')}
-                type={values.showPassword ? 'text' : 'password'}
+                type={!passwordVisible ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
                       edge='end'
-                      onClick={handleClickShowPassword}
+                      onClick={() => setPasswordVisible(!passwordVisible)}
                       onMouseDown={handleMouseDownPassword}
                       aria-label='toggle password visibility'
                     >
-                      {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                      {!passwordVisible ? <EyeOutline /> : <EyeOffOutline />}
                     </IconButton>
                   </InputAdornment>
                 }

@@ -1,7 +1,7 @@
-import { useRouter } from 'next/router'
 import { API_ROUTES } from './../../global/constants/apiRoutes'
 import axios, { AxiosInstance } from 'axios'
 import { API_URL } from 'global/config'
+import Router from 'next/router'
 
 function createAxiosClient(): AxiosInstance {
   const axiosClient = axios.create({
@@ -32,7 +32,7 @@ function createAxiosClient(): AxiosInstance {
     async error => {
       const originalRequest = error.config
       const refresh_token = localStorage.getItem('refresh_token')
-      if (error.response.status === 401 && originalRequest.url !== API_ROUTES.refresh_token && refresh_token) {
+      if (error.response.status === 401 && originalRequest.url !== API_ROUTES.refresh_token) {
         // Gửi request mới để lấy access token mới
         try {
           const response = await axios.post(API_URL + API_ROUTES.refresh_token, { refresh_token })
@@ -47,10 +47,13 @@ function createAxiosClient(): AxiosInstance {
           // Xóa các token nếu refresh token bị lỗi
           localStorage.removeItem('access_token')
           localStorage.removeItem('refresh_token')
-          useRouter().push('/login/')
+          Router.push('/login')
 
           return Promise.reject(error)
         }
+      } else if (error.response.status === 400 && originalRequest.url !== API_ROUTES.refresh_token) {
+        //Refresh token hết hạn
+        Router.push('/login')
       }
 
       return Promise.reject(error)
