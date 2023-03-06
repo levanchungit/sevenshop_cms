@@ -61,3 +61,38 @@ export type GetProductData = {
   price: number
   quantity: number
 }
+
+export type PropertiesProductData = {
+  color_id: string
+  size_id: string
+  quantity: number
+}
+
+export type CreateProductData = {
+  name: string
+  price: number
+  price_sale: number
+  description: string
+  images: string[]
+  active: boolean
+  properties_type: PropertiesProductData[]
+  categories_type: string
+}
+
+export type MetaDataDetail = {
+  _id: string
+  code_name: string
+  meta_data_id: string
+  active: boolean
+  num1: string
+  num2: number
+  num3: number
+  num4: string
+  num5: number
+  eng: string
+  kr: string
+  create_at: string
+  create_by: string
+  modify_at: string
+  modify_by: string
+}

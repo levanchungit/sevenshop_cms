@@ -20,7 +20,6 @@ const Products = () => {
     try {
       const response = await authAPI.getProducts()
       setProducts(response.data.result)
-      console.log(response.data.result)
     } catch (e: any) {
       console.log(e.response?.data?.message)
     }
@@ -28,7 +27,6 @@ const Products = () => {
 
   return (
     <ApexChartWrapper>
-      {console.log('PRODUCTS', products)}
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <TableProducts data={products} />

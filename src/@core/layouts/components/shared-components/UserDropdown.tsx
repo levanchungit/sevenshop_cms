@@ -47,7 +47,6 @@ const UserDropdown = () => {
     try {
       const response = await authAPI.me()
       setInfo(response.data.result)
-      console.log(response)
     } catch (e: any) {
       console.log(e.response?.data?.message)
     }
@@ -55,6 +54,17 @@ const UserDropdown = () => {
 
   const handleDropdownOpen = (event: SyntheticEvent) => {
     setAnchorEl(event.currentTarget)
+  }
+
+  const onLogout = async () => {
+    try {
+      const refresh_token = localStorage.getItem('refresh_token')
+      const response = await authAPI.logout({ refresh_token })
+      console.log(response.data.message)
+      handleDropdownClose('/login')
+    } catch (e: any) {
+      console.log(e.response?.data?.message)
+    }
   }
 
   const handleDropdownClose = (url?: string) => {
@@ -159,7 +169,7 @@ const UserDropdown = () => {
           </Box>
         </MenuItem>
         <Divider />
-        <MenuItem sx={{ py: 2 }} onClick={() => handleDropdownClose('/login')}>
+        <MenuItem sx={{ py: 2 }} onClick={onLogout}>
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>

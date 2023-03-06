@@ -10,5 +10,7 @@ export const API_ROUTES = {
 
   // product
   getProducts: `/product/`,
-};
-export default API_ROUTES;
+  getCategories: `/meta_data/getDetailByMetaDataId/`,
+  createProduct: `/product/createProduct`
+}
+export default API_ROUTES
