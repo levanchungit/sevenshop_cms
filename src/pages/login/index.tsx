@@ -1,35 +1,29 @@
 // ** React Imports
-import { MouseEvent, ReactNode, useState } from 'react'
+import { MouseEvent, ReactNode, useState, useContext } from 'react'
 
 // ** Next Imports
-import Link from 'next/link'
-
 import Router from 'next/router'
 
 // ** MUI Components
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Divider from '@mui/material/Divider'
-import Checkbox from '@mui/material/Checkbox'
-import TextField from '@mui/material/TextField'
-import InputLabel from '@mui/material/InputLabel'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import CardContent from '@mui/material/CardContent'
-import FormControl from '@mui/material/FormControl'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import Alert from '@mui/material/Alert'
+import {
+  Box,
+  Button,
+  Checkbox,
+  TextField,
+  InputLabel,
+  Typography,
+  IconButton,
+  CardContent,
+  FormControl,
+  OutlinedInput,
+  InputAdornment
+} from '@mui/material'
+
 import { styled } from '@mui/material/styles'
 import MuiCard, { CardProps } from '@mui/material/Card'
-import Snackbar from '@mui/material/Snackbar'
-import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel'
 
 // ** Icons Imports
-import Google from 'mdi-material-ui/Google'
-import Github from 'mdi-material-ui/Github'
-import Twitter from 'mdi-material-ui/Twitter'
-import Facebook from 'mdi-material-ui/Facebook'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
@@ -43,16 +37,11 @@ import BlankLayout from '@core/layouts/BlankLayout'
 import FooterIllustrationsV1 from 'views/pages/auth/FooterIllustration'
 import { authAPI } from 'modules'
 import { SignInPayload } from 'interfaces/Auth'
+import { SettingsContext } from '@core/context/settingsContext'
 
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
-}))
-
-const LinkStyled = styled('a')(({ theme }) => ({
-  fontSize: '0.875rem',
-  textDecoration: 'none',
-  color: theme.palette.primary.main
 }))
 
 const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ theme }) => ({
@@ -65,40 +54,21 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
 const LoginPage = () => {
   // ** State
   const [passwordVisible, setPasswordVisible] = useState(true)
-  const [noti, setNoti] = useState('')
-
   const [formData, setFormData] = useState<SignInPayload>({
     email: 'levanchunq123@gmail.com',
     password: '123'
   })
-
-  const [openNoti, setOpenNoti] = useState(false)
-
-  const handleCloseNoti = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setOpenNoti(false)
-  }
+  const { setSnackbarAlert } = useContext(SettingsContext)
 
   const onSubmit = async () => {
     try {
       const response = await authAPI.login(formData)
-      console.log(response)
-      setNoti(response.data.message)
-      setOpenNoti(true)
-      if (response.status == 200) {
-        setTimeout(() => Router.push('/'), 3000)
-      }
+      setSnackbarAlert({ message: response.data.message, severity: 'success' })
+      Router.push('/')
     } catch (e: any) {
-      setNoti(e.response?.data?.message)
+      setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
     }
   }
-
-  // ** Hook
-  // const theme = useTheme()
-  // const router = useRouter()
 
   const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -175,63 +145,15 @@ const LoginPage = () => {
                 sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
               >
                 <FormControlLabel control={<Checkbox />} label='Remember Me' />
-                <Link passHref href='/'>
-                  <LinkStyled onClick={e => e.preventDefault()}>Forgot Password?</LinkStyled>
-                </Link>
               </Box>
               <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }} onClick={onSubmit}>
                 Login
               </Button>
-              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-                <Typography variant='body2' sx={{ marginRight: 2 }}>
-                  New on our platform?
-                </Typography>
-                <Typography variant='body2'>
-                  <Link passHref href='/register'>
-                    <LinkStyled>Create an account</LinkStyled>
-                  </Link>
-                </Typography>
-              </Box>
-              <Divider sx={{ my: 5 }}>or</Divider>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Link href='/' passHref>
-                  <IconButton component='a' onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}>
-                    <Facebook sx={{ color: '#497ce2' }} />
-                  </IconButton>
-                </Link>
-                <Link href='/' passHref>
-                  <IconButton component='a' onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}>
-                    <Twitter sx={{ color: '#1da1f2' }} />
-                  </IconButton>
-                </Link>
-                <Link href='/' passHref>
-                  <IconButton component='a' onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}>
-                    <Github
-                      sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : theme.palette.grey[300]) }}
-                    />
-                  </IconButton>
-                </Link>
-                <Link href='/' passHref>
-                  <IconButton component='a' onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}>
-                    <Google sx={{ color: '#db4437' }} />
-                  </IconButton>
-                </Link>
-              </Box>
             </form>
           </CardContent>
         </Card>
         <FooterIllustrationsV1 />
       </Box>
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={openNoti}
-        autoHideDuration={2000}
-        onClose={handleCloseNoti}
-      >
-        <Alert onClose={handleCloseNoti} severity='success' sx={{ width: '100%' }}>
-          {noti}
-        </Alert>
-      </Snackbar>
     </>
   )
 }

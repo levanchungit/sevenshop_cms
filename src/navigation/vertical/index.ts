@@ -6,7 +6,6 @@ import {
   CartOutline,
   AccountOutline,
   TruckOutline,
-  HomeOutline,
   FormatLetterCase,
   AccountPlusOutline,
   TuneVariant,
@@ -16,6 +15,9 @@ import {
   ChartBoxOutline
 } from 'mdi-material-ui'
 
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import ViewInArIcon from '@mui/icons-material/ViewInAr'
+
 // ** Type import
 import { VerticalNavItemsType } from '@core/layouts/types'
 
@@ -23,7 +25,7 @@ const navigation = (): VerticalNavItemsType => {
   return [
     {
       title: 'Dashboard',
-      icon: HomeOutline,
+      icon: DashboardIcon,
       path: '/'
     },
     {
@@ -38,7 +40,7 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'Products',
-      icon: ChartBoxOutline,
+      icon: ViewInArIcon,
       path: '/products'
     },
     {
@@ -65,18 +67,6 @@ const navigation = (): VerticalNavItemsType => {
       sectionTitle: 'Pages'
     },
     {
-      title: 'Login',
-      icon: Login,
-      path: '/login',
-      openInNewTab: true
-    },
-    {
-      title: 'Register',
-      icon: AccountPlusOutline,
-      path: '/register',
-      openInNewTab: true
-    },
-    {
       title: 'Error',
       icon: AlertCircleOutline,
       path: '/error',
@@ -86,29 +76,9 @@ const navigation = (): VerticalNavItemsType => {
       sectionTitle: 'User Interface'
     },
     {
-      title: 'Typography',
-      icon: FormatLetterCase,
-      path: '/typography'
-    },
-    {
-      title: 'Icons',
-      path: '/icons',
-      icon: GoogleCirclesExtended
-    },
-    {
       title: 'Cards',
       icon: CreditCardOutline,
       path: '/cards'
-    },
-    {
-      title: 'Tables',
-      icon: Table,
-      path: '/tables'
-    },
-    {
-      icon: CubeOutline,
-      title: 'Form Layouts',
-      path: '/form-layouts'
     }
   ]
 }

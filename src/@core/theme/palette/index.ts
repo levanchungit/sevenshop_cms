@@ -14,11 +14,11 @@ const DefaultPalette = (mode: PaletteMode, themeColor: ThemeColor) => {
     } else if (themeColor === 'secondary') {
       return '#9C9FA4'
     } else if (themeColor === 'success') {
-      return '#93DD5C'
+      return '#28a745'
     } else if (themeColor === 'error') {
-      return '#FF8C90'
+      return '#dc3545'
     } else if (themeColor === 'warning') {
-      return '#FFCF5C'
+      return '#ffc107'
     } else {
       return '#6ACDFF'
     }

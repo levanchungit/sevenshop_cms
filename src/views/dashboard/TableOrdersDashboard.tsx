@@ -19,10 +19,12 @@ import {
   ToggleButton,
   Link
 } from '@mui/material'
-import { EditOutlined, DeleteOutlineOutlined, Check } from '@mui/icons-material'
-import { useState, useEffect, ChangeEvent, Fragment, useCallback, useContext } from 'react'
+import CheckIcon from '@mui/icons-material/Check'
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
+import { useState, useEffect, ChangeEvent, Fragment, useContext } from 'react'
 import * as React from 'react'
-import { MetaDataDetail, ProductData, PropertiesProductData } from 'interfaces/Auth'
+import { CreateProductData, MetaDataDetail, ProductData, PropertiesProductData } from 'interfaces/Auth'
 import { authAPI } from 'modules'
 
 import {
@@ -35,9 +37,7 @@ import {
   GridToolbar
 } from '@mui/x-data-grid'
 import { currencyFormatterVND } from 'utils/currencyFormatter'
-import useCMSGetProducts from 'hook/product/useCMSGetProducts'
 import { SettingsContext } from '@core/context/settingsContext'
-import { useRouter } from 'next/router'
 
 // ** Types Imports
 
@@ -51,124 +51,23 @@ const style = {
   p: 4
 }
 
-const TableProducts = () => {
-  const router = useRouter()
-  const { data, error, isLoading, mutate } = useCMSGetProducts()
-  const [openModalCreate, setOpenModalCreate] = useState(false)
+const TableOrders = (props: any) => {
+  const [open, setOpen] = useState(false)
   const [categories, setCategories] = useState<MetaDataDetail[]>([])
   const [colors, setColors] = useState<MetaDataDetail[]>([])
   const [sizes, setSizes] = useState<MetaDataDetail[]>([])
-  const [formData, setFormData] = useState<ProductData>({
-    name: '',
-    price: 0,
-    price_sale: 0,
-    description: '',
-    active: true,
-    categories_type: '',
-    storage_quantity: 0,
-    images: [],
-    properties_type: [],
-    create_at: '',
-    create_by: '',
-    modify_at: '',
-    modify_by: ''
-  })
-  const [openCategories, setOpenCategories] = useState(false)
-  const loading = openCategories && categories.length === 0
   const { setSnackbarAlert } = useContext(SettingsContext)
 
-  useEffect(() => {
-    getColors()
-    getSizes()
-    if (!openCategories) {
-      setCategories([])
-    }
-  }, [openCategories])
-
-  useEffect(() => {
-    getCategories()
-  }, [loading])
-
-  const editProduct = useCallback(
-    (_id: GridRowId) => () => {
-      router.push(`/products/${_id}`)
-    },
-    []
-  )
-
-  const deleteProduct = useCallback(
-    (_id: GridRowId) => () => {
-      setTimeout(() => {
-        console.log(_id)
-      })
-    },
-    []
-  )
-
-  const getCategories = async () => {
-    try {
-      const response = await authAPI.getCategories()
-      setCategories(response.data)
-    } catch (e: any) {
-      setSnackbarAlert({ message: e.response.data.message, severity: 'error' })
-    }
-  }
-
-  const getColors = async () => {
-    try {
-      const response = await authAPI.getColors()
-      setColors(response.data)
-    } catch (e: any) {
-      setSnackbarAlert({ message: e.response.data.message, severity: 'error' })
-    }
-  }
-
-  const getSizes = async () => {
-    try {
-      const response = await authAPI.getSizes()
-      setSizes(response.data)
-    } catch (e: any) {
-      setSnackbarAlert({ message: e.response.data.message, severity: 'error' })
-    }
-  }
-
-  if (error) return <Box>Failed to load</Box>
-  if (!data)
-    return (
-      <div style={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
-        <CircularProgress />
-        <Typography mx={5}>Loading...</Typography>
-      </div>
-    )
-
-  const handleOpenModalCreate = () => setOpenModalCreate(true)
-  const handleCloseModalCreate = () => {
-    setOpenModalCreate(false)
-    setFormData({
-      _id: '',
-      name: '',
-      price: 0,
-      price_sale: 0,
-      description: '',
-      active: true,
-      categories_type: '',
-      storage_quantity: 0,
-      images: [],
-      properties_type: [],
-      create_at: '',
-      create_by: '',
-      modify_at: '',
-      modify_by: ''
-    })
-  }
-
+  // const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
   const ExpandableCell = ({ value }: GridRenderCellParams) => {
     const [expanded, setExpanded] = React.useState(false)
 
     return (
       <Box>
-        {/* {/* {expanded ? value : value.toString().slice(0, 50)}&nbsp; */}
+        {expanded ? value : value.toString().slice(0, 50)}&nbsp;
         {value.length > 50 && (
+          // eslint-disable-next-line jsx-a11y/anchor-is-valid
           <Link type='button' component='button' sx={{ fontSize: 'inherit' }} onClick={() => setExpanded(!expanded)}>
             {expanded ? 'view less' : 'view more'}
           </Link>
@@ -177,7 +76,7 @@ const TableProducts = () => {
     )
   }
 
-  const _rows = data.map((row: ProductData) => {
+  const _rows = props.data.map((row: ProductData) => {
     return {
       id: row._id,
       name: row.name,
@@ -279,20 +178,22 @@ const TableProducts = () => {
         <GridActionsCellItem
           color='primary'
           key={params.id}
-          icon={<EditOutlined />}
+          icon={<EditOutlinedIcon />}
           onClick={editProduct(params.id)}
           label='Edit'
         />,
         <GridActionsCellItem
           color='primary'
           key={params.id}
-          icon={<DeleteOutlineOutlined />}
+          icon={<DeleteOutlineOutlinedIcon />}
           onClick={deleteProduct(params.id)}
           label='Delete'
         />
       ]
     }
   ]
+
+  const properties_num = 1
 
   const properties: PropertiesProductData = {
     color_id: '',
@@ -301,43 +202,112 @@ const TableProducts = () => {
     id: ''
   }
 
-  const handleCreateProduct = async (e: any) => {
-    e.preventDefault()
-    await authAPI.createProduct(formData)
-    mutate()
-    setSnackbarAlert({ message: 'Product created successfully', severity: 'success' })
-    handleCloseModalCreate()
+  const [formData, setFormData] = useState<CreateProductData>({
+    name: '',
+    price: 0,
+    price_sale: 0,
+    description: '',
+    active: true,
+    categories_type: '',
+    images: [],
+    properties_type: []
+  })
+  const [openCategories, setOpenCategories] = useState(false)
+  const loading = openCategories && categories.length === 0
+
+  useEffect(() => {
+    getColors()
+    getSizes()
+    if (!openCategories) {
+      setCategories([])
+    }
+  }, [openCategories])
+
+  useEffect(() => {
+    getCategories()
+  }, [loading])
+
+  const getCategories = async () => {
+    try {
+      const response = await authAPI.getCategories()
+      setCategories(response.data)
+    } catch (e: any) {
+      setSnackbarAlert({ message: e.response.data.message, severity: 'error' })
+    }
   }
+
+  const getColors = async () => {
+    try {
+      const response = await authAPI.getColors()
+      setColors(response.data)
+    } catch (e: any) {
+      setSnackbarAlert({ message: e.response.data.message, severity: 'error' })
+    }
+  }
+
+  const getSizes = async () => {
+    try {
+      const response = await authAPI.getSizes()
+      setSizes(response.data)
+    } catch (e: any) {
+      setSnackbarAlert({ message: e.response.data.message, severity: 'error' })
+    }
+  }
+
+  const onCreateProduct = async (event: any) => {
+    event.preventDefault()
+    try {
+      setFormData({ ...formData, properties_type: [...formData.properties_type, properties] })
+      const response = await authAPI.createProduct(formData)
+      setSnackbarAlert({ message: response.data.message, severity: 'success' })
+    } catch (e: any) {
+      setSnackbarAlert({ message: e.response.data.message, severity: 'error' })
+    }
+  }
+
+  const editProduct = React.useCallback(
+    (_id: GridRowId) => () => {
+      setTimeout(() => {
+        console.log('EDIT PRODUCT', _id)
+      })
+    },
+    []
+  )
+
+  const deleteProduct = React.useCallback(
+    (_id: GridRowId) => () => {
+      setTimeout(() => {
+        console.log('DELETE PRODUCT', _id)
+      })
+    },
+    []
+  )
 
   return (
     <>
-      <Grid my={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant='contained' component='label' onClick={handleOpenModalCreate} aria-label='add'>
-          Create Product
-        </Button>
-      </Grid>
-
       <Card style={{ width: '100%' }}>
         <DataGrid
-          getRowId={row => row.id}
+          key={_rows._id}
           rows={_rows}
           columns={_columns}
           slots={{ toolbar: GridToolbar }}
+          autoHeight
+          getEstimatedRowHeight={() => 200}
+          getRowHeight={() => 'auto'}
           sx={{
             '& .MuiDataGrid-row:hover': {
               color: 'primary.main',
               border: '1px solid red'
-            },
-            minHeight: 682
+            }
           }}
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 10
+                pageSize: 5
               }
             }
           }}
-          pageSizeOptions={[10]}
+          pageSizeOptions={[5]}
           checkboxSelection
         />
       </Card>
@@ -345,16 +315,16 @@ const TableProducts = () => {
       <Modal
         aria-labelledby='transition-modal-title'
         aria-describedby='transition-modal-description'
-        open={openModalCreate}
-        onClose={handleCloseModalCreate}
+        open={open}
+        onClose={handleClose}
         closeAfterTransition
       >
-        <Fade in={openModalCreate}>
+        <Fade in={open}>
           <Box sx={style}>
             <Card>
               <CardHeader title='Create New Product' titleTypographyProps={{ variant: 'h6' }} />
               <CardContent>
-                <form onSubmit={handleCreateProduct}>
+                <form onSubmit={onCreateProduct}>
                   <Grid container spacing={5}>
                     <Grid item xs={12} container direction='row' justifyContent='center' alignItems='center'>
                       <Button variant='contained' component='label'>
@@ -467,7 +437,7 @@ const TableProducts = () => {
 
                     <Grid item container xs={12}>
                       <Grid item my={5} xs={12}>
-                        Properties
+                        Properties {properties_num}
                       </Grid>
 
                       <Grid item xs={4}>
@@ -493,7 +463,7 @@ const TableProducts = () => {
                                 backgroundColor: item.num1
                               }}
                             >
-                              <Check
+                              <CheckIcon
                                 sx={{
                                   ':hover': {
                                     color: item.num1 == '#FFFFFF' ? 'black' : 'white'
@@ -585,4 +555,4 @@ const TableProducts = () => {
     </>
   )
 }
-export default TableProducts
+export default TableOrders

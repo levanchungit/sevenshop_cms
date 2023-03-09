@@ -22,9 +22,9 @@ const authAPI = {
   },
 
   async getProducts() {
-    const result = await axiosClient.get(API_ROUTES.getProducts)
+    const response = await axiosClient.get(API_ROUTES.getProducts)
 
-    return result
+    return response.data.result
   },
 
   async getCategories() {
@@ -52,7 +52,15 @@ const authAPI = {
   },
 
   async createProduct(payload: CreateProductData) {
-    return await axiosClient.post(API_ROUTES.createProduct, payload)
+    const response = await axiosClient.post(API_ROUTES.createProduct, payload)
+
+    return response
+  },
+
+  async getProductDetail(id: string) {
+    const response = await axiosClient.get(API_ROUTES.getProductDetail + id)
+
+    return response.data.result
   }
 }
 

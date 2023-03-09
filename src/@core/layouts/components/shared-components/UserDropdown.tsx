@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, SyntheticEvent, Fragment, useEffect } from 'react'
+import { useState, SyntheticEvent, Fragment, useEffect, useContext } from 'react'
 
 // ** Next Import
 
@@ -24,6 +24,7 @@ import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
 import Router from 'next/router'
 import { authAPI } from 'modules'
 import { GetMeSuccessData } from 'interfaces/Auth'
+import { SettingsContext } from '@core/context/settingsContext'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -38,6 +39,7 @@ const UserDropdown = () => {
   // ** States
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
   const [info, setInfo] = useState<GetMeSuccessData>()
+  const { setSnackbarAlert } = useContext(SettingsContext)
 
   useEffect(() => {
     getMe()
@@ -48,7 +50,7 @@ const UserDropdown = () => {
       const response = await authAPI.me()
       setInfo(response.data.result)
     } catch (e: any) {
-      console.log(e.response?.data?.message)
+      setSnackbarAlert({ message: e.response.data.message, severity: 'error' })
     }
   }
 
@@ -60,10 +62,11 @@ const UserDropdown = () => {
     try {
       const refresh_token = localStorage.getItem('refresh_token')
       const response = await authAPI.logout({ refresh_token })
-      console.log(response.data.message)
+      setSnackbarAlert({ message: response.data.message, severity: 'success' })
+
       handleDropdownClose('/login')
     } catch (e: any) {
-      console.log(e.response?.data?.message)
+      setSnackbarAlert({ message: e.response.data.message, severity: 'error' })
     }
   }
 
