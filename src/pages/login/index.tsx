@@ -66,8 +66,6 @@ const LoginPage = () => {
     setBtnLoginLoading(true)
     try {
       const response = await authAPI.login(formData)
-      console.log(response)
-
       localStorage.setItem('access_token', response.data.access_token)
       localStorage.setItem('refresh_token', response.data.refresh_token)
       setSnackbarAlert({ message: response.data.message, severity: 'success' })

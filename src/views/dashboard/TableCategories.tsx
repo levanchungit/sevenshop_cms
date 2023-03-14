@@ -17,7 +17,7 @@ import {
 import { EditOutlined, DeleteOutlineOutlined } from '@mui/icons-material'
 import { useState, Fragment, useCallback, useContext } from 'react'
 import * as React from 'react'
-import { authAPI } from 'modules'
+import { productsAPI } from 'modules'
 import {
   GridRenderCellParams,
   GridRowParams,
@@ -53,7 +53,7 @@ const TableCategories = () => {
     setDialogCofirm(false)
   }
   const handleDeleteProduct = async () => {
-    await authAPI.deleteProduct(idProduct as string)
+    await productsAPI.deleteProduct(idProduct as string)
     mutate()
     setSnackbarAlert({ message: 'Delete Product Successfully', severity: 'success' })
     handleCloseDialogCofirm()

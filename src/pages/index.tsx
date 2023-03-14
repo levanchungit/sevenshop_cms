@@ -12,7 +12,7 @@ import WeeklyOverview from 'views/dashboard/WeeklyOverview'
 import TableOrders from 'views/dashboard/TableOrdersDashboard'
 import { API_ROUTES } from 'global/constants'
 import useSWR from 'swr'
-import { authAPI } from 'modules'
+import { authAPI, productsAPI } from 'modules'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
@@ -182,7 +182,7 @@ const _columns: GridColDef[] = [
 ]
 
 const Dashboard = () => {
-  const { data, error } = useSWR(API_ROUTES.getProducts, authAPI.getProducts)
+  const { data, error } = useSWR(API_ROUTES.getProducts, productsAPI.getProducts)
 
   if (error) return <Box>Failed to load</Box>
   if (!data)

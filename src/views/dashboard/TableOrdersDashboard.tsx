@@ -24,7 +24,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import { useState, useEffect, ChangeEvent, Fragment, useContext } from 'react'
 import * as React from 'react'
-import { authAPI } from 'modules'
+import { authAPI, categoriesAPI, colorsAPI, sizesAPI } from 'modules'
 
 import {
   GridRenderCellParams,
@@ -228,7 +228,7 @@ const TableOrders = (props: any) => {
 
   const getCategories = async () => {
     try {
-      const response = await authAPI.getCategories()
+      const response = await categoriesAPI.getCategories()
       setCategories(response.data)
     } catch (e: any) {
       setSnackbarAlert({ message: e.response.data.message, severity: 'error' })
@@ -237,7 +237,7 @@ const TableOrders = (props: any) => {
 
   const getColors = async () => {
     try {
-      const response = await authAPI.getColors()
+      const response = await colorsAPI.getColors()
       setColors(response.data)
     } catch (e: any) {
       setSnackbarAlert({ message: e.response.data.message, severity: 'error' })
@@ -246,7 +246,7 @@ const TableOrders = (props: any) => {
 
   const getSizes = async () => {
     try {
-      const response = await authAPI.getSizes()
+      const response = await sizesAPI.getSizes()
       setSizes(response.data)
     } catch (e: any) {
       setSnackbarAlert({ message: e.response.data.message, severity: 'error' })

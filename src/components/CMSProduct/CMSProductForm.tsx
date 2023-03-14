@@ -13,7 +13,7 @@ import {
 import { Form, FormikProvider } from 'formik'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useContext } from 'react'
 import { CreateCmsProductPayload, EditCmsProductPayload } from 'interfaces/Product'
 import { useFormikCustom } from 'hook/lib'
 import { APP_ROUTES, FORM_TYPES } from 'global/constants/index'
@@ -21,8 +21,9 @@ import { InputField } from 'components/CustomFields'
 import useCMSGetCategories from 'hook/category/useCMSGetCategories'
 import useCMSGetColors from 'hook/color/useCMSGetColors'
 import useCMSGetSizes from 'hook/size/useCMSGetSizes'
-import { authAPI } from 'modules'
+import { productsAPI } from 'modules'
 import isObject from 'lodash/isObject'
+import { SettingsContext } from '@core/context/settingsContext'
 
 function isEditForm(value: unknown): value is EditCmsProductPayload {
   return isObject(value) && '_id' in value ? !!value._id : false
@@ -33,9 +34,11 @@ interface Props {
   type: keyof typeof FORM_TYPES
 }
 
-export default function CMSCategoryForm(props: Props) {
+export default function CMSProductForm(props: Props) {
   const { initialValues, type } = props
+  console.log(initialValues)
   const router = useRouter()
+  const { setSnackbarAlert } = useContext(SettingsContext)
   const { cms_categories, error: err_categories, isLoading: loading_categories } = useCMSGetCategories()
   const { cms_colors, error: err_colors } = useCMSGetColors()
   const { cms_sizes, error: err_sizes } = useCMSGetSizes()
@@ -67,20 +70,20 @@ export default function CMSCategoryForm(props: Props) {
       size_ids: yup.array().required().min(1, 'Min 1 element')
     }),
     onSubmit: async (data, actions) => {
-      console.log('SUBMIT')
-
-      console.log(data)
       try {
         if (type === FORM_TYPES.create) {
-          await authAPI.createProduct(data)
+          const response = await productsAPI.createProduct(data)
+          if (response.status === 200) {
+            setSnackbarAlert({ message: 'Add product successfully', severity: 'success' })
+          }
           await router.push({ pathname: APP_ROUTES.cmsProducts })
         }
         if (type === FORM_TYPES.edit && isEditForm(data)) {
-          await authAPI.updateProduct(data._id, data)
+          await productsAPI.updateProduct(data._id, data)
           await router.push({ pathname: APP_ROUTES.cmsProductEdit + data._id })
         }
-      } catch (e) {
-        console.log(e)
+      } catch (e: any) {
+        setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
       } finally {
         actions.setSubmitting(false)
       }
@@ -128,7 +131,14 @@ export default function CMSCategoryForm(props: Props) {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <InputField label='Name' required placeholder='Name' fullWidth {...getFieldPropsCustom('name')} />
+              <InputField
+                label='Name'
+                required
+                placeholder='Name'
+                defaultValue={initialValues?.name}
+                fullWidth
+                {...getFieldPropsCustom('name')}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
               <InputField

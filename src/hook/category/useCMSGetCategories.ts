@@ -1,7 +1,7 @@
 import { CmsCategory } from 'interfaces/Category'
 import { APIResError } from 'interfaces/APIResponse'
 import { API_ROUTES } from 'global/constants'
-import { authAPI } from 'modules'
+import { categoriesAPI } from 'modules'
 import useSWR, { SWRResponse } from 'swr'
 import { Maybe } from 'utils/types'
 
@@ -15,7 +15,7 @@ interface UseCMSCategories extends Omit<SWRResponse<SWRData, SWRError>, 'data'> 
 const SWR_KEY = API_ROUTES.getCategories
 
 const fetcher = async () => {
-  const result = await authAPI.getCategories()
+  const result = await categoriesAPI.getCategories()
 
   return result
 }

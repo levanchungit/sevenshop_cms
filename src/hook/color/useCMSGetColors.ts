@@ -1,6 +1,6 @@
 import { CmsColor } from './../../interfaces/Color'
 import { API_ROUTES } from 'global/constants'
-import { authAPI } from 'modules'
+import { colorsAPI } from 'modules'
 import useSWR, { SWRResponse } from 'swr'
 import { Maybe } from 'utils/types'
 import { APIResError } from 'interfaces/APIResponse'
@@ -15,7 +15,7 @@ interface UseCMSColor extends Omit<SWRResponse<SWRData, SWRError>, 'data'> {
 const SWR_KEY = API_ROUTES.getColors
 
 const fetcher = async () => {
-  const result = await authAPI.getColors()
+  const result = await colorsAPI.getColors()
 
   return result
 }

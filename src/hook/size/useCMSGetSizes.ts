@@ -1,7 +1,7 @@
 import { Maybe } from 'utils/types'
 import { CmsSize } from './../../interfaces/Size'
 import { API_ROUTES } from 'global/constants'
-import { authAPI } from 'modules'
+import { authAPI, sizesAPI } from 'modules'
 import useSWR, { SWRResponse } from 'swr'
 import { APIResError } from 'interfaces/APIResponse'
 
@@ -15,7 +15,7 @@ interface UseCMSSize extends Omit<SWRResponse<SWRData, SWRError>, 'data'> {
 const SWR_KEY = API_ROUTES.getSizes
 
 const fetcher = async () => {
-  const result = await authAPI.getSizes()
+  const result = await sizesAPI.getSizes()
 
   return result
 }
