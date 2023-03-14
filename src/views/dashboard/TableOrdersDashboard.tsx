@@ -24,7 +24,6 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import { useState, useEffect, ChangeEvent, Fragment, useContext } from 'react'
 import * as React from 'react'
-import { CreateProductData, MetaDataDetail, ProductData, PropertiesProductData } from 'interfaces/Auth'
 import { authAPI } from 'modules'
 
 import {
@@ -258,8 +257,9 @@ const TableOrders = (props: any) => {
     event.preventDefault()
     try {
       setFormData({ ...formData, properties_type: [...formData.properties_type, properties] })
-      const response = await authAPI.createProduct(formData)
-      setSnackbarAlert({ message: response.data.message, severity: 'success' })
+
+      // const response = await authAPI.createProduct(formData)
+      // setSnackbarAlert({ message: response.data.message, severity: 'success' })
     } catch (e: any) {
       setSnackbarAlert({ message: e.response.data.message, severity: 'error' })
     }
@@ -285,34 +285,31 @@ const TableOrders = (props: any) => {
 
   return (
     <>
-      <Card style={{ width: '100%' }}>
+      {/* <Card style={{ width: '100%' }}>
         <DataGrid
           key={_rows._id}
           rows={_rows}
           columns={_columns}
           slots={{ toolbar: GridToolbar }}
-          autoHeight
-          getEstimatedRowHeight={() => 200}
-          getRowHeight={() => 'auto'}
           sx={{
             '& .MuiDataGrid-row:hover': {
               color: 'primary.main',
               border: '1px solid red'
-            }
+            },
+            minHeight: 400
           }}
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5
+                pageSize: 10
               }
             }
           }}
-          pageSizeOptions={[5]}
-          checkboxSelection
+          pageSizeOptions={[10]}
         />
-      </Card>
+      </Card> */}
 
-      <Modal
+      {/* <Modal
         aria-labelledby='transition-modal-title'
         aria-describedby='transition-modal-description'
         open={open}
@@ -551,7 +548,7 @@ const TableOrders = (props: any) => {
             </Card>
           </Box>
         </Fade>
-      </Modal>
+      </Modal> */}
     </>
   )
 }

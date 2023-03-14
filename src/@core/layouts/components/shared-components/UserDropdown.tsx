@@ -25,6 +25,7 @@ import Router from 'next/router'
 import { authAPI } from 'modules'
 import { GetMeSuccessData } from 'interfaces/Auth'
 import { SettingsContext } from '@core/context/settingsContext'
+import { APP_ROUTES } from 'global/constants/index'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -131,7 +132,7 @@ const UserDropdown = () => {
         <MenuItem
           sx={{ p: 0 }}
           onClick={() => {
-            Router.push('/account-settings/')
+            Router.push(APP_ROUTES.cmsAccountSettings)
             handleDropdownClose()
           }}
         >

@@ -1,17 +1,13 @@
+import { APP_ROUTES } from 'global/constants/index'
+
 // ** Icon imports
 import {
-  Login,
-  Table,
-  CubeOutline,
   CartOutline,
   AccountOutline,
   TruckOutline,
-  FormatLetterCase,
-  AccountPlusOutline,
   TuneVariant,
   CreditCardOutline,
   AlertCircleOutline,
-  GoogleCirclesExtended,
   ChartBoxOutline
 } from 'mdi-material-ui'
 
@@ -26,12 +22,12 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Dashboard',
       icon: DashboardIcon,
-      path: '/'
+      path: APP_ROUTES.cmsDoashboard
     },
     {
       title: 'Orders',
       icon: CartOutline,
-      path: '/orders'
+      path: APP_ROUTES.cmsOrders
     },
     {
       title: 'Reports',
@@ -41,7 +37,12 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Products',
       icon: ViewInArIcon,
-      path: '/products'
+      path: APP_ROUTES.cmsProducts
+    },
+    {
+      title: 'Properties',
+      icon: ViewInArIcon,
+      path: APP_ROUTES.cmsProducts
     },
     {
       title: 'Customers',
@@ -69,7 +70,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Error',
       icon: AlertCircleOutline,
-      path: '/error',
+      path: APP_ROUTES.cmsError401,
       openInNewTab: true
     },
     {
@@ -78,7 +79,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Cards',
       icon: CreditCardOutline,
-      path: '/cards'
+      path: APP_ROUTES.cmsCards
     }
   ]
 }

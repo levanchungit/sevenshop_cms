@@ -1,17 +1,27 @@
 export const API_ROUTES = {
   // auth
-  login: `/user/login`,
-  logout: `/user/logout`,
-  register: `/user/register`,
-  check_otp: `/user/check_otp`,
-  set_password: `/user/set_password`,
-  refresh_token: `/user/refresh_token`,
-  me: `/user/me`,
+  login: `/auth/login`,
+  logout: `/auth/logout`,
+  check_otp: `/auth/check_otp`,
+  set_password: `/auth/set_password`,
+  refresh_token: `/auth/refresh_token`,
+  me: `/auth/me`,
 
   // product
-  getProducts: `/product/`,
-  getProductDetail: `/product`,
-  getCategories: `/meta_data/getDetailByMetaDataId/`,
-  createProduct: `/product/createProduct`
+  getProducts: `/products`,
+  getProductDetail: (id: string) => `/products/${id}`,
+  createProduct: `/products/`,
+  updateProduct: `/products/:id`,
+  deleteProduct: (id: string) => `/products/${id}`,
+  generateStock: `/generate_stock/:id`,
+
+  //categories
+  getCategories: `/categories`,
+
+  //colors
+  getColors: `/colors`,
+
+  //sizes
+  getSizes: `/sizes`
 }
 export default API_ROUTES

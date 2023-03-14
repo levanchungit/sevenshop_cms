@@ -41,45 +41,6 @@ export type GetMeSuccessData = {
   image: string
 }
 
-export type GetProductsSuccessData = {
-  _id: string
-  name: string
-  price: number
-  price_sale: number
-  description: string
-  images: []
-  active: boolean
-  storage_quantity: number
-  properties_type: []
-  categories_type: string
-  create_at: string
-  create_by: string
-}
-
-export type GetProductData = {
-  name: string
-  price: number
-  quantity: number
-}
-
-export type PropertiesProductData = {
-  color_id: string
-  size_id: string
-  quantity: number
-  id: string
-}
-
-export type CreateProductData = {
-  name: string
-  price: number
-  price_sale: number
-  description: string
-  images: string[]
-  active: boolean
-  properties_type: PropertiesProductData[]
-  categories_type: string
-}
-
 export type MetaDataDetail = {
   _id: string
   code_name: string
@@ -92,23 +53,6 @@ export type MetaDataDetail = {
   num5: number
   eng: string
   kr: string
-  create_at: string
-  create_by: string
-  modify_at: string
-  modify_by: string
-}
-
-export type ProductData = {
-  _id?: string
-  name: string
-  price: number
-  price_sale: number
-  description: string
-  images: string[]
-  active: boolean
-  storage_quantity: number
-  properties_type: PropertiesProductData[]
-  categories_type: string
   create_at: string
   create_by: string
   modify_at: string

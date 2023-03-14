@@ -38,6 +38,7 @@ import FooterIllustrationsV1 from 'views/pages/auth/FooterIllustration'
 import { authAPI } from 'modules'
 import { SignInPayload } from 'interfaces/Auth'
 import { SettingsContext } from '@core/context/settingsContext'
+import { APP_ROUTES } from 'global/constants/index'
 
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
@@ -64,7 +65,7 @@ const LoginPage = () => {
     try {
       const response = await authAPI.login(formData)
       setSnackbarAlert({ message: response.data.message, severity: 'success' })
-      Router.push('/')
+      Router.push(APP_ROUTES.cmsDoashboard)
     } catch (e: any) {
       setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
     }

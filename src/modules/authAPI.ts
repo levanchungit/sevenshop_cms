@@ -1,9 +1,11 @@
-import { SignInPayload, RefreshTokenPayload, CreateProductData } from './../interfaces/Auth'
-import { API_URL } from './../global/config'
-import { API_ROUTES } from './../global/constants/apiRoutes'
+import { CmsProduct, CreateCmsProductPayload } from 'interfaces/Product'
+import { SignInPayload, RefreshTokenPayload } from 'interfaces/Auth'
+import { API_URL } from 'global/config'
+import { API_ROUTES } from 'global/constants/apiRoutes'
 import axios from 'axios'
 
 import axiosClient from './config/axiosClient'
+import { TypeReturn } from 'interfaces/APIResponse'
 
 const authAPI = {
   async login(payload: SignInPayload) {
@@ -17,50 +19,55 @@ const authAPI = {
   me() {
     return axiosClient.get(API_ROUTES.me)
   },
-  logout(payload: RefreshTokenPayload) {
-    return axiosClient.post(API_ROUTES.logout, payload)
+  logout() {
+    return axiosClient.get(API_ROUTES.logout)
   },
 
   async getProducts() {
-    const response = await axiosClient.get(API_ROUTES.getProducts)
+    const response = await axios.get(API_URL + API_ROUTES.getProducts)
 
-    return response.data.result
+    return response.data.results
   },
 
   async getCategories() {
-    const idCategories = '63f325ad7e47080165a85199'
+    const response = await axios.get(API_URL + API_ROUTES.getCategories)
 
-    const result = await axiosClient.get(API_ROUTES.getCategories + idCategories)
-
-    return result
+    return response.data.results
   },
 
   async getColors() {
-    const idColors = '63f8d5fc135f11bc21b9bd4c'
+    const response = await axios.get(API_URL + API_ROUTES.getColors)
 
-    const result = await axiosClient.get(API_ROUTES.getCategories + idColors)
-
-    return result
+    return response.data.results
   },
 
   async getSizes() {
-    const idSizes = '63f8d693243d03d8d48ddac3'
+    const response = await axios.get(API_URL + API_ROUTES.getSizes)
 
-    const result = await axiosClient.get(API_ROUTES.getCategories + idSizes)
-
-    return result
+    return response.data.results
   },
 
-  async createProduct(payload: CreateProductData) {
+  async createProduct(payload: CreateCmsProductPayload) {
     const response = await axiosClient.post(API_ROUTES.createProduct, payload)
+    console.log(response)
 
     return response
   },
 
-  async getProductDetail(id: string) {
-    const response = await axiosClient.get(API_ROUTES.getProductDetail + id)
+  async updateProduct(id: string, payload: CreateCmsProductPayload) {
+    const response = await axiosClient.post(API_ROUTES.updateProduct + id, payload)
 
     return response.data.result
+  },
+
+  async deleteProduct(id: string) {
+    const response = await axiosClient.delete(API_ROUTES.deleteProduct(id))
+
+    return response
+  },
+
+  getProductDetail(id: string): TypeReturn<CmsProduct> {
+    return axios.get(API_URL + API_ROUTES.getProductDetail(id))
   }
 }
 

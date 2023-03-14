@@ -35,7 +35,7 @@ import useCMSGetProducts from 'hook/product/useCMSGetProducts'
 import { CmsProduct } from 'interfaces/Product'
 import moment from 'moment'
 
-const TableProducts = () => {
+const TableCategories = () => {
   const router = useRouter()
   const { setSnackbarAlert } = useContext(SettingsContext)
 
@@ -266,4 +266,4 @@ const TableProducts = () => {
   )
 }
 
-export default TableProducts
+export default TableCategories
