@@ -428,7 +428,7 @@ const Dashboard = () => {
 
         <Grid item xs={12} md={6} lg={4}></Grid>
 
-        <Grid item xs={12} md={8} lg={5}>
+        {/* <Grid item xs={12} md={8} lg={5}>
           <Card>
             <Grid container spacing={6}>
               <Grid item xs={12} sm={12}>
@@ -464,7 +464,7 @@ const Dashboard = () => {
               </Grid>
             </Grid>
           </Card>
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={12} md={4} lg={3}>
           <WeeklyOverview />

@@ -27,20 +27,19 @@ import {
   GridColDef,
   GridToolbar
 } from '@mui/x-data-grid'
-import { currencyFormatterVND } from 'utils/currencyFormatter'
+import { formatDate } from 'utils/currencyFormatter'
 import { SettingsContext } from '@core/context/settingsContext'
 import { useRouter } from 'next/router'
 import { APP_ROUTES } from 'global/constants/index'
-import useCMSGetProducts from 'hook/product/useCMSGetProducts'
-import { CmsProduct } from 'interfaces/Product'
-import moment from 'moment'
+import useCMSGetCategories from 'hook/category/useCMSGetCategories'
+import { CmsCategory } from 'interfaces/Category'
 
 const TableCategories = () => {
   const router = useRouter()
   const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
-  const { cms_products, cms_err_products, cms_mutate_product } = useCMSGetProducts()
+  const { cms_categories, isLoading, error, mutate } = useCMSGetCategories()
 
   //STATE
   const [dialogCofirm, setDialogCofirm] = useState(false)
@@ -55,7 +54,7 @@ const TableCategories = () => {
   }
   const handleDeleteProduct = async () => {
     await authAPI.deleteProduct(idProduct as string)
-    cms_mutate_product()
+    mutate()
     setSnackbarAlert({ message: 'Delete Product Successfully', severity: 'success' })
     handleCloseDialogCofirm()
   }
@@ -68,8 +67,8 @@ const TableCategories = () => {
     []
   )
 
-  if (cms_err_products) return <Box>Failed to load</Box>
-  if (!cms_products)
+  if (error) return <Box>Failed to load</Box>
+  if (!cms_categories)
     return (
       <div style={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
         <CircularProgress />
@@ -92,19 +91,12 @@ const TableCategories = () => {
       </Box>
     )
   }
-  const _rows = cms_products.map((row: CmsProduct) => {
+  const _rows = cms_categories.map((row: CmsCategory) => {
     return {
       id: row._id,
       name: row.name,
-      price: row.price,
-      price_sale: row.price_sale,
       description: row.description,
-      images: row.images,
-      stock: row.stock,
-      status: row.status,
-      category_ids: row.category_ids,
-      color_ids: row.color_ids,
-      size_ids: row.size_ids,
+      image: row.image,
       created_at: row.created_at,
       created_by: row.created_by,
       modify: row.modify
@@ -112,41 +104,14 @@ const TableCategories = () => {
   })
 
   const _columns: GridColDef[] = [
-    // { field: 'id', headerName: 'ID', width: 250, hideable: false },
     {
       field: 'name',
       headerName: 'Name',
       width: 200,
       renderCell: (params: GridRenderCellParams) => (
         <>
-          <Avatar alt='Avatar' src={params.row.images[0]} sx={{ mr: 2, width: 50, height: 50 }} />
+          <Avatar alt='Avatar' src={params.row.image} sx={{ mr: 2, width: 50, height: 50 }} />
           {params.value}
-        </>
-      )
-    },
-    {
-      field: 'price',
-      headerName: 'Price',
-      width: 150,
-      valueFormatter: ({ value }) => currencyFormatterVND(value),
-      renderCell: (params: GridRenderCellParams) => (
-        <>
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography
-              variant='h4'
-              sx={{
-                textDecoration: params.row.price_sale > 0 ? 'line-through' : null,
-                color: params.row.price_sale > 0 ? '#C9C9C9' : 'red',
-                fontWeight: 500,
-                fontSize: '0.875rem !important'
-              }}
-            >
-              {currencyFormatterVND(params.value)}
-            </Typography>
-            <Typography sx={{ color: params.row.price_sale > 0 ? 'red' : 'black ' }}>
-              {params.row.price_sale > 0 ? currencyFormatterVND(params.row.price_sale) : null}
-            </Typography>
-          </Box>
         </>
       )
     },
@@ -157,34 +122,12 @@ const TableCategories = () => {
       renderCell: (params: GridRenderCellParams) => <ExpandableCell {...params} />
     },
     {
-      field: 'status',
-      headerName: 'Status',
-      width: 100,
-      renderCell: (params: GridRenderCellParams) => (
-        <Button
-          sx={{
-            ':hover': {
-              bgColor: 'gray'
-            },
-            px: 2,
-            bgcolor: params.value == 'active' ? '#E0F2FE' : '#FEE2E2',
-            color: params.value == 'active' ? '#0EA5E9' : '#DC2626'
-          }}
-          variant='contained'
-          size='small'
-        >
-          {params.value}
-        </Button>
-      )
-    },
-    { field: 'category_ids', headerName: 'Categories', width: 250 },
-    {
       field: 'created_at',
       headerName: 'Created',
       width: 200,
       renderCell: (params: GridRenderCellParams) => (
         <Typography sx={{ fontSize: '0.875rem' }}>
-          {moment(params.value).format('LLL')} | {params.row.created_by}
+          {formatDate(params.value)} | {params.row.created_by}
         </Typography>
       )
     },
@@ -216,7 +159,7 @@ const TableCategories = () => {
     <>
       <Grid my={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Button variant='contained' component='label' onClick={handleCreate} aria-label='add'>
-          Create Product
+          Create
         </Button>
       </Grid>
 

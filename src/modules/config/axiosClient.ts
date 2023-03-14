@@ -38,7 +38,6 @@ function createAxiosClient(): AxiosInstance {
         // Gửi request mới để lấy access token mới
         try {
           const response = await axios.post(API_URL + API_ROUTES.refresh_token, { refresh_token })
-          console.log(response)
           const access_token = response.data.access_token
           localStorage.setItem('access_token', access_token)
 
@@ -63,6 +62,53 @@ function createAxiosClient(): AxiosInstance {
       return Promise.reject(error)
     }
   )
+
+  // // Thêm interceptor để tự động thêm Authorization header vào mỗi request
+  // axiosClient.interceptors.request.use(async config => {
+  //   try {
+  //     const access_token = Cookies.get('access_token')
+  //     console.log('access_token', access_token)
+  //     if (access_token) {
+  //       config.headers.Authorization = `Bearer ${access_token}`
+  //     }
+
+  //     return config
+  //   } catch (error) {
+  //     throw new Error('Failed to add Authorization header to request')
+  //   }
+  // })
+
+  // // Thêm interceptor để xử lý lỗi authentication và refresh token
+  // axiosClient.interceptors.response.use(
+  //   response => {
+  //     return response
+  //   },
+  //   async error => {
+  //     try {
+  //       const originalRequest = error.config
+  //       const refresh_token = Cookies.get('refresh_token')
+  //       console.log('refresh_token', refresh_token)
+  //       if (error.response.status === 401 && originalRequest.url !== API_ROUTES.refresh_token) {
+  //         // Gửi request mới để lấy access token mới
+  //         const response = await axios.post(API_URL + API_ROUTES.refresh_token, { refresh_token })
+  //         console.log(response)
+  //         const access_token = response.data.access_token
+  //         Cookies.set('access_token', access_token, { httpOnly: true, secure: true })
+
+  //         // Sử dụng access token mới để gửi lại request cũ
+  //         originalRequest.headers.Authorization = `Bearer ${access_token}`
+
+  //         return axios(originalRequest)
+  //       } else if (error.response.status === 400 && originalRequest.url !== API_ROUTES.refresh_token) {
+  //         //Refresh token hết hạn
+  //         Router.push(APP_ROUTES.cmsLogin)
+  //       }
+  //       throw new Error(error.message)
+  //     } catch (error) {
+  //       throw new Error('Failed to handle authentication or refresh token error')
+  //     }
+  //   }
+  // )
 
   return axiosClient
 }

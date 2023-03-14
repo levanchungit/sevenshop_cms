@@ -40,9 +40,9 @@ const navigation = (): VerticalNavItemsType => {
       path: APP_ROUTES.cmsProducts
     },
     {
-      title: 'Properties',
+      title: 'Categories',
       icon: ViewInArIcon,
-      path: APP_ROUTES.cmsProducts
+      path: APP_ROUTES.cmsCategories
     },
     {
       title: 'Customers',

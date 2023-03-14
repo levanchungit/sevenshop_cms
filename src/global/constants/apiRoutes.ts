@@ -17,6 +17,10 @@ export const API_ROUTES = {
 
   //categories
   getCategories: `/categories`,
+  getCategoryDetail: (id: string) => `/categories/${id}`,
+  createCategory: `/categories/`,
+  updateCategory: `/categories/:id`,
+  deleteCategory: (id: string) => `/categories/${id}`,
 
   //colors
   getColors: `/colors`,

@@ -6,6 +6,7 @@ export interface CmsCategory {
   name: string
   description: string
   image: string
+  product_ids: []
   created_at: string
   created_by: string
   modify: IModify[]

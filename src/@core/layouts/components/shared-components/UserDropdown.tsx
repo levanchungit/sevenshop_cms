@@ -49,9 +49,11 @@ const UserDropdown = () => {
   const getMe = async () => {
     try {
       const response = await authAPI.me()
+      setSnackbarAlert({ message: response.data.message, severity: 'success' })
       setInfo(response.data.result)
     } catch (e: any) {
-      setSnackbarAlert({ message: e.response.data.message, severity: 'error' })
+      console.log(e)
+      setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
     }
   }
 
@@ -61,8 +63,7 @@ const UserDropdown = () => {
 
   const onLogout = async () => {
     try {
-      const refresh_token = localStorage.getItem('refresh_token')
-      const response = await authAPI.logout({ refresh_token })
+      const response = await authAPI.logout()
       setSnackbarAlert({ message: response.data.message, severity: 'success' })
 
       handleDropdownClose('/login')
@@ -101,7 +102,7 @@ const UserDropdown = () => {
         badgeContent={<BadgeContentSpan />}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <Avatar alt='John Doe' onClick={handleDropdownOpen} sx={{ width: 40, height: 40 }} src={info?.image} />
+        <Avatar alt='John Doe' onClick={handleDropdownOpen} sx={{ width: 40, height: 40 }} src={info?.avatar} />
       </Badge>
       <Menu
         anchorEl={anchorEl}
@@ -112,18 +113,20 @@ const UserDropdown = () => {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <Box sx={{ pt: 2, pb: 3, px: 4 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
             <Badge
               overlap='circular'
               badgeContent={<BadgeContentSpan />}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             >
-              <Avatar alt='John Doe' src={info?.image} sx={{ width: '2.5rem', height: '2.5rem' }} />
+              <Avatar alt='John Doe' src={info?.avatar} sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 600 }}>{info?.email}</Typography>
+              <Typography sx={{ width: '100%', fontWeight: 600 }}>
+                {info?.email && info.email.length > 14 ? info.email.slice(0, 14) + '...' : info?.email}
+              </Typography>
               <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
-                {info?.role_type == 1 ? 'Admin' : 'User'}
+                {info?.role}
               </Typography>
             </Box>
           </Box>

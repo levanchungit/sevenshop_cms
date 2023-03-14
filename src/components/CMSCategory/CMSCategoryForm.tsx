@@ -13,6 +13,7 @@ import {
 import { Form, FormikProvider } from 'formik'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
+
 import { Fragment, useState } from 'react'
 import { CreateCmsProductPayload, EditCmsProductPayload } from 'interfaces/Product'
 import { useFormikCustom } from 'hook/lib'
@@ -36,49 +37,30 @@ interface Props {
 export default function CMSCategoryForm(props: Props) {
   const { initialValues, type } = props
   const router = useRouter()
-  const { cms_categories, error: err_categories, isLoading: loading_categories } = useCMSGetCategories()
-  const { cms_colors, error: err_colors } = useCMSGetColors()
-  const { cms_sizes, error: err_sizes } = useCMSGetSizes()
-
-  const [openCategories, setOpenCategories] = useState(false)
-  const [openColors, setOpenColors] = useState(false)
-  const [openSizes, setOpenSizes] = useState(false)
-
-  let arrCategories: (string | undefined)[] = []
-  let arrSizes: (string | undefined)[] = []
-  let arrColors: (string | undefined)[] = []
 
   const formik = useFormikCustom({
     initialValues: {
       name: '',
-      price: 0,
       description: '',
-      category_ids: [],
-      color_ids: [],
-      size_ids: [],
       ...initialValues
     },
     validationSchema: yup.object().shape({
       name: yup.string().required(),
-      price: yup.number().required().min(0),
-      description: yup.string().required(),
-      category_ids: yup.array().required().min(1, 'Min 1 element'),
-      color_ids: yup.array().required().min(1, 'Min 1 element'),
-      size_ids: yup.array().required().min(1, 'Min 1 element')
+      description: yup.string().required()
     }),
     onSubmit: async (data, actions) => {
       console.log('SUBMIT')
 
       console.log(data)
       try {
-        if (type === FORM_TYPES.create) {
-          await authAPI.createProduct(data)
-          await router.push({ pathname: APP_ROUTES.cmsProducts })
-        }
-        if (type === FORM_TYPES.edit && isEditForm(data)) {
-          await authAPI.updateProduct(data._id, data)
-          await router.push({ pathname: APP_ROUTES.cmsProductEdit + data._id })
-        }
+        // if (type === FORM_TYPES.create) {
+        //   await authAPI.createProduct(data)
+        //   await router.push({ pathname: APP_ROUTES.cmsProducts })
+        // }
+        // if (type === FORM_TYPES.edit && isEditForm(data)) {
+        //   await authAPI.updateProduct(data._id, data)
+        //   await router.push({ pathname: APP_ROUTES.cmsProductEdit + data._id })
+        // }
       } catch (e) {
         console.log(e)
       } finally {

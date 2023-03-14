@@ -7,7 +7,6 @@ import Router from 'next/router'
 // ** MUI Components
 import {
   Box,
-  Button,
   Checkbox,
   TextField,
   InputLabel,
@@ -39,6 +38,7 @@ import { authAPI } from 'modules'
 import { SignInPayload } from 'interfaces/Auth'
 import { SettingsContext } from '@core/context/settingsContext'
 import { APP_ROUTES } from 'global/constants/index'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
@@ -54,21 +54,28 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
 
 const LoginPage = () => {
   // ** State
+  const { setSnackbarAlert } = useContext(SettingsContext)
   const [passwordVisible, setPasswordVisible] = useState(true)
   const [formData, setFormData] = useState<SignInPayload>({
     email: 'levanchunq123@gmail.com',
-    password: '123'
+    password: '123456'
   })
-  const { setSnackbarAlert } = useContext(SettingsContext)
+  const [btnLoginLoading, setBtnLoginLoading] = useState(false)
 
   const onSubmit = async () => {
+    setBtnLoginLoading(true)
     try {
       const response = await authAPI.login(formData)
+      console.log(response)
+
+      localStorage.setItem('access_token', response.data.access_token)
+      localStorage.setItem('refresh_token', response.data.refresh_token)
       setSnackbarAlert({ message: response.data.message, severity: 'success' })
       Router.push(APP_ROUTES.cmsDoashboard)
     } catch (e: any) {
       setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
     }
+    setBtnLoginLoading(false)
   }
 
   const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
@@ -147,9 +154,21 @@ const LoginPage = () => {
               >
                 <FormControlLabel control={<Checkbox />} label='Remember Me' />
               </Box>
-              <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }} onClick={onSubmit}>
+
+              <LoadingButton
+                size='large'
+                fullWidth
+                sx={{ marginBottom: 7 }}
+                onClick={onSubmit}
+                loading={btnLoginLoading}
+                loadingIndicator='Loading…'
+                variant='contained'
+              >
                 Login
-              </Button>
+              </LoadingButton>
+              {/* <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }} onClick={onSubmit}>
+                Login
+              </Button> */}
             </form>
           </CardContent>
         </Card>

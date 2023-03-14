@@ -27,13 +27,12 @@ import {
   GridColDef,
   GridToolbar
 } from '@mui/x-data-grid'
-import { currencyFormatterVND } from 'utils/currencyFormatter'
+import { currencyFormatterVND, formatDate } from 'utils/currencyFormatter'
 import { SettingsContext } from '@core/context/settingsContext'
 import { useRouter } from 'next/router'
 import { APP_ROUTES } from 'global/constants/index'
 import useCMSGetProducts from 'hook/product/useCMSGetProducts'
 import { CmsProduct } from 'interfaces/Product'
-import moment from 'moment'
 
 const TableProducts = () => {
   const router = useRouter()
@@ -184,7 +183,7 @@ const TableProducts = () => {
       width: 200,
       renderCell: (params: GridRenderCellParams) => (
         <Typography sx={{ fontSize: '0.875rem' }}>
-          {moment(params.value).format('LLL')} | {params.row.created_by}
+          {formatDate(params.value)} | {params.row.created_by}
         </Typography>
       )
     },
