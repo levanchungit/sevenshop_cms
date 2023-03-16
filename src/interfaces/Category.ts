@@ -2,7 +2,7 @@ import { IModify } from './Product'
 
 //new
 export interface CmsCategory {
-  _id?: string
+  _id: string
   name: string
   description: string
   image: string

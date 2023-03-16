@@ -5,5 +5,5 @@ export const currencyFormatterVND = (value: number) => {
 }
 
 export const formatDate = (date: string) => {
-  return moment(date).format('YYYY-MM-DD HH:MM')
+  return moment(date).format('yyyy-MM-DD HH:mm')
 }

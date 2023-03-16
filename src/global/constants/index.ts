@@ -36,8 +36,3 @@ export enum STATUS_PRODUCT {
   active = 'active',
   inactive = 'inactive'
 }
-
-export enum FORM_TYPES {
-  create = 'create',
-  edit = 'edit'
-}

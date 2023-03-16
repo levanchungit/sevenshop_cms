@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { CircularProgress, Box, Typography, Card, Divider, CardHeader, Stack } from '@mui/material'
 import useCMSGetProductDetail from 'hook/product/useCMSGetDetail'
-import CMSProductForm from 'components/CMSProduct/CMSProductForm'
+import CMSProductFormEdit from 'components/CMSProduct/CMSProductFormEdit'
 
 const EditProduct = () => {
   const router = useRouter()
@@ -24,7 +24,7 @@ const EditProduct = () => {
         {error && <Box>Failed to load</Box>}
         {cmsProduct && (
           <Box width={600}>
-            <CMSProductForm type='edit' initialValues={cmsProduct} />
+            <CMSProductFormEdit initialValues={cmsProduct.data} />
           </Box>
         )}
       </Stack>

@@ -40,4 +40,8 @@ export interface CreateCmsProductPayload {
 
 export interface EditCmsProductPayload extends CreateCmsProductPayload {
   _id: string
+  price_sale: number
+  images: string[]
+  stock: IStock[]
+  status: STATUS_PRODUCT
 }

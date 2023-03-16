@@ -17,7 +17,7 @@ import {
 import { EditOutlined, DeleteOutlineOutlined } from '@mui/icons-material'
 import { useState, Fragment, useCallback, useContext } from 'react'
 import * as React from 'react'
-import { authAPI, productsAPI } from 'modules'
+import { productsAPI } from 'modules'
 import {
   GridRenderCellParams,
   GridRowParams,
@@ -44,6 +44,7 @@ const TableProducts = () => {
   //STATE
   const [dialogCofirm, setDialogCofirm] = useState(false)
   const [idProduct, setIdProduct] = useState<GridRowId>('')
+  console.log(cms_products)
 
   //HANDLER
   const handleOpenDialogCofirm = () => {
@@ -232,14 +233,6 @@ const TableProducts = () => {
             },
             minHeight: 682
           }}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 10
-              }
-            }
-          }}
-          pageSizeOptions={[10]}
           checkboxSelection
         />
       </Card>

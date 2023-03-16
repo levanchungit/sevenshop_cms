@@ -14,29 +14,22 @@ import { Form, FormikProvider } from 'formik'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
 import { Fragment, useState, useContext } from 'react'
-import { CreateCmsProductPayload, EditCmsProductPayload } from 'interfaces/Product'
+import { EditCmsProductPayload } from 'interfaces/Product'
 import { useFormikCustom } from 'hook/lib'
-import { APP_ROUTES, FORM_TYPES } from 'global/constants/index'
+import { APP_ROUTES } from 'global/constants/index'
 import { InputField } from 'components/CustomFields'
 import useCMSGetCategories from 'hook/category/useCMSGetCategories'
 import useCMSGetColors from 'hook/color/useCMSGetColors'
 import useCMSGetSizes from 'hook/size/useCMSGetSizes'
 import { productsAPI } from 'modules'
-import isObject from 'lodash/isObject'
 import { SettingsContext } from '@core/context/settingsContext'
 
-function isEditForm(value: unknown): value is EditCmsProductPayload {
-  return isObject(value) && '_id' in value ? !!value._id : false
-}
-
 interface Props {
-  initialValues?: Partial<CreateCmsProductPayload | EditCmsProductPayload>
-  type: keyof typeof FORM_TYPES
+  initialValues?: Partial<EditCmsProductPayload>
 }
 
-export default function CMSProductForm(props: Props) {
-  const { initialValues, type } = props
-  console.log(initialValues)
+export default function CMSProductFormCreate(props: Props) {
+  const { initialValues } = props
   const router = useRouter()
   const { setSnackbarAlert } = useContext(SettingsContext)
   const { cms_categories, error: err_categories, isLoading: loading_categories } = useCMSGetCategories()
@@ -63,25 +56,20 @@ export default function CMSProductForm(props: Props) {
     },
     validationSchema: yup.object().shape({
       name: yup.string().required(),
-      price: yup.number().required().min(0),
+      price: yup.number().required().min(1),
       description: yup.string().required(),
       category_ids: yup.array().required().min(1, 'Min 1 element'),
       color_ids: yup.array().required().min(1, 'Min 1 element'),
       size_ids: yup.array().required().min(1, 'Min 1 element')
     }),
     onSubmit: async (data, actions) => {
+      console.log('CREATE', data)
       try {
-        if (type === FORM_TYPES.create) {
-          const response = await productsAPI.createProduct(data)
-          if (response.status === 200) {
-            setSnackbarAlert({ message: 'Add product successfully', severity: 'success' })
-          }
-          await router.push({ pathname: APP_ROUTES.cmsProducts })
+        const response = await productsAPI.createProduct(data)
+        if (response.status === 200) {
+          setSnackbarAlert({ message: 'Add product successfully', severity: 'success' })
         }
-        if (type === FORM_TYPES.edit && isEditForm(data)) {
-          await productsAPI.updateProduct(data._id, data)
-          await router.push({ pathname: APP_ROUTES.cmsProductEdit + data._id })
-        }
+        await router.push({ pathname: APP_ROUTES.cmsProducts })
       } catch (e: any) {
         setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
       } finally {
@@ -131,14 +119,7 @@ export default function CMSProductForm(props: Props) {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <InputField
-                label='Name'
-                required
-                placeholder='Name'
-                defaultValue={initialValues?.name}
-                fullWidth
-                {...getFieldPropsCustom('name')}
-              />
+              <InputField label='Name' required placeholder='Name' fullWidth {...getFieldPropsCustom('name')} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <InputField

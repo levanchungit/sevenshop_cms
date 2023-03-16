@@ -53,7 +53,8 @@ const UserDropdown = () => {
       setInfo(response.data.result)
     } catch (e: any) {
       console.log(e)
-      setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
+
+      // setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
     }
   }
 

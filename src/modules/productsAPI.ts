@@ -1,9 +1,8 @@
-import { CmsProduct, CreateCmsProductPayload } from 'interfaces/Product'
+import { CreateCmsProductPayload, EditCmsProductPayload } from 'interfaces/Product'
 import { API_URL } from 'global/config'
 import { API_ROUTES } from 'global/constants/apiRoutes'
 import axios from 'axios'
 import axiosClient from './config/axiosClient'
-import { TypeReturn } from 'interfaces/APIResponse'
 
 const productsAPI = {
   async getProducts() {
@@ -16,8 +15,8 @@ const productsAPI = {
 
     return response
   },
-  async updateProduct(id: string, payload: CreateCmsProductPayload) {
-    const response = await axiosClient.put(API_ROUTES.updateProduct + id, payload)
+  async updateProduct(payload: EditCmsProductPayload) {
+    const response = await axiosClient.put(API_ROUTES.updateProduct + payload._id, payload)
 
     return response.data.result
   },
@@ -26,7 +25,7 @@ const productsAPI = {
 
     return response
   },
-  getProductDetail(id: string): TypeReturn<CmsProduct> {
+  getProductDetail(id: string) {
     return axios.get(API_URL + API_ROUTES.getProductDetail(id))
   }
 }
