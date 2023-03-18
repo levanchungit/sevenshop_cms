@@ -42,10 +42,6 @@ const UserDropdown = () => {
   const [info, setInfo] = useState<GetMeSuccessData>()
   const { setSnackbarAlert } = useContext(SettingsContext)
 
-  useEffect(() => {
-    getMe()
-  }, [])
-
   const getMe = async () => {
     try {
       const response = await usersAPI.me()
@@ -53,10 +49,13 @@ const UserDropdown = () => {
       setInfo(response.data.result)
     } catch (e: any) {
       console.error(e)
-
-      // setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
+      setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
     }
   }
+
+  useEffect(() => {
+    getMe()
+  }, [])
 
   const handleDropdownOpen = (event: SyntheticEvent) => {
     setAnchorEl(event.currentTarget)

@@ -1,7 +1,7 @@
 import { Maybe } from 'utils/types'
 import { CmsSize } from './../../interfaces/Size'
 import { API_ROUTES } from 'global/constants'
-import { authAPI, sizesAPI } from 'modules'
+import { sizesAPI } from 'modules'
 import useSWR, { SWRResponse } from 'swr'
 import { APIResError } from 'interfaces/APIResponse'
 
