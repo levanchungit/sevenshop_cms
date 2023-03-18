@@ -39,7 +39,7 @@ const TableCategories = () => {
   const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
-  const { cms_categories, isLoading, error, mutate } = useCMSGetCategories()
+  const { cms_categories, error, mutate } = useCMSGetCategories()
 
   //STATE
   const [dialogCofirm, setDialogCofirm] = useState(false)

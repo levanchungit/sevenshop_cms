@@ -1,5 +1,5 @@
 // ** MUI Imports
-import { Box, Fab, Typography, Grid, Stack, CircularProgress, Card, CardContent, Avatar } from '@mui/material'
+import { Box, Fab, Typography, Grid, Stack, CircularProgress } from '@mui/material'
 
 // ** Icons Imports
 import AddCircleIcon from '@mui/icons-material/AddCircle'
@@ -9,14 +9,14 @@ import ApexChartWrapper from '@core/styles/libs/react-apexcharts'
 
 // ** Demo Components Imports
 import WeeklyOverview from 'views/dashboard/WeeklyOverview'
-import TableOrders from 'views/dashboard/TableOrdersDashboard'
 import { API_ROUTES } from 'global/constants'
 import useSWR from 'swr'
-import { authAPI, productsAPI } from 'modules'
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
-import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
-import { currencyFormatterVND } from 'utils/currencyFormatter'
+import { productsAPI } from 'modules'
+
+// import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
+// import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
+// import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
+// import { currencyFormatterVND } from 'utils/currencyFormatter'
 
 const arrKeywordsSearch = [
   'Backpacks',
@@ -46,140 +46,140 @@ const arrKeywordsSearch = [
   'Boots'
 ]
 
-const arrBestSellers = [
-  {
-    _id: '1',
-    name: 'Parisian Collage Jacquard Hoodie',
-    images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-    price: 1000000,
-    sold: 151,
-    profit: 151000000,
-    view: 151,
-    favorites: 151
-  },
-  {
-    _id: '2',
-    name: 'Parisian Collage Jacquard Hoodie',
-    images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-    price: 2000000,
-    sold: 231,
-    profit: 124000000,
-    view: 12,
-    favorites: 53
-  },
-  {
-    _id: '3',
-    name: 'Parisian Collage Jacquard Hoodie',
-    images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-    price: 123123,
-    sold: 521324,
-    profit: 123124432,
-    view: 53,
-    favorites: 643
-  },
-  {
-    _id: '4',
-    name: 'Parisian Collage Jacquard Hoodie',
-    images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-    price: 5352342,
-    sold: 245,
-    profit: 21314214,
-    view: 53,
-    favorites: 232
-  },
-  {
-    _id: '5',
-    name: 'Parisian Collage Jacquard Hoodie',
-    images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-    price: 2534654,
-    sold: 24,
-    profit: 23422423,
-    view: 2343,
-    favorites: 32
-  },
-  {
-    _id: '6',
-    name: 'Parisian Collage Jacquard Hoodie',
-    images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-    price: 233,
-    sold: 23,
-    profit: 21132,
-    view: 134,
-    favorites: 23
-  },
-  {
-    _id: '7',
-    name: 'Parisian Collage Jacquard Hoodie',
-    images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-    price: 223232,
-    sold: 464,
-    profit: 22323,
-    view: 12321,
-    favorites: 2132
-  }
-]
+// const arrBestSellers = [
+//   {
+//     _id: '1',
+//     name: 'Parisian Collage Jacquard Hoodie',
+//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
+//     price: 1000000,
+//     sold: 151,
+//     profit: 151000000,
+//     view: 151,
+//     favorites: 151
+//   },
+//   {
+//     _id: '2',
+//     name: 'Parisian Collage Jacquard Hoodie',
+//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
+//     price: 2000000,
+//     sold: 231,
+//     profit: 124000000,
+//     view: 12,
+//     favorites: 53
+//   },
+//   {
+//     _id: '3',
+//     name: 'Parisian Collage Jacquard Hoodie',
+//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
+//     price: 123123,
+//     sold: 521324,
+//     profit: 123124432,
+//     view: 53,
+//     favorites: 643
+//   },
+//   {
+//     _id: '4',
+//     name: 'Parisian Collage Jacquard Hoodie',
+//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
+//     price: 5352342,
+//     sold: 245,
+//     profit: 21314214,
+//     view: 53,
+//     favorites: 232
+//   },
+//   {
+//     _id: '5',
+//     name: 'Parisian Collage Jacquard Hoodie',
+//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
+//     price: 2534654,
+//     sold: 24,
+//     profit: 23422423,
+//     view: 2343,
+//     favorites: 32
+//   },
+//   {
+//     _id: '6',
+//     name: 'Parisian Collage Jacquard Hoodie',
+//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
+//     price: 233,
+//     sold: 23,
+//     profit: 21132,
+//     view: 134,
+//     favorites: 23
+//   },
+//   {
+//     _id: '7',
+//     name: 'Parisian Collage Jacquard Hoodie',
+//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
+//     price: 223232,
+//     sold: 464,
+//     profit: 22323,
+//     view: 12321,
+//     favorites: 2132
+//   }
+// ]
 
-const _rows = arrBestSellers.map((row: any) => {
-  return {
-    id: row._id,
-    name: row.name,
-    images: row.images,
-    price: row.price,
-    sold: row.sold,
-    profit: row.profit,
-    view: row.view,
-    favorites: row.favorites
-  }
-})
+// const _rows = arrBestSellers.map((row: any) => {
+//   return {
+//     id: row._id,
+//     name: row.name,
+//     images: row.images,
+//     price: row.price,
+//     sold: row.sold,
+//     profit: row.profit,
+//     view: row.view,
+//     favorites: row.favorites
+//   }
+// })
 
-const _columns: GridColDef[] = [
-  {
-    field: 'name',
-    headerName: 'PRODUCT',
-    width: 300,
-    renderCell: (params: GridRenderCellParams) => (
-      <>
-        <Avatar alt='Avatar' src={params.row.images[0]} sx={{ width: 50, height: 50 }} />
+// const _columns: GridColDef[] = [
+//   {
+//     field: 'name',
+//     headerName: 'PRODUCT',
+//     width: 300,
+//     renderCell: (params: GridRenderCellParams) => (
+//       <>
+//         <Avatar alt='Avatar' src={params.row.images[0]} sx={{ width: 50, height: 50 }} />
 
-        <Stack>
-          <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{params.value}</Typography>
+//         <Stack>
+//           <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{params.value}</Typography>
 
-          <Typography>{currencyFormatterVND(params.row.price)}</Typography>
-        </Stack>
-      </>
-    )
-  },
-  {
-    field: 'sold',
-    headerName: 'SOLD',
-    width: 70
-  },
-  {
-    field: 'profit',
-    headerName: 'PROFIT',
-    headerAlign: 'right',
+//           <Typography>{currencyFormatterVND(params.row.price)}</Typography>
+//         </Stack>
+//       </>
+//     )
+//   },
+//   {
+//     field: 'sold',
+//     headerName: 'SOLD',
+//     width: 70
+//   },
+//   {
+//     field: 'profit',
+//     headerName: 'PROFIT',
+//     headerAlign: 'right',
 
-    width: 150,
-    renderCell: (params: GridRenderCellParams) => (
-      <>
-        <Box width={150}>
-          <Box>
-            <Typography>{currencyFormatterVND(params.value)}</Typography>
-          </Box>
+//     width: 150,
+//     renderCell: (params: GridRenderCellParams) => (
+//       <>
+//         <Box width={150}>
+//           <Box>
+//             <Typography>{currencyFormatterVND(params.value)}</Typography>
+//           </Box>
 
-          <Box display='flex' flexDirection={'row'} justifyContent='flex-end' alignItems={'center'}>
-            <Box display='flex' flexDirection={'row'} justifyContent='flex-end' alignItems={'center'} mx={2}>
-              <Typography sx={{ fontSize: 12 }}>{params.row.view}</Typography>
-              <RemoveRedEyeOutlinedIcon />
-            </Box>
-            <Typography sx={{ fontSize: 12 }}> {params.row.favorites}</Typography>
-            <FavoriteBorderOutlinedIcon />
-          </Box>
-        </Box>
-      </>
-    )
-  }
-]
+//           <Box display='flex' flexDirection={'row'} justifyContent='flex-end' alignItems={'center'}>
+//             <Box display='flex' flexDirection={'row'} justifyContent='flex-end' alignItems={'center'} mx={2}>
+//               <Typography sx={{ fontSize: 12 }}>{params.row.view}</Typography>
+//               <RemoveRedEyeOutlinedIcon />
+//             </Box>
+//             <Typography sx={{ fontSize: 12 }}> {params.row.favorites}</Typography>
+//             <FavoriteBorderOutlinedIcon />
+//           </Box>
+//         </Box>
+//       </>
+//     )
+//   }
+// ]
 
 const Dashboard = () => {
   const { data, error } = useSWR(API_ROUTES.getProducts, productsAPI.getProducts)
@@ -423,7 +423,7 @@ const Dashboard = () => {
         </Grid>
 
         <Grid item xs={12} lg={8} display='flex' flexDirection={'column'}>
-          <TableOrders data={data}></TableOrders>
+          Table Data
         </Grid>
 
         <Grid item xs={12} md={6} lg={4}></Grid>
