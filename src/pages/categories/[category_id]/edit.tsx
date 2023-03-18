@@ -7,6 +7,7 @@ const EditProduct = () => {
   const router = useRouter()
   const product_id = router.query.id as string
   const { cmsProduct, error, isLoading } = useCMSGetProductDetail(product_id)
+  console.log(cmsProduct)
 
   return (
     <Card>
@@ -24,7 +25,7 @@ const EditProduct = () => {
         {error && <Box>Failed to load</Box>}
         {cmsProduct && (
           <Box width={600}>
-            <CMSProductFormEdit initialValues={cmsProduct} />
+            <CMSProductFormEdit initialValues={cmsProduct.data} />
           </Box>
         )}
       </Stack>
