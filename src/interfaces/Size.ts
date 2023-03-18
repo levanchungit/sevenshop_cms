@@ -2,7 +2,7 @@ import { IModify } from './Product'
 
 //new
 export interface CmsSize {
-  _id?: string
+  _id: string
   name: string
   size: string
   created_at: string

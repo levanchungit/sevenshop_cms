@@ -25,7 +25,7 @@ import { productsAPI } from 'modules'
 import { SettingsContext } from '@core/context/settingsContext'
 
 interface Props {
-  initialValues?: CmsProduct
+  initialValues: CmsProduct
 }
 
 export default function CMSProductFormEdit(props: Props) {
@@ -46,13 +46,17 @@ export default function CMSProductFormEdit(props: Props) {
 
   const formik = useFormikCustom({
     initialValues: {
-      id: initialValues?._id,
-      name: initialValues?.name,
-      price: initialValues?.price,
-      description: initialValues?.description,
-      category_ids: [],
-      color_ids: [],
-      size_ids: []
+      _id: initialValues._id,
+      name: initialValues.name,
+      price: initialValues.price,
+      price_sale: initialValues.price_sale,
+      images: initialValues.images,
+      stock: initialValues.stock,
+      status: initialValues.status,
+      description: initialValues.description,
+      category_ids: initialValues.category_ids,
+      color_ids: initialValues.color_ids,
+      size_ids: initialValues.size_ids
     },
     validationSchema: yup.object().shape({
       id: yup.string().required(),
@@ -66,7 +70,7 @@ export default function CMSProductFormEdit(props: Props) {
     onSubmit: async (data, actions) => {
       try {
         const response = await productsAPI.updateProduct(data)
-        await router.push({ pathname: APP_ROUTES.cmsProductEdit + data.id })
+        await router.push({ pathname: APP_ROUTES.cmsProductEdit + data._id })
         if (response.status === 200) {
           setSnackbarAlert({ message: 'Add product successfully', severity: 'success' })
         }
@@ -105,6 +109,8 @@ export default function CMSProductFormEdit(props: Props) {
       </div>
     )
   const defaultCategories = cms_categories.filter(c => initialValues?.category_ids.includes(c._id))
+  const defaultColors = cms_colors.filter(c => initialValues?.color_ids.includes(c._id))
+  const defaultSizes = cms_sizes.filter(c => initialValues?.size_ids.includes(c?._id))
 
   const handleBack = () => {
     router.push(APP_ROUTES.cmsProducts)
@@ -166,7 +172,9 @@ export default function CMSProductFormEdit(props: Props) {
                     arrCategories = []
                   } else {
                     const stringArray = values.map(item => item._id)
-                    arrCategories.push(stringArray)
+                    for (let i = 0; i < stringArray.length; i++) {
+                      arrCategories.push(stringArray[i].toString())
+                    }
                   }
                   formik.setFieldValue('category_ids', arrCategories)
                   console.log(arrCategories)
@@ -196,11 +204,16 @@ export default function CMSProductFormEdit(props: Props) {
               <Autocomplete
                 id='color_ids'
                 open={openColors}
+                multiple
+                defaultValue={defaultColors}
                 onChange={(event, values) => {
                   if (values == null) {
                     arrColors = []
                   } else {
-                    arrColors.push(values?._id)
+                    const stringArray = values.map(item => item._id)
+                    for (let i = 0; i < stringArray.length; i++) {
+                      arrColors.push(stringArray[i].toString())
+                    }
                   }
                   formik.setFieldValue('color_ids', arrColors)
                 }}
@@ -237,11 +250,16 @@ export default function CMSProductFormEdit(props: Props) {
               <Autocomplete
                 id='size_ids'
                 open={openSizes}
+                multiple
+                defaultValue={defaultSizes}
                 onChange={(event, values) => {
                   if (values == null) {
                     arrSizes = []
                   } else {
-                    arrSizes.push(values?._id)
+                    const stringArray = values.map(item => item._id)
+                    for (let i = 0; i < stringArray.length; i++) {
+                      arrSizes.push(stringArray[i].toString())
+                    }
                   }
                   formik.setFieldValue('size_ids', arrSizes)
                 }}
@@ -279,7 +297,15 @@ export default function CMSProductFormEdit(props: Props) {
             </Grid>
             <Grid item xs={12}>
               <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                2. REVIEW
+                2. STOCK
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Divider sx={{ marginBottom: 0 }} />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant='body2' sx={{ fontWeight: 600 }}>
+                3. REVIEW
               </Typography>
             </Grid>
           </Grid>

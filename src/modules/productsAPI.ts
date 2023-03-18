@@ -26,7 +26,14 @@ const productsAPI = {
     return response
   },
   getProductDetail(id: string) {
-    return axios.get(API_URL + API_ROUTES.getProductDetail(id))
+    const response = axiosClient.get(API_ROUTES.getProductDetail + id)
+
+    return response
+  },
+  async generateStock(id: string) {
+    const response = await axiosClient.get(API_ROUTES.generateStock + id)
+
+    return response
   }
 }
 

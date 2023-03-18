@@ -25,7 +25,9 @@ import {
   GridActionsCellItem,
   GridRowId,
   GridColDef,
-  GridToolbar
+  GridToolbarContainer,
+  GridToolbarExport,
+  GridToolbarQuickFilter
 } from '@mui/x-data-grid'
 import { currencyFormatterVND, formatDate } from 'utils/currencyFormatter'
 import { SettingsContext } from '@core/context/settingsContext'
@@ -33,6 +35,35 @@ import { useRouter } from 'next/router'
 import { APP_ROUTES } from 'global/constants/index'
 import useCMSGetProducts from 'hook/product/useCMSGetProducts'
 import { CmsProduct } from 'interfaces/Product'
+import { CmsCategory } from 'interfaces/Category'
+import useCMSGetCategories from 'hook/category/useCMSGetCategories'
+import useCMSGetColors from 'hook/color/useCMSGetColors'
+import useCMSGetSizes from 'hook/size/useCMSGetSizes'
+import { CmsColor } from 'interfaces/Color'
+import { CmsSize } from 'interfaces/Size'
+
+const CustomToolbar = () => {
+  return (
+    <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between', m: 2 }}>
+      <Box
+        sx={{
+          p: 0.5,
+          pb: 0
+        }}
+      >
+        <GridToolbarQuickFilter
+          quickFilterParser={(searchInput: string) =>
+            searchInput
+              .split(',')
+              .map(value => value.trim())
+              .filter(value => value !== '')
+          }
+        />
+      </Box>
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  )
+}
 
 const TableProducts = () => {
   const router = useRouter()
@@ -40,11 +71,13 @@ const TableProducts = () => {
 
   //SWR
   const { cms_products, cms_err_products, cms_mutate_product } = useCMSGetProducts()
+  const { cms_categories, error: cms_err_categories } = useCMSGetCategories()
+  const { cms_colors, error: cms_err_colors } = useCMSGetColors()
+  const { cms_sizes, error: cms_err_sizes } = useCMSGetSizes()
 
   //STATE
   const [dialogCofirm, setDialogCofirm] = useState(false)
   const [idProduct, setIdProduct] = useState<GridRowId>('')
-  console.log(cms_products)
 
   //HANDLER
   const handleOpenDialogCofirm = () => {
@@ -68,8 +101,8 @@ const TableProducts = () => {
     []
   )
 
-  if (cms_err_products) return <Box>Failed to load</Box>
-  if (!cms_products)
+  if (cms_err_products || cms_err_categories || cms_err_colors || cms_err_sizes) return <Box>Failed to load</Box>
+  if (!cms_products || !cms_categories || !cms_colors || !cms_sizes)
     return (
       <div style={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
         <CircularProgress />
@@ -112,7 +145,7 @@ const TableProducts = () => {
   })
 
   const _columns: GridColDef[] = [
-    // { field: 'id', headerName: 'ID', width: 250, hideable: false },
+    // { field: 'id', headerName: 'ID', width: 250},
     {
       field: 'name',
       headerName: 'Name',
@@ -177,15 +210,69 @@ const TableProducts = () => {
         </Button>
       )
     },
-    { field: 'category_ids', headerName: 'Categories', width: 250 },
+    {
+      field: 'category_ids',
+      headerName: 'Categories',
+      width: 100,
+      renderCell: (params: GridRenderCellParams) => (
+        <Typography sx={{ fontSize: '0.875rem' }}>
+          {cms_categories
+            .filter(c => params.value.includes(c._id))
+            .map((category: CmsCategory) => category.name)
+            .join(', ')}
+        </Typography>
+      )
+    },
+    {
+      field: 'color_ids',
+      headerName: 'Colors',
+      width: 100,
+      renderCell: (params: GridRenderCellParams) => (
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          {cms_colors
+            .filter(c => params.value.includes(c._id))
+            .map((color: CmsColor) => {
+              return (
+                <Box
+                  key={color._id}
+                  mr={1}
+                  sx={{
+                    width: 30,
+                    height: 30,
+                    border: '0.1px solid #C4C4C4',
+                    bgcolor: color.code,
+                    borderRadius: 10
+                  }}
+                ></Box>
+              )
+            })}
+        </Box>
+      )
+    },
+    {
+      field: 'size_ids',
+      headerName: 'Sizes',
+      width: 100,
+      renderCell: (params: GridRenderCellParams) => (
+        <Typography sx={{ fontSize: '0.875rem' }}>
+          {cms_sizes
+            .filter(c => params.value.includes(c._id))
+            .map((size: CmsSize) => size.name)
+            .join(', ')}
+        </Typography>
+      )
+    },
     {
       field: 'created_at',
       headerName: 'Created',
       width: 200,
       renderCell: (params: GridRenderCellParams) => (
-        <Typography sx={{ fontSize: '0.875rem' }}>
-          {formatDate(params.value)} | {params.row.created_by}
-        </Typography>
+        <>
+          <Box flex={1} flexWrap={'wrap'}>
+            <Typography sx={{ fontSize: '0.875rem' }}>{formatDate(params.value)}</Typography>
+            <Typography sx={{ fontSize: '0.875rem' }}>{params.row.created_by}</Typography>
+          </Box>
+        </>
       )
     },
     {
@@ -225,7 +312,7 @@ const TableProducts = () => {
           getRowId={row => row.id}
           rows={_rows}
           columns={_columns}
-          slots={{ toolbar: GridToolbar }}
+          slots={{ toolbar: CustomToolbar }}
           sx={{
             '& .MuiDataGrid-row:hover': {
               color: 'primary.main',

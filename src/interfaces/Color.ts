@@ -2,7 +2,7 @@ import { IModify } from './Product'
 
 //new
 export interface CmsColor {
-  _id?: string
+  _id: string
   name: string
   code: string
   created_at: string

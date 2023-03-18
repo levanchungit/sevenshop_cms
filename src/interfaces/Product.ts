@@ -13,7 +13,7 @@ export type IStock = {
 }
 
 export interface CmsProduct {
-  _id?: string
+  _id: string
   name: string
   price: number
   price_sale: number

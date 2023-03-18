@@ -9,11 +9,11 @@ export const API_ROUTES = {
 
   // product
   getProducts: `/products`,
-  getProductDetail: (id: string) => `/products/${id}`,
+  getProductDetail: `/products/`,
   createProduct: `/products/`,
-  updateProduct: `/products/:id`,
+  updateProduct: `/products/`,
   deleteProduct: (id: string) => `/products/${id}`,
-  generateStock: `/generate_stock/:id`,
+  generateStock: `/products/generate_stock/`,
 
   //categories
   getCategories: `/categories`,
@@ -26,6 +26,10 @@ export const API_ROUTES = {
   getColors: `/colors`,
 
   //sizes
-  getSizes: `/sizes`
+  getSizes: `/sizes`,
+
+  //upload
+  single: `/upload/single`,
+  multiple: `/upload/multiple`
 }
 export default API_ROUTES
