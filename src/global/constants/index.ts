@@ -21,6 +21,11 @@ export const APP_ROUTES = {
   //Order
   cmsOrders: `/orders`,
 
+  //Category
+  cmsCategories: `/categories`,
+  cmsCategoryCreate: `/categories/create`,
+  cmsCategoryEdit: `/categories/[category_id]/edit`,
+
   //Erro
   cmsError401: `/401`,
   cmsError404: `/404`,
@@ -30,9 +35,4 @@ export const APP_ROUTES = {
 export enum STATUS_PRODUCT {
   active = 'active',
   inactive = 'inactive'
-}
-
-export enum FORM_TYPES {
-  create = 'create',
-  edit = 'edit'
 }

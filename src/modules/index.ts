@@ -1,1 +1,6 @@
-export { default as authAPI } from './authAPI';
+export { default as authAPI } from './authAPI'
+export { default as usersAPI } from './usersAPI'
+export { default as productsAPI } from './productsAPI'
+export { default as categoriesAPI } from './categoriesAPI'
+export { default as colorsAPI } from './colorsAPI'
+export { default as sizesAPI } from './sizesAPI'

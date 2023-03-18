@@ -13,31 +13,25 @@ import {
 import { Form, FormikProvider } from 'formik'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
-
-import { Fragment, useState } from 'react'
-import { CreateCmsProductPayload, EditCmsProductPayload } from 'interfaces/Product'
+import { Fragment, useState, useContext } from 'react'
+import { CmsProduct } from 'interfaces/Product'
 import { useFormikCustom } from 'hook/lib'
-import { APP_ROUTES, FORM_TYPES } from 'global/constants/index'
+import { APP_ROUTES } from 'global/constants/index'
 import { InputField } from 'components/CustomFields'
 import useCMSGetCategories from 'hook/category/useCMSGetCategories'
 import useCMSGetColors from 'hook/color/useCMSGetColors'
 import useCMSGetSizes from 'hook/size/useCMSGetSizes'
-import { authAPI } from 'modules'
-import isObject from 'lodash/isObject'
-import Avatar from '@core/theme/overrides/avatars'
-
-function isEditForm(value: unknown): value is EditCmsProductPayload {
-  return isObject(value) && '_id' in value ? !!value._id : false
-}
+import { productsAPI } from 'modules'
+import { SettingsContext } from '@core/context/settingsContext'
 
 interface Props {
-  initialValues?: Partial<CreateCmsProductPayload | EditCmsProductPayload>
-  type: keyof typeof FORM_TYPES
+  initialValues: CmsProduct
 }
 
-export default function CMSProductForm(props: Props) {
-  const { initialValues, type } = props
+export default function CMSProductFormEdit(props: Props) {
+  const { initialValues } = props
   const router = useRouter()
+  const { setSnackbarAlert } = useContext(SettingsContext)
   const { cms_categories, error: err_categories, isLoading: loading_categories } = useCMSGetCategories()
   const { cms_colors, error: err_colors } = useCMSGetColors()
   const { cms_sizes, error: err_sizes } = useCMSGetSizes()
@@ -52,15 +46,20 @@ export default function CMSProductForm(props: Props) {
 
   const formik = useFormikCustom({
     initialValues: {
-      name: '',
-      price: 0,
-      description: '',
-      category_ids: [],
-      color_ids: [],
-      size_ids: [],
-      ...initialValues
+      _id: initialValues._id,
+      name: initialValues.name,
+      price: initialValues.price,
+      price_sale: initialValues.price_sale,
+      images: initialValues.images,
+      stock: initialValues.stock,
+      status: initialValues.status,
+      description: initialValues.description,
+      category_ids: initialValues.category_ids,
+      color_ids: initialValues.color_ids,
+      size_ids: initialValues.size_ids
     },
     validationSchema: yup.object().shape({
+      id: yup.string().required(),
       name: yup.string().required(),
       price: yup.number().required().min(0),
       description: yup.string().required(),
@@ -69,20 +68,15 @@ export default function CMSProductForm(props: Props) {
       size_ids: yup.array().required().min(1, 'Min 1 element')
     }),
     onSubmit: async (data, actions) => {
-      console.log('SUBMIT')
-
-      console.log(data)
       try {
-        if (type === FORM_TYPES.create) {
-          await authAPI.createProduct(data)
-          await router.push({ pathname: APP_ROUTES.cmsProducts })
+        const response = await productsAPI.updateProduct(data)
+        await router.push({ pathname: APP_ROUTES.cmsProductEdit + data._id })
+        if (response.status === 200) {
+          setSnackbarAlert({ message: 'Add product successfully', severity: 'success' })
         }
-        if (type === FORM_TYPES.edit && isEditForm(data)) {
-          await authAPI.updateProduct(data._id, data)
-          await router.push({ pathname: APP_ROUTES.cmsProductEdit + data._id })
-        }
-      } catch (e) {
-        console.log(e)
+        await router.push({ pathname: APP_ROUTES.cmsProducts })
+      } catch (e: any) {
+        setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
       } finally {
         actions.setSubmitting(false)
       }
@@ -114,6 +108,9 @@ export default function CMSProductForm(props: Props) {
         <Typography mx={5}>Loading cms_sizes...</Typography>
       </div>
     )
+  const defaultCategories = cms_categories.filter(c => initialValues?.category_ids.includes(c._id))
+  const defaultColors = cms_colors.filter(c => initialValues?.color_ids.includes(c._id))
+  const defaultSizes = cms_sizes.filter(c => initialValues?.size_ids.includes(c?._id))
 
   const handleBack = () => {
     router.push(APP_ROUTES.cmsProducts)
@@ -157,15 +154,9 @@ export default function CMSProductForm(props: Props) {
             <Grid item xs={12} sm={6}>
               <Autocomplete
                 id='category_ids'
+                multiple
                 open={openCategories}
-                onChange={(event, values) => {
-                  if (values == null) {
-                    arrCategories = []
-                  } else {
-                    arrCategories.push(values?._id)
-                  }
-                  formik.setFieldValue('category_ids', arrCategories)
-                }}
+                defaultValue={defaultCategories}
                 onOpen={() => {
                   setOpenCategories(true)
                 }}
@@ -175,6 +166,18 @@ export default function CMSProductForm(props: Props) {
                 options={cms_categories}
                 isOptionEqualToValue={(option, value) => {
                   return option.name === value.name
+                }}
+                onChange={(event, values) => {
+                  if (values.length == 0) {
+                    arrCategories = []
+                  } else {
+                    const stringArray = values.map(item => item._id)
+                    for (let i = 0; i < stringArray.length; i++) {
+                      arrCategories.push(stringArray[i].toString())
+                    }
+                  }
+                  formik.setFieldValue('category_ids', arrCategories)
+                  console.log(arrCategories)
                 }}
                 getOptionLabel={option => option.name}
                 renderInput={params => (
@@ -201,11 +204,16 @@ export default function CMSProductForm(props: Props) {
               <Autocomplete
                 id='color_ids'
                 open={openColors}
+                multiple
+                defaultValue={defaultColors}
                 onChange={(event, values) => {
                   if (values == null) {
                     arrColors = []
                   } else {
-                    arrColors.push(values?._id)
+                    const stringArray = values.map(item => item._id)
+                    for (let i = 0; i < stringArray.length; i++) {
+                      arrColors.push(stringArray[i].toString())
+                    }
                   }
                   formik.setFieldValue('color_ids', arrColors)
                 }}
@@ -242,11 +250,16 @@ export default function CMSProductForm(props: Props) {
               <Autocomplete
                 id='size_ids'
                 open={openSizes}
+                multiple
+                defaultValue={defaultSizes}
                 onChange={(event, values) => {
                   if (values == null) {
                     arrSizes = []
                   } else {
-                    arrSizes.push(values?._id)
+                    const stringArray = values.map(item => item._id)
+                    for (let i = 0; i < stringArray.length; i++) {
+                      arrSizes.push(stringArray[i].toString())
+                    }
                   }
                   formik.setFieldValue('size_ids', arrSizes)
                 }}
@@ -284,7 +297,15 @@ export default function CMSProductForm(props: Props) {
             </Grid>
             <Grid item xs={12}>
               <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                2. REVIEW
+                2. STOCK
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Divider sx={{ marginBottom: 0 }} />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant='body2' sx={{ fontWeight: 600 }}>
+                3. REVIEW
               </Typography>
             </Grid>
           </Grid>

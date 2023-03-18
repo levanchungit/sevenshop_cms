@@ -13,7 +13,7 @@ export type IStock = {
 }
 
 export interface CmsProduct {
-  _id?: string
+  _id: string
   name: string
   price: number
   price_sale: number
@@ -40,4 +40,8 @@ export interface CreateCmsProductPayload {
 
 export interface EditCmsProductPayload extends CreateCmsProductPayload {
   _id: string
+  price_sale: number
+  images: string[]
+  stock: IStock[]
+  status: STATUS_PRODUCT
 }

@@ -3,8 +3,54 @@ export type SignInPayload = {
   password: string
 }
 
-export type RegisterPayload = {
+export type SignInSuccessData = {
+  message: string
+  access_token: string
+  refresh_token: string
+}
+
+export type GetMeSuccessData = {
+  _id: string
   email: string
+  password: string
+  full_name: string
+  phone: string
+  avatar: string
+  cover_image: string
+  gender: string
+  birthday: string
+  addresses: []
+  status: string
+  product_favorites: []
+  recent_products: []
+  otp: {
+    exp: string
+    _id: string
+  }
+  access_token: string
+  role: string
+  membership: {
+    name: string
+    description: string
+    point: number
+  }
+  cart_id: string
+  orders: []
+  history_search: []
+  created_at: string
+  created_by: string
+  modify: [
+    {
+      action: string
+      date: string
+      _id: string
+    },
+    {
+      action: string
+      date: string
+      _id: string
+    }
+  ]
 }
 
 export type CheckOTPPayload = {
@@ -18,27 +64,6 @@ export type SetPasswordPayload = {
 
 export type RefreshTokenPayload = {
   refresh_token: string | null | undefined
-}
-
-export type GetMeSuccessData = {
-  _id: string
-  email: string
-  status: string
-  product_favorites: []
-  recent_products: []
-  language: number
-  role_type: number
-  membership_type: number
-  create_at: string
-  address: []
-  create_by: string
-  __v: 0
-  access_token: string
-  modify_at: string
-  modify_by: string
-  refresh_token: string
-  password: string
-  image: string
 }
 
 export type MetaDataDetail = {

@@ -1,17 +1,22 @@
-export type DataResSuccess<T> = {
-  message: string
-  result: T[]
-}
+import { Maybe } from 'utils/types'
 
-export type APIResSuccess<T> = {
+export interface ErrorForm {
+  code: string
+  field: string
+}
+export interface APIResSuccess<T = unknown> {
   code: string
   message: string
-  result: T
+  data: T
 }
+
 export interface APIResError {
   code: string
   message: string
   status: number
+  errors: ErrorForm[]
 }
+
+export type MaybeAPIResError = Maybe<APIResError>
 
 export type TypeReturn<T> = Promise<APIResSuccess<T>>

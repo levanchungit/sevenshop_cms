@@ -1,28 +1,16 @@
-import { CmsProduct } from 'interfaces/Product'
-import { API_ROUTES } from 'global/constants'
-import { authAPI } from 'modules'
-import useSWR, { Fetcher, SWRResponse } from 'swr'
-import { Maybe } from 'utils/types'
-import { APIResError } from 'interfaces/APIResponse'
+import { productsAPI } from 'modules'
+import useSWR from 'swr'
+import { useMemo } from 'react'
 
-const SWR_KEY = API_ROUTES.getProductDetail
-
-type SWRData = CmsProduct
-type SWRError = Maybe<APIResError>
-
-interface UseCMSProductDetail extends Omit<SWRResponse<SWRData, SWRError>, 'data'> {
-  cmsProduct?: CmsProduct
-}
-
-const fetcher: Fetcher<SWRData, [string, string]> = async ([, id]) => {
-  const result = await authAPI.getProductDetail(id)
+const fetcher = async (id: string) => {
+  const result = await productsAPI.getProductDetail(id)
 
   return result
 }
 
-export default function useCMSGetProductDetail(id: string): UseCMSProductDetail {
-  const key = [SWR_KEY, id]
-  const swr = useSWR(key, fetcher)
+export default function useCMSGetProductDetail(id: string) {
+  const key = useMemo(() => [id], [id]) // sử dụng useMemo
+  const swr = useSWR(key, fetcher, { revalidateOnFocus: true }) // sử dụng caching
   const { data, ...others } = swr
 
   return { cmsProduct: data, ...others }

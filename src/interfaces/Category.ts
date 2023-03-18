@@ -2,10 +2,11 @@ import { IModify } from './Product'
 
 //new
 export interface CmsCategory {
-  _id?: string
+  _id: string
   name: string
   description: string
   image: string
+  product_ids: []
   created_at: string
   created_by: string
   modify: IModify[]

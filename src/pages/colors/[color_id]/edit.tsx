@@ -1,13 +1,12 @@
 import { useRouter } from 'next/router'
 import { CircularProgress, Box, Typography, Card, Divider, CardHeader, Stack } from '@mui/material'
 import useCMSGetProductDetail from 'hook/product/useCMSGetDetail'
-import CMSProductForm from 'components/CMSProduct/CMSProductForm'
+import CMSProductForm from 'components/CMSProduct/CMSProductFormEdit'
 
 const EditProduct = () => {
   const router = useRouter()
   const product_id = router.query.id as string
   const { cmsProduct, error, isLoading } = useCMSGetProductDetail(product_id)
-  console.log(cmsProduct)
 
   return (
     <Card>

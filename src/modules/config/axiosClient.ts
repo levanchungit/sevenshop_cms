@@ -1,3 +1,4 @@
+import { authAPI } from 'modules'
 import { APP_ROUTES } from 'global/constants/index'
 import { API_ROUTES } from './../../global/constants/apiRoutes'
 import axios, { AxiosInstance } from 'axios'
@@ -33,12 +34,10 @@ function createAxiosClient(): AxiosInstance {
     async error => {
       const originalRequest = error.config
       const refresh_token = localStorage.getItem('refresh_token')
-      console.log('refresh_token', refresh_token)
       if (error.response.status === 401 && originalRequest.url !== API_ROUTES.refresh_token) {
         // Gửi request mới để lấy access token mới
         try {
-          const response = await axios.post(API_URL + API_ROUTES.refresh_token, { refresh_token })
-          console.log(response)
+          const response = await authAPI.refresh_Token({ refresh_token })
           const access_token = response.data.access_token
           localStorage.setItem('access_token', access_token)
 
@@ -51,7 +50,7 @@ function createAxiosClient(): AxiosInstance {
           localStorage.removeItem('access_token')
           localStorage.removeItem('refresh_token')
 
-          // Router.push(APP_ROUTES.cmsLogin)
+          Router.push(APP_ROUTES.cmsLogin)
 
           return Promise.reject(error)
         }

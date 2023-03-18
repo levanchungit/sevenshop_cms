@@ -9,19 +9,27 @@ export const API_ROUTES = {
 
   // product
   getProducts: `/products`,
-  getProductDetail: (id: string) => `/products/${id}`,
+  getProductDetail: `/products/`,
   createProduct: `/products/`,
-  updateProduct: `/products/:id`,
+  updateProduct: `/products/`,
   deleteProduct: (id: string) => `/products/${id}`,
-  generateStock: `/generate_stock/:id`,
+  generateStock: `/products/generate_stock/`,
 
   //categories
   getCategories: `/categories`,
+  getCategoryDetail: (id: string) => `/categories/${id}`,
+  createCategory: `/categories/`,
+  updateCategory: `/categories/:id`,
+  deleteCategory: (id: string) => `/categories/${id}`,
 
   //colors
   getColors: `/colors`,
 
   //sizes
-  getSizes: `/sizes`
+  getSizes: `/sizes`,
+
+  //upload
+  single: `/upload/single`,
+  multiple: `/upload/multiple`
 }
 export default API_ROUTES

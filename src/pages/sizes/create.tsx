@@ -1,5 +1,5 @@
 import { CardHeader, Divider, Box, Card, Stack } from '@mui/material'
-import CMSProductForm from 'components/CMSProduct/CMSProductForm'
+import CMSProductForm from 'components/CMSProduct/CMSProductFormEdit'
 
 const CreateProduct = () => {
   return (
