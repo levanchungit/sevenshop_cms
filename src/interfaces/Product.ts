@@ -7,6 +7,7 @@ export type IModify = {
 }
 
 export type IStock = {
+  _id: string
   size_id: string
   color_id: string
   quantity: number

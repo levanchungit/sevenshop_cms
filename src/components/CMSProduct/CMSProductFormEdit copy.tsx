@@ -8,58 +8,30 @@ import {
   CardActions,
   CircularProgress,
   Box,
-  Autocomplete,
-  ButtonProps,
-  Switch
+  Autocomplete
 } from '@mui/material'
 import { Form, FormikProvider } from 'formik'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
-import { Fragment, useState, useContext, ElementType, ChangeEvent } from 'react'
+import { Fragment, useState, useContext } from 'react'
 import { CmsProduct } from 'interfaces/Product'
 import { useFormikCustom } from 'hook/lib'
-import { APP_ROUTES, STATUS_PRODUCT } from 'global/constants/index'
+import { APP_ROUTES } from 'global/constants/index'
 import { InputField } from 'components/CustomFields'
 import useCMSGetCategories from 'hook/category/useCMSGetCategories'
 import useCMSGetColors from 'hook/color/useCMSGetColors'
 import useCMSGetSizes from 'hook/size/useCMSGetSizes'
 import { productsAPI } from 'modules'
 import { SettingsContext } from '@core/context/settingsContext'
-import { styled } from '@mui/material/styles'
-import uploadAPI from 'modules/uploadAPI'
 
 interface Props {
   initialValues: CmsProduct
 }
 
-const ImgStyled = styled('img')(({ theme }) => ({
-  width: 600 / 5 - 25,
-  marginRight: theme.spacing(5),
-  borderRadius: theme.shape.borderRadius
-}))
-
-const ButtonStyled = styled(Button)<ButtonProps & { component?: ElementType; htmlFor?: string }>(({ theme }) => ({
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    textAlign: 'center'
-  }
-}))
-
-const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
-  marginLeft: theme.spacing(4.5),
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    marginLeft: 0,
-    textAlign: 'center',
-    marginTop: theme.spacing(4)
-  }
-}))
-
-export default function CMSProductFormCreate(props: Props) {
+export default function CMSProductFormEdit(props: Props) {
   const { initialValues } = props
   const router = useRouter()
   const { setSnackbarAlert } = useContext(SettingsContext)
-
   const { cms_categories, error: err_categories, isLoading: loading_categories } = useCMSGetCategories()
   const { cms_colors, error: err_colors } = useCMSGetColors()
   const { cms_sizes, error: err_sizes } = useCMSGetSizes()
@@ -67,9 +39,6 @@ export default function CMSProductFormCreate(props: Props) {
   const [openCategories, setOpenCategories] = useState(false)
   const [openColors, setOpenColors] = useState(false)
   const [openSizes, setOpenSizes] = useState(false)
-  const [images, setImages] = useState(initialValues.images)
-  const [isLoadingImages, setIsLoadingImages] = useState(false)
-  const [statusProduct, setStatusProduct] = useState(initialValues.status == STATUS_PRODUCT.active ? true : false)
 
   let arrCategories: (string | undefined)[] = []
   let arrSizes: (string | undefined)[] = []
@@ -90,23 +59,20 @@ export default function CMSProductFormCreate(props: Props) {
       size_ids: initialValues.size_ids
     },
     validationSchema: yup.object().shape({
-      // _id: yup.string().required(),
+      id: yup.string().required(),
       name: yup.string().required(),
       price: yup.number().required().min(0),
-      price_sale: yup.number().required().min(0),
       description: yup.string().required(),
-      status: yup.boolean().required(),
-      images: yup.array().required().min(1, 'Min 1 element'),
       category_ids: yup.array().required().min(1, 'Min 1 element'),
       color_ids: yup.array().required().min(1, 'Min 1 element'),
       size_ids: yup.array().required().min(1, 'Min 1 element')
     }),
     onSubmit: async (data, actions) => {
-      console.log('onSubmit UPDATE', data)
       try {
         const response = await productsAPI.updateProduct(data)
+        await router.push({ pathname: APP_ROUTES.cmsProductEdit + data._id })
         if (response.status === 200) {
-          setSnackbarAlert({ message: 'Update product successfully', severity: 'success' })
+          setSnackbarAlert({ message: 'Add product successfully', severity: 'success' })
         }
         await router.push({ pathname: APP_ROUTES.cmsProducts })
       } catch (e: any) {
@@ -142,7 +108,6 @@ export default function CMSProductFormCreate(props: Props) {
         <Typography mx={5}>Loading cms_sizes...</Typography>
       </div>
     )
-
   const defaultCategories = cms_categories.filter(c => initialValues?.category_ids.includes(c._id))
   const defaultColors = cms_colors.filter(c => initialValues?.color_ids.includes(c._id))
   const defaultSizes = cms_sizes.filter(c => initialValues?.size_ids.includes(c?._id))
@@ -151,77 +116,9 @@ export default function CMSProductFormCreate(props: Props) {
     router.push(APP_ROUTES.cmsProducts)
   }
 
-  const uploadImages = async (formData: any) => {
-    try {
-      const response = await uploadAPI.multiple(formData)
-
-      setIsLoadingImages(false)
-
-      return response.data.secure_urls
-    } catch (e: any) {
-      console.log('uploadImages', e)
-
-      return null
-    }
-  }
-
-  const onChangeImages = async (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
-    setIsLoadingImages(true)
-    if (files && files.length > 0) {
-      const formData = new FormData()
-      for (let i = 0; i < files.length; i++) {
-        formData.append('files', files[i])
-      }
-      const secure_urls = await uploadImages(formData)
-      console.log('secure_urls', secure_urls)
-      setImages(secure_urls)
-      formik.setFieldValue('images', secure_urls)
-    }
-  }
-
-  const handleChangeStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStatusProduct(event.target.checked)
-  }
-
   return (
     <FormikProvider value={formik}>
       <Form autoComplete='off' onSubmit={handleSubmit} noValidate>
-        <CardActions>
-          <Box sx={{ flex: 1 }}>
-            <Box
-              sx={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              {isLoadingImages ? (
-                <CircularProgress />
-              ) : (
-                images.map((img, index) => <ImgStyled key={index.toString()} src={img} alt='Profile Pic' />)
-              )}
-            </Box>
-            <Box width={'100%'} mt={2} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-              <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
-                Upload Photos
-                <input
-                  hidden
-                  multiple
-                  type='file'
-                  onChange={onChangeImages}
-                  accept='*'
-                  id='account-settings-upload-image'
-                />
-              </ButtonStyled>
-              <ResetButtonStyled color='error' variant='outlined' onClick={() => setImages([])}>
-                Reset
-              </ResetButtonStyled>
-            </Box>
-          </Box>
-        </CardActions>
         <CardContent>
           <Grid container spacing={5}>
             <Grid item xs={12}>
@@ -229,10 +126,10 @@ export default function CMSProductFormCreate(props: Props) {
                 1. PRODUCT
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <InputField label='Name' required placeholder='Name' fullWidth {...getFieldPropsCustom('name')} />
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <InputField
                 label='Price'
                 inputMode='numeric'
@@ -243,18 +140,8 @@ export default function CMSProductFormCreate(props: Props) {
                 {...getFieldPropsCustom('price')}
               />
             </Grid>
-            <Grid item xs={12} sm={4}>
-              <InputField
-                label='Price Sale'
-                inputMode='numeric'
-                required
-                placeholder='Price Sale'
-                fullWidth
-                type={'number'}
-                {...getFieldPropsCustom('price_sale')}
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
+
+            <Grid item xs={12} sm={6}>
               <InputField
                 label='Description'
                 required
@@ -264,7 +151,7 @@ export default function CMSProductFormCreate(props: Props) {
               />
             </Grid>
 
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <Autocomplete
                 id='category_ids'
                 multiple
@@ -312,7 +199,7 @@ export default function CMSProductFormCreate(props: Props) {
               />
             </Grid>
 
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <Autocomplete
                 id='color_ids'
                 open={openColors}
@@ -355,37 +242,10 @@ export default function CMSProductFormCreate(props: Props) {
                     }}
                   />
                 )}
-                renderOption={(props, option) => (
-                  <li {...props}>
-                    <Box
-                      component='span'
-                      sx={{
-                        width: 30,
-                        height: 30,
-                        border: '0.1px solid #C4C4C4',
-                        bgcolor: option.code,
-                        mr: 1,
-                        borderRadius: 10
-                      }}
-                      style={{ backgroundColor: option.code }}
-                    />
-                    <Box
-                      sx={{
-                        flexGrow: 1,
-                        '& span': {
-                          color: 'red'
-                        }
-                      }}
-                    >
-                      {option.name}
-                      <br />
-                    </Box>
-                  </li>
-                )}
               />
             </Grid>
 
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <Autocomplete
                 id='size_ids'
                 open={openSizes}
@@ -431,11 +291,6 @@ export default function CMSProductFormCreate(props: Props) {
               />
             </Grid>
 
-            <Grid item xs={12} sm={4}>
-              <Typography>Status</Typography>
-              <Switch checked={statusProduct} onChange={handleChangeStatus} defaultChecked />
-            </Grid>
-
             <Grid item xs={12}>
               <Divider sx={{ marginBottom: 0 }} />
             </Grid>
@@ -444,34 +299,6 @@ export default function CMSProductFormCreate(props: Props) {
                 2. STOCK
               </Typography>
             </Grid>
-
-            <Grid container item>
-              {initialValues.stock.map((stock: any, index: any) => {
-                const defaultColor = cms_colors.find(c => stock?.color_id.includes(c._id))
-                const defaultSize = cms_sizes.find(c => stock?.size_id.includes(c._id))
-
-                return (
-                  <Grid sx={{ width: '100%', display: 'flex', flexDirection: 'row' }} item key={index.toString()}>
-                    <Box width={50} height={50} sx={{ bgcolor: defaultColor?.code }}></Box>
-                    <Typography width={50} height={50}>
-                      {defaultSize?.name}
-                    </Typography>
-                    <Grid item xs={12} sm={4}>
-                      <InputField
-                        label='Price'
-                        inputMode='numeric'
-                        required
-                        placeholder='Price'
-                        fullWidth
-                        type={'number'}
-                        {...getFieldPropsCustom('price')}
-                      />
-                    </Grid>
-                  </Grid>
-                )
-              })}
-            </Grid>
-
             <Grid item xs={12}>
               <Divider sx={{ marginBottom: 0 }} />
             </Grid>
@@ -482,11 +309,12 @@ export default function CMSProductFormCreate(props: Props) {
             </Grid>
           </Grid>
         </CardContent>
+        <Divider sx={{ margin: 0 }} />
         <CardActions>
           <Button variant='outlined' size='large' fullWidth onClick={handleBack}>
             Back
           </Button>
-          <Button fullWidth size='large' type='submit' sx={{ mr: 2 }} variant='contained' disabled={isLoadingImages}>
+          <Button fullWidth size='large' type='submit' sx={{ mr: 2 }} variant='contained'>
             CONFIRM
           </Button>
         </CardActions>

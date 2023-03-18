@@ -15,7 +15,6 @@ import { Form, FormikProvider } from 'formik'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
 import { Fragment, useState, useContext, ElementType, ChangeEvent } from 'react'
-import { EditCmsProductPayload } from 'interfaces/Product'
 import { useFormikCustom } from 'hook/lib'
 import { APP_ROUTES } from 'global/constants/index'
 import { InputField } from 'components/CustomFields'
@@ -26,10 +25,6 @@ import { productsAPI } from 'modules'
 import { SettingsContext } from '@core/context/settingsContext'
 import { styled } from '@mui/material/styles'
 import uploadAPI from 'modules/uploadAPI'
-
-interface Props {
-  initialValues?: Partial<EditCmsProductPayload>
-}
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 600 / 5 - 25,
@@ -54,8 +49,7 @@ const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
   }
 }))
 
-export default function CMSProductFormCreate(props: Props) {
-  const { initialValues } = props
+export default function CMSProductFormCreate() {
   const router = useRouter()
   const { setSnackbarAlert } = useContext(SettingsContext)
 
@@ -81,8 +75,7 @@ export default function CMSProductFormCreate(props: Props) {
       images: [],
       category_ids: [],
       color_ids: [],
-      size_ids: [],
-      ...initialValues
+      size_ids: []
     },
     validationSchema: yup.object().shape({
       name: yup.string().required(),
@@ -174,7 +167,7 @@ export default function CMSProductFormCreate(props: Props) {
   return (
     <FormikProvider value={formik}>
       <Form autoComplete='off' onSubmit={handleSubmit} noValidate>
-        <CardActions sx={{ maxWidth: 600 }}>
+        <CardActions sx={{ maxWidth: 1000 }}>
           <Box sx={{ minWidth: 600 }}>
             <Box
               sx={{
