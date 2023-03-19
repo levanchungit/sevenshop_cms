@@ -10,7 +10,19 @@ import {
   Box,
   Autocomplete,
   ButtonProps,
-  Switch
+  Paper,
+  Table,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableContainer,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  MenuItem
 } from '@mui/material'
 import { Form, FormikProvider } from 'formik'
 import { useRouter } from 'next/router'
@@ -18,7 +30,7 @@ import * as yup from 'yup'
 import { Fragment, useState, useContext, ElementType, ChangeEvent } from 'react'
 import { CmsProduct } from 'interfaces/Product'
 import { useFormikCustom } from 'hook/lib'
-import { APP_ROUTES, STATUS_PRODUCT } from 'global/constants/index'
+import { APP_ROUTES, STATUS_PRODUCT_OPTIONS } from 'global/constants/index'
 import { InputField } from 'components/CustomFields'
 import useCMSGetCategories from 'hook/category/useCMSGetCategories'
 import useCMSGetColors from 'hook/color/useCMSGetColors'
@@ -27,6 +39,10 @@ import { productsAPI } from 'modules'
 import { SettingsContext } from '@core/context/settingsContext'
 import { styled } from '@mui/material/styles'
 import uploadAPI from 'modules/uploadAPI'
+import { DeleteOutlineOutlined } from '@mui/icons-material'
+import { CmsColor } from 'interfaces/Color'
+import { CmsSize } from 'interfaces/Size'
+import IconButton from '@mui/material/IconButton'
 
 interface Props {
   initialValues: CmsProduct
@@ -55,7 +71,7 @@ const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
   }
 }))
 
-export default function CMSProductFormCreate(props: Props) {
+export default function CMSProductFormEdit(props: Props) {
   const { initialValues } = props
   const router = useRouter()
   const { setSnackbarAlert } = useContext(SettingsContext)
@@ -69,7 +85,28 @@ export default function CMSProductFormCreate(props: Props) {
   const [openSizes, setOpenSizes] = useState(false)
   const [images, setImages] = useState(initialValues.images)
   const [isLoadingImages, setIsLoadingImages] = useState(false)
-  const [statusProduct, setStatusProduct] = useState(initialValues.status == STATUS_PRODUCT.active ? true : false)
+  const [dialogConfirm, setDialogConfirm] = useState({ open: false, id: '' })
+
+  const handleOpenDialogConfirm = (id: string) => {
+    setDialogConfirm({ open: true, id: id })
+  }
+  const handleCloseDialogConfirm = () => {
+    setDialogConfirm({ open: false, id: '' })
+  }
+  const handleDeleteStock = async (id: string) => {
+    //remove table row
+    const newStock = initialValues.stock.filter(item => item._id !== id)
+    initialValues.stock = newStock
+
+    //update product
+    const response = await productsAPI.updateProduct(initialValues)
+    if (response.status === 200) {
+      setSnackbarAlert({ message: 'Delete Stock Successfully', severity: 'success' })
+      console.log(initialValues.stock)
+    }
+
+    handleCloseDialogConfirm()
+  }
 
   let arrCategories: (string | undefined)[] = []
   let arrSizes: (string | undefined)[] = []
@@ -95,7 +132,7 @@ export default function CMSProductFormCreate(props: Props) {
       price: yup.number().required().min(0),
       price_sale: yup.number().required().min(0),
       description: yup.string().required(),
-      status: yup.boolean().required(),
+      status: yup.string().required(),
       images: yup.array().required().min(1, 'Min 1 element'),
       category_ids: yup.array().required().min(1, 'Min 1 element'),
       color_ids: yup.array().required().min(1, 'Min 1 element'),
@@ -180,8 +217,15 @@ export default function CMSProductFormCreate(props: Props) {
     }
   }
 
-  const handleChangeStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStatusProduct(event.target.checked)
+  const handleChangeQuantity = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: string) => {
+    const newStock = initialValues.stock.map(item => {
+      if (item._id === id) {
+        item.quantity = Number(event.target.value)
+      }
+
+      return item
+    })
+    initialValues.stock = newStock
   }
 
   return (
@@ -262,6 +306,16 @@ export default function CMSProductFormCreate(props: Props) {
                 fullWidth
                 {...getFieldPropsCustom('description')}
               />
+            </Grid>
+
+            <Grid item xs={12} sm={4}>
+              <InputField required select fullWidth label='Status' {...getFieldPropsCustom('status')}>
+                {STATUS_PRODUCT_OPTIONS.map(option => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </InputField>
             </Grid>
 
             <Grid item xs={12} sm={4}>
@@ -431,11 +485,6 @@ export default function CMSProductFormCreate(props: Props) {
               />
             </Grid>
 
-            <Grid item xs={12} sm={4}>
-              <Typography>Status</Typography>
-              <Switch checked={statusProduct} onChange={handleChangeStatus} defaultChecked />
-            </Grid>
-
             <Grid item xs={12}>
               <Divider sx={{ marginBottom: 0 }} />
             </Grid>
@@ -443,9 +492,10 @@ export default function CMSProductFormCreate(props: Props) {
               <Typography variant='body2' sx={{ fontWeight: 600 }}>
                 2. STOCK
               </Typography>
+              <Button>Generate Stock</Button>
             </Grid>
 
-            <Grid container item>
+            {/* <Grid container item>
               {initialValues.stock.map((stock: any, index: any) => {
                 const defaultColor = cms_colors.find(c => stock?.color_id.includes(c._id))
                 const defaultSize = cms_sizes.find(c => stock?.size_id.includes(c._id))
@@ -470,7 +520,73 @@ export default function CMSProductFormCreate(props: Props) {
                   </Grid>
                 )
               })}
-            </Grid>
+            </Grid> */}
+
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label='simple table'>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Color</TableCell>
+                    <TableCell>Size</TableCell>
+                    <TableCell align='right'>Quantity</TableCell>
+                    <TableCell align='right'>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {initialValues.stock.map(row => (
+                    <TableRow
+                      key={row._id}
+                      sx={{
+                        '&:last-of-type td, &:last-of-type th': {
+                          border: 0
+                        }
+                      }}
+                    >
+                      <TableCell>
+                        {cms_colors
+                          .filter(c => row.color_id.includes(c._id))
+                          .map((color: CmsColor) => {
+                            return (
+                              <Box
+                                key={color._id}
+                                mr={1}
+                                sx={{
+                                  width: 30,
+                                  height: 30,
+                                  border: '0.1px solid #C4C4C4',
+                                  bgcolor: color.code,
+                                  borderRadius: 10
+                                }}
+                              ></Box>
+                            )
+                          })}
+                      </TableCell>
+                      <TableCell>
+                        {cms_sizes.filter(c => row.size_id.includes(c._id)).map((size: CmsSize) => size.name)}
+                      </TableCell>
+                      <TableCell align='right'>
+                        {/* set stock quantity */}
+                        <InputField
+                          label='Quantity'
+                          inputMode='numeric'
+                          required
+                          placeholder='Quantity'
+                          fullWidth
+                          type={'number'}
+                          defaultValue={row.quantity}
+                          onChange={e => handleChangeQuantity(e, row._id)}
+                        />
+                      </TableCell>
+                      <TableCell align='right'>
+                        <IconButton onClick={() => handleOpenDialogConfirm(row._id)}>
+                          <DeleteOutlineOutlined />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
 
             <Grid item xs={12}>
               <Divider sx={{ marginBottom: 0 }} />
@@ -491,6 +607,24 @@ export default function CMSProductFormCreate(props: Props) {
           </Button>
         </CardActions>
       </Form>
+
+      <Dialog
+        open={dialogConfirm.open}
+        onClose={handleCloseDialogConfirm}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{'INFO'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>Do you want remove ?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialogConfirm}>Cancel</Button>
+          <Button onClick={() => handleDeleteStock(dialogConfirm.id)} autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
     </FormikProvider>
   )
 }

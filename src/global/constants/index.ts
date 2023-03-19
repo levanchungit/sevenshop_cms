@@ -36,3 +36,8 @@ export enum STATUS_PRODUCT {
   active = 'active',
   inactive = 'inactive'
 }
+
+export const STATUS_PRODUCT_OPTIONS = [
+  { value: STATUS_PRODUCT.active, label: 'Active' },
+  { value: STATUS_PRODUCT.inactive, label: 'Inactive' }
+]

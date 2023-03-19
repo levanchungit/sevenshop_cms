@@ -76,21 +76,21 @@ const TableProducts = () => {
   const { cms_sizes, error: cms_err_sizes } = useCMSGetSizes()
 
   //STATE
-  const [dialogCofirm, setDialogCofirm] = useState(false)
+  const [dialogConfirm, setDialogConfirm] = useState(false)
   const [idProduct, setIdProduct] = useState<GridRowId>('')
 
   //HANDLER
-  const handleOpenDialogCofirm = () => {
-    setDialogCofirm(true)
+  const handleOpenDialogConfirm = () => {
+    setDialogConfirm(true)
   }
-  const handleCloseDialogCofirm = () => {
-    setDialogCofirm(false)
+  const handleCloseDialogConfirm = () => {
+    setDialogConfirm(false)
   }
   const handleDeleteProduct = async () => {
     await productsAPI.deleteProduct(idProduct as string)
     cms_mutate_product()
     setSnackbarAlert({ message: 'Delete Product Successfully', severity: 'success' })
-    handleCloseDialogCofirm()
+    handleCloseDialogConfirm()
   }
 
   const handleCreate = () => router.push(APP_ROUTES.cmsProductCreate)
@@ -291,7 +291,7 @@ const TableProducts = () => {
           key={params.id}
           icon={<DeleteOutlineOutlined />}
           onClick={() => {
-            handleOpenDialogCofirm(), setIdProduct(params.id)
+            handleOpenDialogConfirm(), setIdProduct(params.id)
           }}
           label='Delete'
         />
@@ -325,8 +325,8 @@ const TableProducts = () => {
       </Card>
 
       <Dialog
-        open={dialogCofirm}
-        onClose={handleCloseDialogCofirm}
+        open={dialogConfirm}
+        onClose={handleCloseDialogConfirm}
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
       >
@@ -335,7 +335,7 @@ const TableProducts = () => {
           <DialogContentText id='alert-dialog-description'>Do you want remove ?</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialogCofirm}>Disagree</Button>
+          <Button onClick={handleCloseDialogConfirm}>Disagree</Button>
           <Button onClick={handleDeleteProduct} autoFocus>
             Agree
           </Button>

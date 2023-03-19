@@ -18,7 +18,7 @@ const productsAPI = {
   async updateProduct(payload: EditCmsProductPayload) {
     const response = await axiosClient.put(API_ROUTES.updateProduct + payload._id, payload)
 
-    return response.data.result
+    return response
   },
   async deleteProduct(id: string) {
     const response = await axiosClient.delete(API_ROUTES.deleteProduct(id))
