@@ -20,11 +20,23 @@ export const APP_ROUTES = {
 
   //Order
   cmsOrders: `/orders`,
+  cmsOrderCreate: `/orders/create`,
+  cmsOrderEdit: `/orders/[order_id]/edit`,
 
   //Category
   cmsCategories: `/categories`,
   cmsCategoryCreate: `/categories/create`,
   cmsCategoryEdit: `/categories/[category_id]/edit`,
+
+  //Color
+  cmsColors: `/colors`,
+  cmsColorCreate: `/colors/create`,
+  cmsColorEdit: `/colors/[color_id]/edit`,
+
+  //Category
+  cmsSizes: `/sizes`,
+  cmsSizeCreate: `/sizes/create`,
+  cmsSizeEdit: `/sizes/[size_id]/edit`,
 
   //Erro
   cmsError401: `/401`,

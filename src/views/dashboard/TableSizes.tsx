@@ -3,11 +3,9 @@ import {
   Box,
   Card,
   Typography,
-  Avatar,
   Grid,
   CircularProgress,
   Button,
-  Link,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -17,7 +15,7 @@ import {
 import { EditOutlined, DeleteOutlineOutlined } from '@mui/icons-material'
 import { useState, Fragment, useCallback, useContext } from 'react'
 import * as React from 'react'
-import { categoriesAPI } from 'modules'
+import { sizesAPI } from 'modules'
 import {
   GridRenderCellParams,
   GridRowParams,
@@ -33,8 +31,8 @@ import { formatDate } from 'utils/currencyFormatter'
 import { SettingsContext } from '@core/context/settingsContext'
 import { useRouter } from 'next/router'
 import { APP_ROUTES } from 'global/constants/index'
-import { CmsCategory } from 'interfaces/Category'
-import useCMSGetCategories from 'hook/category/useCMSGetCategories'
+import { CmsSize } from 'interfaces/Size'
+import useCMSGetSizes from 'hook/size/useCMSGetSizes'
 
 const CustomToolbar = () => {
   return (
@@ -59,16 +57,16 @@ const CustomToolbar = () => {
   )
 }
 
-const TableProducts = () => {
+const TableSizes = () => {
   const router = useRouter()
   const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
-  const { cms_categories, error: cms_err_categories, mutate } = useCMSGetCategories()
+  const { cms_sizes, error, mutate } = useCMSGetSizes()
 
   //STATE
   const [dialogConfirm, setDialogConfirm] = useState(false)
-  const [idCategory, setIdCategory] = useState<GridRowId>('')
+  const [idSize, setIdSize] = useState<GridRowId>('')
 
   //HANDLER
   const handleOpenDialogConfirm = () => {
@@ -77,52 +75,29 @@ const TableProducts = () => {
   const handleCloseDialogConfirm = () => {
     setDialogConfirm(false)
   }
-  const handleDeleteCategory = async () => {
-    await categoriesAPI.deleteCategory(idCategory as string)
+  const handleDelete = async () => {
+    await sizesAPI.deleteSize(idSize as string)
     mutate()
-    setSnackbarAlert({ message: 'Delete Category Successfully', severity: 'success' })
+    setSnackbarAlert({ message: 'Delete Size Successfully', severity: 'success' })
     handleCloseDialogConfirm()
   }
 
-  const handleCreate = () => router.push(APP_ROUTES.cmsCategoryCreate)
+  const handleCreate = () => router.push(APP_ROUTES.cmsSizeCreate)
   const handleEdit = useCallback(
     (_id: GridRowId) => () => {
-      router.push({ pathname: APP_ROUTES.cmsCategoryEdit, query: { id: _id } })
+      router.push({ pathname: APP_ROUTES.cmsSizeEdit, query: { id: _id } })
     },
     []
   )
 
-  if (cms_err_categories) return <Box>Failed to load</Box>
-  if (!cms_categories)
-    return (
-      <div style={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
-        <CircularProgress />
-        <Typography mx={5}>Loading...</Typography>
-      </div>
-    )
+  if (error) return <div>Failed to load</div>
+  if (!cms_sizes) return <CircularProgress />
 
-  //ROW - COLUMN
-  const ExpandableCell = ({ value }: GridRenderCellParams) => {
-    const [expanded, setExpanded] = React.useState(false)
-
-    return (
-      <Box>
-        {expanded ? value : value.toString().slice(0, 50)}&nbsp;
-        {value.length > 50 && (
-          <Link type='button' component='button' sx={{ fontSize: 'inherit' }} onClick={() => setExpanded(!expanded)}>
-            {expanded ? 'view less' : 'view more'}
-          </Link>
-        )}
-      </Box>
-    )
-  }
-  const _rows = cms_categories.map((row: CmsCategory) => {
+  const _rows = cms_sizes.map((row: CmsSize) => {
     return {
       id: row._id,
       name: row.name,
-      description: row.description,
-      image: row.image,
-      product_ids: row.product_ids,
+      size: row.size,
       created_at: row.created_at,
       created_by: row.created_by,
       modify: row.modify
@@ -135,18 +110,13 @@ const TableProducts = () => {
       field: 'name',
       headerName: 'Name',
       width: 200,
-      renderCell: (params: GridRenderCellParams) => (
-        <>
-          <Avatar alt='Avatar' src={params.row.image} sx={{ mr: 2, width: 50, height: 50 }} />
-          {params.value}
-        </>
-      )
+      renderCell: (params: GridRenderCellParams) => <>{params.value}</>
     },
     {
-      field: 'description',
-      headerName: 'Description',
+      field: 'size',
+      headerName: 'Size',
       width: 200,
-      renderCell: (params: GridRenderCellParams) => <ExpandableCell {...params} />
+      renderCell: (params: GridRenderCellParams) => <>{params.value}</>
     },
     {
       field: 'created_at',
@@ -177,7 +147,7 @@ const TableProducts = () => {
           key={params.id}
           icon={<DeleteOutlineOutlined />}
           onClick={() => {
-            handleOpenDialogConfirm(), setIdCategory(params.id)
+            handleOpenDialogConfirm(), setIdSize(params.id)
           }}
           label='Delete'
         />
@@ -189,7 +159,7 @@ const TableProducts = () => {
     <>
       <Grid my={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Button variant='contained' component='label' onClick={handleCreate} aria-label='add'>
-          Create Category
+          Create Size
         </Button>
       </Grid>
 
@@ -226,7 +196,7 @@ const TableProducts = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialogConfirm}>Disagree</Button>
-          <Button onClick={handleDeleteCategory} autoFocus>
+          <Button onClick={handleDelete} autoFocus>
             Agree
           </Button>
         </DialogActions>
@@ -235,4 +205,4 @@ const TableProducts = () => {
   )
 }
 
-export default TableProducts
+export default TableSizes

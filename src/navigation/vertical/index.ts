@@ -47,12 +47,12 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Colors',
       icon: ViewInArIcon,
-      path: APP_ROUTES.cmsCategories
+      path: APP_ROUTES.cmsColors
     },
     {
       title: 'Sizes',
       icon: ViewInArIcon,
-      path: APP_ROUTES.cmsCategories
+      path: APP_ROUTES.cmsSizes
     },
     {
       title: 'Customers',

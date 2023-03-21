@@ -144,7 +144,7 @@ export default function CMSCategoryFormCreate() {
           <Grid container spacing={5}>
             <Grid item xs={12}>
               <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                1. PRODUCT
+                1. CATEGORY
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>

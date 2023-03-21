@@ -1,18 +1,18 @@
 // ** Demo Components Imports
-import TableProducts from 'views/dashboard/TableProducts'
+import TableSizes from 'views/dashboard/TableSizes'
 import ApexChartWrapper from '@core/styles/libs/react-apexcharts'
 import Grid from '@mui/material/Grid'
 
-const Products = () => {
+const Sizes = () => {
   return (
     <ApexChartWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <TableProducts />
+          <TableSizes />
         </Grid>
       </Grid>
     </ApexChartWrapper>
   )
 }
 
-export default Products
+export default Sizes
