@@ -6,7 +6,7 @@ import axiosClient from './config/axiosClient'
 
 const productsAPI = {
   async getProducts() {
-    const response = await axios.get(API_URL + API_ROUTES.getProducts)
+    const response = await axios.get(API_URL + API_ROUTES.getProducts + '?limit=1000')
 
     return response.data.results
   },

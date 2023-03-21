@@ -321,6 +321,10 @@ const TableProducts = () => {
             minHeight: 682
           }}
           checkboxSelection
+          initialState={{
+            pagination: { paginationModel: { pageSize: 10, page: 0 } }
+          }}
+          pageSizeOptions={[10, 20, 30]}
         />
       </Card>
 

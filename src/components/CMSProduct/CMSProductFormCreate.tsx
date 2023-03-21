@@ -96,7 +96,7 @@ export default function CMSProductFormCreate() {
         if (response.status === 200 && responseStock.status === 200) {
           setSnackbarAlert({ message: 'Add product & generate stock successfully', severity: 'success' })
         }
-        await router.push({ pathname: APP_ROUTES.cmsProducts })
+        await router.back()
       } catch (e: any) {
         setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
       } finally {

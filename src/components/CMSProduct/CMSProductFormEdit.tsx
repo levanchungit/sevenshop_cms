@@ -30,7 +30,7 @@ import * as yup from 'yup'
 import { Fragment, useState, useContext, ElementType, ChangeEvent } from 'react'
 import { CmsProduct } from 'interfaces/Product'
 import { useFormikCustom } from 'hook/lib'
-import { APP_ROUTES, STATUS_PRODUCT_OPTIONS } from 'global/constants/index'
+import { STATUS_PRODUCT_OPTIONS } from 'global/constants/index'
 import { InputField } from 'components/CustomFields'
 import useCMSGetCategories from 'hook/category/useCMSGetCategories'
 import useCMSGetColors from 'hook/color/useCMSGetColors'
@@ -46,6 +46,7 @@ import IconButton from '@mui/material/IconButton'
 
 interface Props {
   initialValues: CmsProduct
+  mutate: any
 }
 
 const ImgStyled = styled('img')(({ theme }) => ({
@@ -72,7 +73,7 @@ const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
 }))
 
 export default function CMSProductFormEdit(props: Props) {
-  const { initialValues } = props
+  const { initialValues, mutate } = props
   const router = useRouter()
   const { setSnackbarAlert } = useContext(SettingsContext)
 
@@ -106,6 +107,7 @@ export default function CMSProductFormEdit(props: Props) {
     }
 
     handleCloseDialogConfirm()
+    mutate()
   }
 
   let arrCategories: (string | undefined)[] = []
@@ -145,7 +147,8 @@ export default function CMSProductFormEdit(props: Props) {
         if (response.status === 200) {
           setSnackbarAlert({ message: 'Update product successfully', severity: 'success' })
         }
-        await router.push({ pathname: APP_ROUTES.cmsProducts })
+        await router.back()
+        mutate()
       } catch (e: any) {
         setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
       } finally {
@@ -185,7 +188,7 @@ export default function CMSProductFormEdit(props: Props) {
   const defaultSizes = cms_sizes.filter(c => initialValues?.size_ids.includes(c?._id))
 
   const handleBack = () => {
-    router.push(APP_ROUTES.cmsProducts)
+    router.back()
   }
 
   const uploadImages = async (formData: any) => {
@@ -226,6 +229,21 @@ export default function CMSProductFormEdit(props: Props) {
       return item
     })
     initialValues.stock = newStock
+    mutate()
+  }
+
+  //call api generate Stock
+  const handleGenerateStock = async () => {
+    try {
+      const response = await productsAPI.generateStock(initialValues._id)
+      if (response.status === 200) {
+        setSnackbarAlert({ message: 'Generate Stock Successfully', severity: 'success' })
+        initialValues.stock = response.data.stock
+        mutate()
+      }
+    } catch (e: any) {
+      setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
+    }
   }
 
   return (
@@ -488,11 +506,13 @@ export default function CMSProductFormEdit(props: Props) {
             <Grid item xs={12}>
               <Divider sx={{ marginBottom: 0 }} />
             </Grid>
-            <Grid item xs={12}>
-              <Typography variant='body2' sx={{ fontWeight: 600 }}>
+            <Grid item xs={12} display='flex' flexDirection='row'>
+              <Typography flex='1' variant='body2' sx={{ fontWeight: 600 }}>
                 2. STOCK
               </Typography>
-              <Button>Generate Stock</Button>
+              <Button variant='contained' onClick={handleGenerateStock}>
+                Generate Stock
+              </Button>
             </Grid>
 
             <TableContainer component={Paper}>

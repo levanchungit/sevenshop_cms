@@ -6,7 +6,7 @@ import CMSProductFormEdit from 'components/CMSProduct/CMSProductFormEdit'
 const EditProduct = () => {
   const router = useRouter()
   const product_id = router.query.id as string
-  const { cmsProduct, error, isLoading } = useCMSGetProductDetail(product_id)
+  const { cmsProduct, error, isLoading, mutate } = useCMSGetProductDetail(product_id)
 
   return (
     <Card>
@@ -24,7 +24,7 @@ const EditProduct = () => {
         {error && <Box>Failed to load</Box>}
         {cmsProduct && (
           <Box width={1000}>
-            <CMSProductFormEdit initialValues={cmsProduct.data} />
+            <CMSProductFormEdit initialValues={cmsProduct.data} mutate={mutate} />
           </Box>
         )}
       </Stack>
