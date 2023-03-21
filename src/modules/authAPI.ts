@@ -15,6 +15,9 @@ const authAPI = {
   },
   refresh_Token(payLoad: RefreshTokenPayload) {
     return axios.post(API_URL + API_ROUTES.refresh_token, payLoad)
+  },
+  me() {
+    return axiosClient.get(API_ROUTES.me)
   }
 }
 

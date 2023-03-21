@@ -17,16 +17,31 @@ export const API_ROUTES = {
 
   //categories
   getCategories: `/categories`,
-  getCategoryDetail: (id: string) => `/categories/${id}`,
+  getCategoryDetail: `/categories/`,
   createCategory: `/categories/`,
-  updateCategory: `/categories/:id`,
+  updateCategory: `/categories/`,
   deleteCategory: (id: string) => `/categories/${id}`,
 
   //colors
   getColors: `/colors`,
+  getColorDetail: `/colors/`,
+  createColor: `/colors/`,
+  updateColor: `/colors/`,
+  deleteColor: (id: string) => `/colors/${id}`,
 
   //sizes
   getSizes: `/sizes`,
+  getSizeDetail: `/sizes/`,
+  createSize: `/sizes/`,
+  updateSize: `/sizes/`,
+  deleteSize: (id: string) => `/sizes/${id}`,
+
+  //sizes
+  getUsers: `/users`,
+  getUserDetail: `/users/`,
+  createUser: `/users/`,
+  updateUser: `/users/`,
+  deleteUser: (id: string) => `/users/${id}`,
 
   //upload
   single: `/upload/single`,

@@ -1,16 +1,16 @@
 import { useRouter } from 'next/router'
 import { CircularProgress, Box, Typography, Card, Divider, CardHeader, Stack } from '@mui/material'
-import useCMSGetProductDetail from 'hook/product/useCMSGetDetail'
-import CMSProductFormEdit from 'components/CMSProduct/CMSProductFormEdit'
+import CMSCategoryFormEdit from 'components/CMSCategory/CMSCategoryFormEdit'
+import useCMSGetCategoryDetail from 'hook/category/useCMSGetDetail'
 
-const EditProduct = () => {
+const EditCategory = () => {
   const router = useRouter()
   const product_id = router.query.id as string
-  const { cmsProduct, error, isLoading } = useCMSGetProductDetail(product_id)
+  const { cmsCategory, error, isLoading, mutate } = useCMSGetCategoryDetail(product_id)
 
   return (
     <Card>
-      <CardHeader title='UPDATE PRODUCT' titleTypographyProps={{ variant: 'h6' }} />
+      <CardHeader title='UPDATE CATEGORY' titleTypographyProps={{ variant: 'h6' }} />
       <Divider sx={{ margin: 0 }} />
       <Stack bgcolor={'white'} p={5} alignItems='center'>
         {isLoading && (
@@ -22,9 +22,9 @@ const EditProduct = () => {
           </div>
         )}
         {error && <Box>Failed to load</Box>}
-        {cmsProduct && (
+        {cmsCategory && (
           <Box width={1000}>
-            <CMSProductFormEdit initialValues={cmsProduct.data} />
+            <CMSCategoryFormEdit initialValues={cmsCategory.data} mutate={mutate} />
           </Box>
         )}
       </Stack>
@@ -32,4 +32,4 @@ const EditProduct = () => {
   )
 }
 
-export default EditProduct
+export default EditCategory

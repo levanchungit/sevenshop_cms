@@ -1,18 +1,18 @@
 import { CardHeader, Divider, Box, Card, Stack } from '@mui/material'
-import CMSProductFormCreate from 'components/CMSProduct/CMSProductFormCreate'
+import CMSCategoryFormCreate from 'components/CMSCategory/CMSCategoryFormCreate'
 
-const CreateProduct = () => {
+const CreateCategory = () => {
   return (
     <Card>
-      <CardHeader title='CREATE PRODUCT' titleTypographyProps={{ variant: 'h6' }} />
+      <CardHeader title='CREATE CATEGORY' titleTypographyProps={{ variant: 'h6' }} />
       <Divider sx={{ margin: 0 }} />
       <Stack bgcolor={'white'} p={5} alignItems='center'>
         <Box width={600}>
-          <CMSProductFormCreate />
+          <CMSCategoryFormCreate />
         </Box>
       </Stack>
     </Card>
   )
 }
 
-export default CreateProduct
+export default CreateCategory

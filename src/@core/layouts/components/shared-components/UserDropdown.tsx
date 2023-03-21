@@ -22,7 +22,7 @@ import AccountOutline from 'mdi-material-ui/AccountOutline'
 import MessageOutline from 'mdi-material-ui/MessageOutline'
 import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
 import Router from 'next/router'
-import { authAPI, usersAPI } from 'modules'
+import { authAPI } from 'modules'
 import { GetMeSuccessData } from 'interfaces/Auth'
 import { SettingsContext } from '@core/context/settingsContext'
 import { APP_ROUTES } from 'global/constants/index'
@@ -44,7 +44,7 @@ const UserDropdown = () => {
 
   const getMe = async () => {
     try {
-      const response = await usersAPI.me()
+      const response = await authAPI.me()
       setSnackbarAlert({ message: response.data.message, severity: 'success' })
       setInfo(response.data.result)
     } catch (e: any) {
