@@ -495,40 +495,13 @@ export default function CMSProductFormEdit(props: Props) {
               <Button>Generate Stock</Button>
             </Grid>
 
-            {/* <Grid container item>
-              {initialValues.stock.map((stock: any, index: any) => {
-                const defaultColor = cms_colors.find(c => stock?.color_id.includes(c._id))
-                const defaultSize = cms_sizes.find(c => stock?.size_id.includes(c._id))
-
-                return (
-                  <Grid sx={{ width: '100%', display: 'flex', flexDirection: 'row' }} item key={index.toString()}>
-                    <Box width={50} height={50} sx={{ bgcolor: defaultColor?.code }}></Box>
-                    <Typography width={50} height={50}>
-                      {defaultSize?.name}
-                    </Typography>
-                    <Grid item xs={12} sm={4}>
-                      <InputField
-                        label='Price'
-                        inputMode='numeric'
-                        required
-                        placeholder='Price'
-                        fullWidth
-                        type={'number'}
-                        {...getFieldPropsCustom('price')}
-                      />
-                    </Grid>
-                  </Grid>
-                )
-              })}
-            </Grid> */}
-
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label='simple table'>
                 <TableHead>
                   <TableRow>
                     <TableCell>Color</TableCell>
                     <TableCell>Size</TableCell>
-                    <TableCell align='right'>Quantity</TableCell>
+                    <TableCell>Quantity</TableCell>
                     <TableCell align='right'>Action</TableCell>
                   </TableRow>
                 </TableHead>
@@ -564,10 +537,9 @@ export default function CMSProductFormEdit(props: Props) {
                       <TableCell>
                         {cms_sizes.filter(c => row.size_id.includes(c._id)).map((size: CmsSize) => size.name)}
                       </TableCell>
-                      <TableCell align='right'>
+                      <TableCell>
                         {/* set stock quantity */}
                         <InputField
-                          label='Quantity'
                           inputMode='numeric'
                           required
                           placeholder='Quantity'
