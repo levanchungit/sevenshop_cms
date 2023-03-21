@@ -1,17 +1,4 @@
-import { STATUS_PRODUCT } from 'global/constants'
-
-//new
-export type IModify = {
-  action: string
-  date: string
-}
-
-export type IStock = {
-  _id: string
-  size_id: string
-  color_id: string
-  quantity: number
-}
+import { IModify, IStock, STATUS_PRODUCT } from 'global/constants'
 
 export interface CmsProduct {
   _id: string

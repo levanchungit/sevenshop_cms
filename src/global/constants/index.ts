@@ -54,6 +54,18 @@ export const STATUS_PRODUCT_OPTIONS = [
   { value: STATUS_PRODUCT.inactive, label: 'Inactive' }
 ]
 
+export type IModify = {
+  action: string
+  date: string
+}
+
+export type IStock = {
+  _id: string
+  size_id: string
+  color_id: string
+  quantity: number
+}
+
 export enum GENDER {
   male = 'male',
   female = 'female',
@@ -104,4 +116,40 @@ export enum STATUS_VOUCHER_USER {
 export enum TYPE_VOUCHER {
   percent = 'percent',
   money = 'money'
+}
+
+export type IProductCart = {
+  _id: string
+  product_id: string
+  quantity: number
+  size_id: string
+  color_id: string
+}
+
+export type IProductOrder = IProductCart & {
+  total_before_discount: number | undefined
+  total_discount: number | undefined
+  total: number | undefined
+}
+
+export enum STATUS_ORDER {
+  pending = 'pending',
+  verified = 'verified',
+  shipping = 'shipping',
+  completed = 'completed',
+  cancel = 'cancel'
+}
+
+export const STATUS_ORDER_OPTIONS = [
+  { value: STATUS_ORDER.pending, label: 'Pending' },
+  { value: STATUS_ORDER.verified, label: 'Verified' },
+  { value: STATUS_ORDER.shipping, label: 'Shipping' },
+  { value: STATUS_ORDER.completed, label: 'Completed' },
+  { value: STATUS_ORDER.cancel, label: 'Cancel' }
+]
+
+export enum PAYMENT_TYPE {
+  cod = 'cod',
+  momo = 'momo',
+  bank = 'bank'
 }

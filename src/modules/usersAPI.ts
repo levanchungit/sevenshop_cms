@@ -1,12 +1,10 @@
-import axios from 'axios'
-import { API_URL } from 'global/config'
 import { API_ROUTES } from 'global/constants/apiRoutes'
 import { CreateCmsUserPayload, EditCmsUserPayload } from 'interfaces/User'
 import axiosClient from './config/axiosClient'
 
 const usersAPI = {
   async getUsers() {
-    const response = await axios.get(API_URL + API_ROUTES.getUsers)
+    const response = await axiosClient.get(API_ROUTES.getUsers)
 
     return response.data.results
   },

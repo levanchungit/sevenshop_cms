@@ -1,6 +1,5 @@
-import { IModify } from './Product'
+import { IModify } from 'global/constants'
 
-//new
 export interface CmsColor {
   _id: string
   name: string

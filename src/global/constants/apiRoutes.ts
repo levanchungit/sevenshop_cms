@@ -43,6 +43,11 @@ export const API_ROUTES = {
   updateUser: `/users/`,
   deleteUser: (id: string) => `/users/${id}`,
 
+  // order
+  getOrders: `/orders`,
+  getOrderDetail: `/orders/`,
+  updateOrder: `/orders/`,
+
   //upload
   single: `/upload/single`,
   multiple: `/upload/multiple`
