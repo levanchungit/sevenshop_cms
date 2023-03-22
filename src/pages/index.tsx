@@ -196,7 +196,7 @@ const Dashboard = () => {
   return (
     <ApexChartWrapper>
       <Grid container spacing={2}>
-        <Grid item xs={12} lg={4} display='flex' flexDirection={'column'}>
+        {/* <Grid item xs={12} lg={4} display='flex' flexDirection={'column'}>
           <Box display='flex' flexDirection={'row'}>
             <Grid
               item
@@ -420,7 +420,7 @@ const Dashboard = () => {
               ))}
             </Box>
           </Box>
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={12} lg={8} display='flex' flexDirection={'column'}>
           Table Data

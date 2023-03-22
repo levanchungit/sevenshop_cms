@@ -132,7 +132,7 @@ export default function CMSProductFormCreate() {
     )
 
   const handleBack = () => {
-    router.back(APP_ROUTES.cmsProducts)
+    router.back()
   }
 
   const uploadImages = async (formData: any) => {
