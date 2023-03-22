@@ -118,7 +118,7 @@ const TableOrders = () => {
       renderCell: (params: GridRenderCellParams) => (
         <>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography>{params.value}</Typography>
+            <Typography>{currencyFormatterVND(params.value)}</Typography>
           </Box>
         </>
       )

@@ -45,8 +45,9 @@ export const API_ROUTES = {
 
   // order
   getOrders: `/orders`,
-  getOrderDetail: `/orders/`,
+  getOrderDetail: `/orders/get/`,
   updateOrder: `/orders/`,
+  updateStatusOrder: `/orders/`,
 
   //upload
   single: `/upload/single`,

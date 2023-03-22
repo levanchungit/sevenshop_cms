@@ -7,6 +7,10 @@ import { STATUS_ORDER_OPTIONS } from 'global/constants'
 import { InputField } from 'components/CustomFields'
 import CardContent from '@mui/material/CardContent'
 import TableOrdersProducts from 'views/tables/TableOrdersProducts'
+import CustomizedSteppers from 'components/Stepper/CustomizedSteppers'
+import { ordersAPI } from 'modules'
+import { useContext } from 'react'
+import { SettingsContext } from '@core/context/settingsContext'
 
 interface Props {
   order_id: string
@@ -14,8 +18,9 @@ interface Props {
 
 export default function CMSOrderFormEdit(props: Props) {
   const { order_id } = props
+  const { setSnackbarAlert } = useContext(SettingsContext)
 
-  const { cmsOrder, error: err_order } = useCMSGetOrderDetail(order_id)
+  const { cmsOrder, error: err_order, mutate } = useCMSGetOrderDetail(order_id)
   const { cms_categories, error: err_categories } = useCMSGetCategories()
   const { cms_colors, error: err_colors } = useCMSGetColors()
   const { cms_sizes, error: err_sizes } = useCMSGetSizes()
@@ -29,8 +34,14 @@ export default function CMSOrderFormEdit(props: Props) {
       </div>
     )
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value)
+  //call api change status
+  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const status = event.target.value
+    const response = await ordersAPI.updateStatusOrder({ _id: order_id, status: status })
+    if (response.status === 200) {
+      setSnackbarAlert({ message: 'Change status successfully', severity: 'success' })
+      mutate()
+    }
   }
 
   const { _id, status } = cmsOrder?.data
@@ -51,22 +62,21 @@ export default function CMSOrderFormEdit(props: Props) {
           </form>
         </Box>
       </Box>
-
       <Divider sx={{ margin: 0 }} />
+
+      <CustomizedSteppers data={cmsOrder.data.modify} />
 
       <Box>
         <CardHeader title={'Delivery Address'} sx={{ width: '100%', alignContent: 'right' }} />
         <CardContent sx={{ padding: theme => `${theme.spacing(3, 5.25, 4)} !important` }}>
-          <Typography variant='h6' sx={{ marginBottom: 2 }}>
+          <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
             Chung OK 2
           </Typography>
           <Typography sx={{ marginBottom: 2 }}>0378484047</Typography>
           <Typography variant='body2'>TPHCM</Typography>
         </CardContent>
       </Box>
-
       <Divider sx={{ margin: 0 }} />
-
       <Box>
         <CardHeader title={'Products'} sx={{ width: '100%', alignContent: 'right' }} />
         <TableOrdersProducts data={cmsOrder?.data} />

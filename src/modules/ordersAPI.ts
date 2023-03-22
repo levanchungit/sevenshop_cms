@@ -17,6 +17,11 @@ const productsAPI = {
     const response = axiosClient.get(API_ROUTES.getOrderDetail + id)
 
     return response
+  },
+  async updateStatusOrder(payload: EditCmsOrderPayload) {
+    const response = await axiosClient.put(API_ROUTES.updateStatusOrder + payload._id, payload)
+
+    return response
   }
 }
 

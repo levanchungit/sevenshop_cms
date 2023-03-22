@@ -18,5 +18,5 @@ export interface CmsOrder {
 
 export interface EditCmsOrderPayload {
   _id: string
-  status: STATUS_ORDER
+  status: string
 }

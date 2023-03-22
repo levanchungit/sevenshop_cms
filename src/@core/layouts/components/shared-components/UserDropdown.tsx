@@ -55,7 +55,7 @@ const UserDropdown = () => {
 
   useEffect(() => {
     getMe()
-  })
+  }, [])
 
   const handleDropdownOpen = (event: SyntheticEvent) => {
     setAnchorEl(event.currentTarget)

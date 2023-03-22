@@ -153,3 +153,15 @@ export enum PAYMENT_TYPE {
   momo = 'momo',
   bank = 'bank'
 }
+
+export const STATUS_PAYMENT_OPTIONS = [
+  { value: PAYMENT_TYPE.cod, label: 'Cash on delivery' },
+  { value: PAYMENT_TYPE.momo, label: 'Momo' },
+  { value: PAYMENT_TYPE.bank, label: 'Bank' }
+]
+
+export type IModifyOrder = {
+  status: STATUS_ORDER
+  modify_at: string
+  modify_by: string
+}

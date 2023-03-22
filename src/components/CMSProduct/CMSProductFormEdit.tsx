@@ -236,6 +236,7 @@ export default function CMSProductFormEdit(props: Props) {
   const handleGenerateStock = async () => {
     try {
       const response = await productsAPI.generateStock(initialValues._id)
+      console.log(response)
       if (response.status === 200) {
         setSnackbarAlert({ message: 'Generate Stock Successfully', severity: 'success' })
         initialValues.stock = response.data.stock
@@ -526,56 +527,57 @@ export default function CMSProductFormEdit(props: Props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {initialValues.stock.map(row => (
-                    <TableRow
-                      key={row._id}
-                      sx={{
-                        '&:last-of-type td, &:last-of-type th': {
-                          border: 0
-                        }
-                      }}
-                    >
-                      <TableCell>
-                        {cms_colors
-                          .filter(c => row.color_id.includes(c._id))
-                          .map((color: CmsColor) => {
-                            return (
-                              <Box
-                                key={color._id}
-                                mr={1}
-                                sx={{
-                                  width: 30,
-                                  height: 30,
-                                  border: '0.1px solid #C4C4C4',
-                                  bgcolor: color.code,
-                                  borderRadius: 10
-                                }}
-                              ></Box>
-                            )
-                          })}
-                      </TableCell>
-                      <TableCell>
-                        {cms_sizes.filter(c => row.size_id.includes(c._id)).map((size: CmsSize) => size.name)}
-                      </TableCell>
-                      <TableCell>
-                        {/* set stock quantity */}
-                        <InputField
-                          inputMode='numeric'
-                          required
-                          placeholder='Quantity'
-                          fullWidth
-                          type={'number'}
-                          defaultValue={row.quantity}
-                          onChange={e => handleChangeQuantity(e, row._id)}
-                        />
-                      </TableCell>
-                      <TableCell align='right'>
-                        <IconButton onClick={() => handleOpenDialogConfirm(row._id)}>
-                          <DeleteOutlineOutlined />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {initialValues.stock &&
+                    initialValues.stock.map(row => (
+                      <TableRow
+                        key={row._id}
+                        sx={{
+                          '&:last-of-type td, &:last-of-type th': {
+                            border: 0
+                          }
+                        }}
+                      >
+                        <TableCell>
+                          {cms_colors
+                            .filter(c => row.color_id.includes(c._id))
+                            .map((color: CmsColor) => {
+                              return (
+                                <Box
+                                  key={color._id}
+                                  mr={1}
+                                  sx={{
+                                    width: 30,
+                                    height: 30,
+                                    border: '0.1px solid #C4C4C4',
+                                    bgcolor: color.code,
+                                    borderRadius: 10
+                                  }}
+                                ></Box>
+                              )
+                            })}
+                        </TableCell>
+                        <TableCell>
+                          {cms_sizes.filter(c => row.size_id.includes(c._id)).map((size: CmsSize) => size.name)}
+                        </TableCell>
+                        <TableCell>
+                          {/* set stock quantity */}
+                          <InputField
+                            inputMode='numeric'
+                            required
+                            placeholder='Quantity'
+                            fullWidth
+                            type={'number'}
+                            defaultValue={row.quantity}
+                            onChange={e => handleChangeQuantity(e, row._id)}
+                          />
+                        </TableCell>
+                        <TableCell align='right'>
+                          <IconButton onClick={() => handleOpenDialogConfirm(row._id)}>
+                            <DeleteOutlineOutlined />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </TableContainer>
