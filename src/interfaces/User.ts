@@ -1,7 +1,5 @@
-import { GENDER, IAddress, IMembership, IOTP, IVoucherUser, ROLE, STATUS_USER } from 'global/constants'
-import { IModify } from './Product'
+import { GENDER, IAddress, IMembership, IModify, IOTP, IVoucherUser, ROLE, STATUS_USER } from 'global/constants'
 
-//new
 export interface CmsUser {
   _id: string
   email: string

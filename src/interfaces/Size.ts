@@ -1,6 +1,5 @@
-import { IModify } from './Product'
+import { IModify } from 'global/constants'
 
-//new
 export interface CmsSize {
   _id: string
   name: string
