@@ -1,8 +1,5 @@
 // ** MUI Imports
-import { Box, Fab, Typography, Grid, Stack, CircularProgress } from '@mui/material'
-
-// ** Icons Imports
-import AddCircleIcon from '@mui/icons-material/AddCircle'
+import { Box, Typography, Grid, CircularProgress } from '@mui/material'
 
 // ** Styled Component Import
 import ApexChartWrapper from '@core/styles/libs/react-apexcharts'
@@ -18,33 +15,33 @@ import { productsAPI } from 'modules'
 // import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
 // import { currencyFormatterVND } from 'utils/currencyFormatter'
 
-const arrKeywordsSearch = [
-  'Backpacks',
-  'Totes',
-  'Boots',
-  'Totes',
-  'Bootsasdasdsd',
-  'Totasdases',
-  'Boots',
-  'Toteasdasdds',
-  'Boots',
-  'Totadsadadses',
-  'Boots',
-  'Totes',
-  'Boasdasdaots',
-  'Boots',
-  'Totes',
-  'Boots',
-  'Boots',
-  'Totes',
-  'Bootsasdasd',
-  'Boots',
-  'Totes',
-  'Boots',
-  'Boots',
-  'Totesasdasdasdd',
-  'Boots'
-]
+// const arrKeywordsSearch = [
+//   'Backpacks',
+//   'Totes',
+//   'Boots',
+//   'Totes',
+//   'Bootsasdasdsd',
+//   'Totasdases',
+//   'Boots',
+//   'Toteasdasdds',
+//   'Boots',
+//   'Totadsadadses',
+//   'Boots',
+//   'Totes',
+//   'Boasdasdaots',
+//   'Boots',
+//   'Totes',
+//   'Boots',
+//   'Boots',
+//   'Totes',
+//   'Bootsasdasd',
+//   'Boots',
+//   'Totes',
+//   'Boots',
+//   'Boots',
+//   'Totesasdasdasdd',
+//   'Boots'
+// ]
 
 // const arrBestSellers = [
 //   {
