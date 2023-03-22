@@ -87,7 +87,7 @@ const TableColors = () => {
     (_id: GridRowId) => () => {
       router.push({ pathname: APP_ROUTES.cmsColorEdit, query: { id: _id } })
     },
-    []
+    [router]
   )
 
   if (error) return <div>Failed to load</div>

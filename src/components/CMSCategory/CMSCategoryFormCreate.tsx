@@ -70,7 +70,7 @@ export default function CMSCategoryFormCreate() {
   const { handleSubmit, getFieldPropsCustom } = formik
 
   const handleBack = () => {
-    router.push(APP_ROUTES.cmsProducts)
+    router.back(APP_ROUTES.cmsProducts)
   }
 
   const uploadImages = async (formData: any) => {

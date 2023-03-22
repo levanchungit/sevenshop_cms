@@ -69,7 +69,7 @@ const LoginPage = () => {
       localStorage.setItem('access_token', response.data.access_token)
       localStorage.setItem('refresh_token', response.data.refresh_token)
       setSnackbarAlert({ message: response.data.message, severity: 'success' })
-      Router.push(APP_ROUTES.cmsDoashboard)
+      Router.replace(APP_ROUTES.cmsDoashboard)
     } catch (e: any) {
       setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
     }

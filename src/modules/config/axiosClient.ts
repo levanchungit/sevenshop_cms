@@ -50,13 +50,13 @@ function createAxiosClient(): AxiosInstance {
           localStorage.removeItem('access_token')
           localStorage.removeItem('refresh_token')
 
-          Router.push(APP_ROUTES.cmsLogin)
+          Router.replace(APP_ROUTES.cmsLogin)
 
           return Promise.reject(error)
         }
       } else if (error.response.status === 400 && originalRequest.url !== API_ROUTES.refresh_token) {
         //Refresh token hết hạn
-        Router.push(APP_ROUTES.cmsLogin)
+        Router.replace(APP_ROUTES.cmsLogin)
       }
 
       return Promise.reject(error)

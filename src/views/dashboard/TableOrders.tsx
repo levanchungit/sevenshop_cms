@@ -1,21 +1,8 @@
 // ** MUI Imports
-import {
-  Box,
-  Card,
-  Typography,
-  Grid,
-  CircularProgress,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
-} from '@mui/material'
+import { Box, Card, Typography, Grid, CircularProgress, Button } from '@mui/material'
 import { EditOutlined } from '@mui/icons-material'
-import { useState, Fragment, useCallback, useContext } from 'react'
+import { useCallback } from 'react'
 import * as React from 'react'
-import { productsAPI } from 'modules'
 import {
   GridRenderCellParams,
   GridRowParams,
@@ -28,7 +15,6 @@ import {
   GridToolbarQuickFilter
 } from '@mui/x-data-grid'
 import { currencyFormatterVND, formatDate } from 'utils/currencyFormatter'
-import { SettingsContext } from '@core/context/settingsContext'
 import { useRouter } from 'next/router'
 import { APP_ROUTES } from 'global/constants/index'
 import useCMSGetCategories from 'hook/category/useCMSGetCategories'
@@ -64,33 +50,14 @@ const CustomToolbar = () => {
 
 const TableOrders = () => {
   const router = useRouter()
-  const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
-  const { cms_orders, cms_err_orders, cms_mutate_orders } = useCMSGetOrders()
-  const { cms_products, cms_err_products, cms_mutate_product } = useCMSGetProducts()
+  const { cms_orders, cms_err_orders } = useCMSGetOrders()
+  const { cms_products, cms_err_products } = useCMSGetProducts()
   const { cms_users, error: cms_err_users } = useCMSGetUsers()
   const { cms_categories, error: cms_err_categories } = useCMSGetCategories()
   const { cms_colors, error: cms_err_colors } = useCMSGetColors()
   const { cms_sizes, error: cms_err_sizes } = useCMSGetSizes()
-
-  //STATE
-  const [dialogConfirm, setDialogConfirm] = useState(false)
-  const [idOrder, setIdOrder] = useState<GridRowId>('')
-
-  //HANDLER
-  const handleOpenDialogConfirm = () => {
-    setDialogConfirm(true)
-  }
-  const handleCloseDialogConfirm = () => {
-    setDialogConfirm(false)
-  }
-  const handleDeleteOrder = async () => {
-    await productsAPI.deleteOrder(idOrder as string)
-    cms_mutate_product()
-    setSnackbarAlert({ message: 'Delete Order Successfully', severity: 'success' })
-    handleCloseDialogConfirm()
-  }
 
   const handleCreate = () => router.push(APP_ROUTES.cmsOrderCreate)
   const handleEdit = useCallback(
@@ -272,24 +239,6 @@ const TableOrders = () => {
           pageSizeOptions={[10, 20, 30]}
         />
       </Card>
-
-      <Dialog
-        open={dialogConfirm}
-        onClose={handleCloseDialogConfirm}
-        aria-labelledby='alert-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='alert-dialog-title'>{'INFO'}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id='alert-dialog-description'>Do you want remove ?</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialogConfirm}>Disagree</Button>
-          <Button onClick={handleDeleteOrder} autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   )
 }

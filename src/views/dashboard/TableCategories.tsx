@@ -84,12 +84,12 @@ const TableProducts = () => {
     handleCloseDialogConfirm()
   }
 
-  const handleCreate = () => router.push(APP_ROUTES.cmsCategoryCreate)
+  const handleCreate = () => router.back()
   const handleEdit = useCallback(
     (_id: GridRowId) => () => {
       router.push({ pathname: APP_ROUTES.cmsCategoryEdit, query: { id: _id } })
     },
-    []
+    [router]
   )
 
   if (cms_err_categories) return <Box>Failed to load</Box>
