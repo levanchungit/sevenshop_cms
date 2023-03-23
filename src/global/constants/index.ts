@@ -38,6 +38,9 @@ export const APP_ROUTES = {
   cmsSizeCreate: `/sizes/create`,
   cmsSizeEdit: `/sizes/[size_id]/edit`,
 
+  //Chart
+  cmsChart: `/chart`,
+
   //Erro
   cmsError401: `/401`,
   cmsError404: `/404`,

@@ -49,6 +49,9 @@ export const API_ROUTES = {
   updateOrder: `/orders/`,
   updateStatusOrder: `/orders/`,
 
+  //chart
+  getRevenue: `/revenue`,
+
   //upload
   single: `/upload/single`,
   multiple: `/upload/multiple`

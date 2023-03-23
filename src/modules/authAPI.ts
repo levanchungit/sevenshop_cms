@@ -6,7 +6,6 @@ import axios from 'axios'
 import axiosClient from './config/axiosClient'
 
 const authAPI = {
-  //AUTH
   login(payload: SignInPayload) {
     return axios.post(API_URL + API_ROUTES.login, payload)
   },

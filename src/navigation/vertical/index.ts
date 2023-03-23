@@ -27,7 +27,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Reports',
       icon: ChartBoxOutline,
-      path: '/'
+      path: APP_ROUTES.cmsChart
     },
     {
       title: 'Products',
