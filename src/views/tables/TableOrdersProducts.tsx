@@ -53,7 +53,7 @@ const TableOrdersProducts = (props: Props) => {
                     variant='h4'
                     sx={{
                       textDecoration: product(row.product_id)?.price_sale > 0 ? 'line-through' : null,
-                      color: product(row.product_id)?.price_sale > 0 ? '#C9C9C9' : 'red',
+                      color: product(row.product_id)?.price_sale > 0 ? '#C9C9C9' : '#AC1506',
                       fontWeight: 500,
                       fontSize: '0.875rem !important',
                       mr: 2
@@ -61,7 +61,7 @@ const TableOrdersProducts = (props: Props) => {
                   >
                     {currencyFormatterVND(product(row.product_id)?.price)}
                   </Typography>
-                  <Typography sx={{ color: product(row.product_id)?.price_sale > 0 ? 'red' : 'black ' }}>
+                  <Typography sx={{ color: product(row.product_id)?.price_sale > 0 ? '#AC1506' : 'black ' }}>
                     {product(row.product_id)?.price_sale > 0
                       ? currencyFormatterVND(product(row.product_id)?.price_sale)
                       : null}
@@ -70,13 +70,6 @@ const TableOrdersProducts = (props: Props) => {
               </TableCell>
             </TableRow>
           ))}
-
-          <TableRow>
-            <TableCell colSpan={2} align='right' sx={{ borderRight: '1px solid rgba(231, 230, 232, 1)' }}>
-              Merchandise Subtotal
-            </TableCell>
-            <TableCell align='right'>{currencyFormatterVND(data.total_price)}</TableCell>
-          </TableRow>
 
           <TableRow>
             <TableCell colSpan={2} align='right' sx={{ borderRight: '1px solid rgba(231, 230, 232, 1)' }}>
@@ -94,10 +87,12 @@ const TableOrdersProducts = (props: Props) => {
 
           <TableRow>
             <TableCell colSpan={2} align='right' sx={{ borderRight: '1px solid rgba(231, 230, 232, 1)' }}>
-              Total Price
+              Total price
             </TableCell>
-            <TableCell sx={{ fontSize: 20, fontWeight: 'bold', color: 'primary.mai' }} align='right'>
-              {currencyFormatterVND(data.total_price)}
+            <TableCell align='right'>
+              <Typography fontSize={20} fontWeight={'bold'} color={'#AC1506'}>
+                {currencyFormatterVND(data.total_price)}
+              </Typography>
             </TableCell>
           </TableRow>
 

@@ -11,6 +11,7 @@ import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutl
 import LocalAtmOutlinedIcon from '@mui/icons-material/LocalAtmOutlined'
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined'
 import StarOutlineOutlinedIcon from '@mui/icons-material/StarOutlineOutlined'
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
 import { IModifyOrder } from 'global/constants'
 import { formatDate } from 'utils/currencyFormatter'
 import Typography from '@mui/material/Typography'
@@ -66,7 +67,8 @@ function ColorlibStepIcon(props: StepIconProps) {
     2: <LocalAtmOutlinedIcon />,
     3: <LocalShippingOutlinedIcon />,
     4: <ShoppingBasketOutlinedIcon />,
-    5: <StarOutlineOutlinedIcon />
+    5: <StarOutlineOutlinedIcon />,
+    6: <CancelOutlinedIcon />
   }
 
   return (
@@ -82,7 +84,6 @@ type Props = {
 
 export default function CustomizedSteppers(props: Props) {
   const { data } = props
-  console.log(data)
 
   //get index of status by data.status
   const getIndex = (status: string) => {
@@ -97,20 +98,19 @@ export default function CustomizedSteppers(props: Props) {
         return 3
       case 'rated':
         return 4
-      case 'cancel':
+      case 'cancelled':
         return 5
       default:
         return 0
     }
   }
-  console.log(getIndex(data[data.length - 1].status))
 
   return (
     <Stack sx={{ width: '100%', my: 10 }} spacing={4}>
       <Stepper alternativeLabel activeStep={getIndex(data[data.length - 1].status)} connector={<ColorlibConnector />}>
         {data.map(step => (
           <Step key={step.status}>
-            <StepLabel StepIconComponent={ColorlibStepIcon}>
+            <StepLabel sx={{ textTransform: 'capitalize' }} StepIconComponent={ColorlibStepIcon}>
               {step.status}
               <Typography variant='body2' sx={{ color: 'text.secondary' }}>
                 {formatDate(step.modify_at)}

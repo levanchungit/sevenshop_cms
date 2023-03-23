@@ -1,5 +1,15 @@
 // ** MUI Imports
-import { Box, Card, Typography, Grid, CircularProgress, Button } from '@mui/material'
+import {
+  Box,
+  Card,
+  Typography,
+  CircularProgress,
+  ImageList,
+  ImageListItem,
+  SelectChangeEvent,
+  Select,
+  Button
+} from '@mui/material'
 import { EditOutlined } from '@mui/icons-material'
 import { useCallback } from 'react'
 import * as React from 'react'
@@ -12,18 +22,20 @@ import {
   GridColDef,
   GridToolbarContainer,
   GridToolbarExport,
-  GridToolbarQuickFilter
+  GridToolbarQuickFilter,
+  useGridApiContext
 } from '@mui/x-data-grid'
 import { currencyFormatterVND, formatDate } from 'utils/currencyFormatter'
 import { useRouter } from 'next/router'
-import { APP_ROUTES } from 'global/constants/index'
-import useCMSGetCategories from 'hook/category/useCMSGetCategories'
-import useCMSGetColors from 'hook/color/useCMSGetColors'
-import useCMSGetSizes from 'hook/size/useCMSGetSizes'
+import { APP_ROUTES, STATUS_ORDER, STATUS_ORDER_OPTIONS, STATUS_PAYMENT_OPTIONS } from 'global/constants/index'
 import useCMSGetOrders from 'hook/order/useCMSGetOrders'
 import { CmsOrder } from 'interfaces/Order'
 import useCMSGetUsers from 'hook/user/useCMSGetUsers'
 import useCMSGetProducts from 'hook/product/useCMSGetProducts'
+import MenuItem from '@mui/material/MenuItem'
+import { SettingsContext } from '@core/context/settingsContext'
+import { useContext } from 'react'
+import { ordersAPI } from 'modules'
 
 const CustomToolbar = () => {
   return (
@@ -50,16 +62,13 @@ const CustomToolbar = () => {
 
 const TableOrders = () => {
   const router = useRouter()
+  const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
-  const { cms_orders, cms_err_orders } = useCMSGetOrders()
+  const { cms_orders, cms_err_orders, cms_mutate_orders } = useCMSGetOrders()
   const { cms_products, cms_err_products } = useCMSGetProducts()
   const { cms_users, error: cms_err_users } = useCMSGetUsers()
-  const { cms_categories, error: cms_err_categories } = useCMSGetCategories()
-  const { cms_colors, error: cms_err_colors } = useCMSGetColors()
-  const { cms_sizes, error: cms_err_sizes } = useCMSGetSizes()
 
-  const handleCreate = () => router.push(APP_ROUTES.cmsOrderCreate)
   const handleEdit = useCallback(
     (_id: GridRowId) => () => {
       router.push({ pathname: APP_ROUTES.cmsOrderEdit, query: { id: _id } })
@@ -67,9 +76,8 @@ const TableOrders = () => {
     []
   )
 
-  if (cms_err_orders || cms_err_users || cms_err_products || cms_err_categories || cms_err_colors || cms_err_sizes)
-    return <Box>Failed to load</Box>
-  if (!cms_orders || !cms_users || !cms_products || !cms_categories || !cms_colors || !cms_sizes)
+  if (cms_err_orders || cms_err_users || cms_err_products) return <Box>Failed to load</Box>
+  if (!cms_orders || !cms_users || !cms_products)
     return (
       <div style={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
         <CircularProgress />
@@ -94,20 +102,96 @@ const TableOrders = () => {
     }
   })
 
+  //get status order return set bgcolor, color every status change
+  const getStatusOrder = (status: string) => {
+    switch (status) {
+      case STATUS_ORDER.pending:
+        return { bgColor: '#FFC107', color: '#000' }
+      case STATUS_ORDER.verified:
+        return { bgColor: '#FF9800', color: '#fff' }
+      case STATUS_ORDER.shipping:
+        return { bgColor: '#2196F3', color: '#fff' }
+      case STATUS_ORDER.completed:
+        return { bgColor: '#4CAF50', color: '#fff' }
+      case STATUS_ORDER.cancelled:
+        return { bgColor: '#F44336', color: '#fff' }
+      default:
+        return { bgColor: '#FFC107', color: '#000' }
+    }
+  }
+
+  //get 1 image every products order
+  const getProductsImage = (products: any) => {
+    return products.map((product: any) => {
+      const productDetail = cms_products.find((item: { _id: any }) => item._id === product.product_id)
+
+      return productDetail?.images[0]
+    })
+  }
+
+  const renderSelectEditInputCell: GridColDef['renderCell'] = params => {
+    return <SelectEditInputCell {...params} />
+  }
+
+  function SelectEditInputCell(props: GridRenderCellParams) {
+    const { id, value, field } = props
+    const apiRef = useGridApiContext()
+
+    const handleChange = async (event: SelectChangeEvent) => {
+      const status = event.target.value
+      try {
+        await ordersAPI.updateStatusOrder({ _id: id as string, status })
+        cms_mutate_orders()
+        setSnackbarAlert({ message: 'Change status success', severity: 'success' })
+        await apiRef.current.setEditCellValue({ id, field, value: status })
+      } catch (err) {
+        setSnackbarAlert({ message: 'Change status fail', severity: 'error' })
+      }
+      apiRef.current.stopCellEditMode({ id, field })
+    }
+
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Select
+          sx={{ width: '90%', alignItems: 'center', justifyContent: 'center' }}
+          value={value}
+          onChange={handleChange}
+        >
+          {STATUS_ORDER_OPTIONS.map((item: any) => (
+            <MenuItem key={item.value} value={item.value}>
+              {item.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
+    )
+  }
+
   const _columns: GridColDef[] = [
     {
       field: 'user_id',
       headerName: 'Order by User',
-      width: 200,
+      width: 300,
       renderCell: (params: GridRenderCellParams) => (
-        <>
-          {/* <Avatar alt='Avatar' src={params.row} sx={{ mr: 2, width: 50, height: 50 }} /> */}
-          {cms_users
-            .filter(user => params.value.includes(user._id))
-            .map(user => (
-              <Typography key={user._id}>{user.email}</Typography>
-            ))}
-        </>
+        <Box display={'flex'} flexDirection={'row'}>
+          <Box borderRadius={20} mx={2}>
+            <ImageList sx={{ width: 100, height: 100 }} cols={2}>
+              {getProductsImage(params.row.products).map((item: React.Key | null | undefined) => (
+                <ImageListItem key={item}>
+                  <img src={`${item}`} srcSet={`${item}`} alt={item?.toString()} loading='lazy' />
+                </ImageListItem>
+              ))}
+            </ImageList>
+          </Box>
+          <Box flexDirection={'column'}>
+            {cms_users
+              .filter(user => params.value.includes(user._id))
+              .map(user => (
+                <Typography key={user._id}>{user.email}</Typography>
+              ))}
+            <Typography sx={{ color: 'text.secondary' }}>{params.row.products.length} products</Typography>
+          </Box>
+        </Box>
       )
     },
     {
@@ -125,8 +209,8 @@ const TableOrders = () => {
     },
     {
       field: 'note',
-      headerName: 'note',
-      width: 150,
+      headerName: 'Note',
+      width: 100,
       valueFormatter: ({ value }) => currencyFormatterVND(value),
       renderCell: (params: GridRenderCellParams) => (
         <>
@@ -138,13 +222,13 @@ const TableOrders = () => {
     },
     {
       field: 'payment_type',
-      headerName: 'payment_type',
+      headerName: 'Payment',
       width: 150,
       valueFormatter: ({ value }) => currencyFormatterVND(value),
       renderCell: (params: GridRenderCellParams) => (
         <>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography>{params.value}</Typography>
+            <Typography>{STATUS_PAYMENT_OPTIONS.find(item => item.value === params.value)?.label}</Typography>
           </Box>
         </>
       )
@@ -152,36 +236,24 @@ const TableOrders = () => {
     {
       field: 'status',
       headerName: 'Status',
-      width: 100,
+      width: 150,
       renderCell: (params: GridRenderCellParams) => (
         <Button
           sx={{
-            ':hover': {
-              bgColor: 'gray'
-            },
+            width: '100%',
             px: 2,
-            bgcolor: params.value == 'verified' ? '#E0F2FE' : '#FEE2E2',
-            color: params.value == 'verified' ? '#0EA5E9' : '#DC2626'
+            py: 0.5,
+            bgcolor: getStatusOrder(params.value).bgColor,
+            color: getStatusOrder(params.value).color
           }}
           variant='contained'
           size='small'
         >
           {params.value}
         </Button>
-      )
-    },
-    {
-      field: 'voucher_id',
-      headerName: 'voucher_id',
-      width: 150,
-      valueFormatter: ({ value }) => currencyFormatterVND(value),
-      renderCell: (params: GridRenderCellParams) => (
-        <>
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography>{params.value}</Typography>
-          </Box>
-        </>
-      )
+      ),
+      renderEditCell: renderSelectEditInputCell,
+      editable: true
     },
     {
       field: 'created_at',
@@ -213,26 +285,20 @@ const TableOrders = () => {
 
   return (
     <>
-      <Grid my={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant='contained' component='label' onClick={handleCreate} aria-label='add'>
-          Create Order
-        </Button>
-      </Grid>
-
       <Card style={{ width: '100%' }}>
         <DataGrid
           getRowId={row => row.id}
           rows={_rows}
           columns={_columns}
           slots={{ toolbar: CustomToolbar }}
+          getRowHeight={() => 130}
           sx={{
             '& .MuiDataGrid-row:hover': {
               color: 'primary.main',
               border: '1px solid red'
             },
-            minHeight: 682
+            minHeight: 800
           }}
-          checkboxSelection
           initialState={{
             pagination: { paginationModel: { pageSize: 10, page: 0 } }
           }}

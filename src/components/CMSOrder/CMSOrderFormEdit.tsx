@@ -37,10 +37,12 @@ export default function CMSOrderFormEdit(props: Props) {
   //call api change status
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const status = event.target.value
-    const response = await ordersAPI.updateStatusOrder({ _id: order_id, status: status })
-    if (response.status === 200) {
-      setSnackbarAlert({ message: 'Change status successfully', severity: 'success' })
+    try {
+      await ordersAPI.updateStatusOrder({ _id: order_id, status })
       mutate()
+      setSnackbarAlert({ message: 'Change status success', severity: 'success' })
+    } catch (err) {
+      setSnackbarAlert({ message: 'Change status fail', severity: 'error' })
     }
   }
 
@@ -66,13 +68,21 @@ export default function CMSOrderFormEdit(props: Props) {
 
       <CustomizedSteppers data={cmsOrder.data.modify} />
 
+      <Divider sx={{ margin: 0 }} />
+
       <Box>
-        <CardHeader title={'Delivery Address'} sx={{ width: '100%', alignContent: 'right' }} />
-        <CardContent sx={{ padding: theme => `${theme.spacing(3, 5.25, 4)} !important` }}>
-          <Typography variant='subtitle1' sx={{ marginBottom: 2 }}>
-            Chung OK 2
-          </Typography>
-          <Typography sx={{ marginBottom: 2 }}>0378484047</Typography>
+        <CardContent
+          sx={{
+            padding: theme => `${theme.spacing(3, 5.25, 4)} !important`,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <Typography variant='h6'>Delivery Address</Typography>
+          <Typography variant='subtitle1'>Chung OK 2</Typography>
+          <Typography mx={20}>0378484047</Typography>
           <Typography variant='body2'>TPHCM</Typography>
         </CardContent>
       </Box>

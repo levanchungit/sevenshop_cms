@@ -137,7 +137,8 @@ export enum STATUS_ORDER {
   verified = 'verified',
   shipping = 'shipping',
   completed = 'completed',
-  cancel = 'cancel'
+  rated = 'rated',
+  cancelled = 'cancelled'
 }
 
 export const STATUS_ORDER_OPTIONS = [
@@ -145,7 +146,8 @@ export const STATUS_ORDER_OPTIONS = [
   { value: STATUS_ORDER.verified, label: 'Verified' },
   { value: STATUS_ORDER.shipping, label: 'Shipping' },
   { value: STATUS_ORDER.completed, label: 'Completed' },
-  { value: STATUS_ORDER.cancel, label: 'Cancel' }
+  { value: STATUS_ORDER.rated, label: 'Rated' },
+  { value: STATUS_ORDER.cancelled, label: 'Cancelled' }
 ]
 
 export enum PAYMENT_TYPE {

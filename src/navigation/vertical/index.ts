@@ -1,18 +1,13 @@
 import { APP_ROUTES } from 'global/constants/index'
 
 // ** Icon imports
-import {
-  CartOutline,
-  AccountOutline,
-  TruckOutline,
-  TuneVariant,
-  CreditCardOutline,
-  AlertCircleOutline,
-  ChartBoxOutline
-} from 'mdi-material-ui'
+import { CartOutline, AccountOutline, CreditCardOutline, ChartBoxOutline } from 'mdi-material-ui'
 
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import ViewInArIcon from '@mui/icons-material/ViewInAr'
+import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined'
+import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined'
+import FormatSizeOutlinedIcon from '@mui/icons-material/FormatSizeOutlined'
 
 // ** Type import
 import { VerticalNavItemsType } from '@core/layouts/types'
@@ -40,28 +35,8 @@ const navigation = (): VerticalNavItemsType => {
       path: APP_ROUTES.cmsProducts
     },
     {
-      title: 'Categories',
-      icon: ViewInArIcon,
-      path: APP_ROUTES.cmsCategories
-    },
-    {
-      title: 'Colors',
-      icon: ViewInArIcon,
-      path: APP_ROUTES.cmsColors
-    },
-    {
-      title: 'Sizes',
-      icon: ViewInArIcon,
-      path: APP_ROUTES.cmsSizes
-    },
-    {
       title: 'Customers',
       icon: AccountOutline,
-      path: '/'
-    },
-    {
-      title: 'Shipping',
-      icon: TruckOutline,
       path: '/'
     },
     {
@@ -70,26 +45,23 @@ const navigation = (): VerticalNavItemsType => {
       path: '/'
     },
     {
-      title: 'Configurations',
-      icon: TuneVariant,
-      path: '/'
+      sectionTitle: 'Properties'
+    },
+
+    {
+      title: 'Categories',
+      icon: CategoryOutlinedIcon,
+      path: APP_ROUTES.cmsCategories
     },
     {
-      sectionTitle: 'Pages'
+      title: 'Colors',
+      icon: ColorLensOutlinedIcon,
+      path: APP_ROUTES.cmsColors
     },
     {
-      title: 'Error',
-      icon: AlertCircleOutline,
-      path: APP_ROUTES.cmsError401,
-      openInNewTab: true
-    },
-    {
-      sectionTitle: 'User Interface'
-    },
-    {
-      title: 'Cards',
-      icon: CreditCardOutline,
-      path: APP_ROUTES.cmsCards
+      title: 'Sizes',
+      icon: FormatSizeOutlinedIcon,
+      path: APP_ROUTES.cmsSizes
     }
   ]
 }

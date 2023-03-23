@@ -32,7 +32,7 @@ import {
 import { currencyFormatterVND, formatDate } from 'utils/currencyFormatter'
 import { SettingsContext } from '@core/context/settingsContext'
 import { useRouter } from 'next/router'
-import { APP_ROUTES } from 'global/constants/index'
+import { APP_ROUTES, STATUS_PRODUCT } from 'global/constants/index'
 import useCMSGetProducts from 'hook/product/useCMSGetProducts'
 import { CmsProduct } from 'interfaces/Product'
 import { CmsCategory } from 'interfaces/Category'
@@ -144,6 +144,18 @@ const TableProducts = () => {
     }
   })
 
+  //get product status return bgColor, color
+  const getProductStatus = (status: string) => {
+    switch (status) {
+      case STATUS_PRODUCT.active:
+        return { bgColor: '#4CAF50', color: '#fff' }
+      case STATUS_PRODUCT.inactive:
+        return { bgColor: '#F44336', color: '#fff' }
+      default:
+        return { bgColor: '#F44336', color: '#fff' }
+    }
+  }
+
   const _columns: GridColDef[] = [
     // { field: 'id', headerName: 'ID', width: 250},
     {
@@ -197,11 +209,11 @@ const TableProducts = () => {
         <Button
           sx={{
             ':hover': {
-              bgColor: 'gray'
+              bgcolor: 'gray'
             },
             px: 2,
-            bgcolor: params.value == 'active' ? '#E0F2FE' : '#FEE2E2',
-            color: params.value == 'active' ? '#0EA5E9' : '#DC2626'
+            bgcolor: getProductStatus(params.value).bgColor,
+            color: getProductStatus(params.value).color
           }}
           variant='contained'
           size='small'
@@ -226,7 +238,7 @@ const TableProducts = () => {
     {
       field: 'color_ids',
       headerName: 'Colors',
-      width: 100,
+      width: 110,
       renderCell: (params: GridRenderCellParams) => (
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
           {cms_colors
