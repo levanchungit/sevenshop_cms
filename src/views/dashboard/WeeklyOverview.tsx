@@ -1,30 +1,94 @@
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
-import { useState } from 'react'
 import useCMSGetRevenue from 'hook/revenue/useCMSGetRevenue'
 import { currencyFormatterVND } from 'utils/currencyFormatter'
 import dynamic from 'next/dynamic'
+import { Grid, Box } from '@mui/material'
+import { useState, useEffect } from 'react'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import { STATUS_ORDER, STATUS_ORDER_OPTIONS } from 'global/constants'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker'
+import moment from 'moment'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
-const WeeklyOverview = () => {
-  const { cmsRevenue, error } = useCMSGetRevenue('completed')
-  console.log(cmsRevenue)
 
+const WeeklyOverview = () => {
   const [options, setOptions] = useState({
     xaxis: {
-      categories: cmsRevenue?.data?.results.map(item => item.date)
+      categories: []
     }
   })
-
   const [series, setSeries] = useState([
     {
       name: 'Doanh thu',
-      data: cmsRevenue?.data?.results.map(item => currencyFormatterVND(item.total))
+      data: []
     }
   ])
 
+  const [typeOrder, setTypeOrder] = useState<STATUS_ORDER>(STATUS_ORDER.completed)
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    start: moment(),
+    end: moment()
+  })
+
+  const handleDateRangeChange = (newDateRange: [any, any]) => {
+    const [start, end] = newDateRange
+    console.log(start, end)
+
+    //check end date < start date => set default date range is today
+    if (end < start) {
+      setSelectedDateRange({
+        start: moment(),
+        end: moment()
+      })
+
+      return
+    }
+
+    setSelectedDateRange({
+      start: moment(start),
+      end: moment(end)
+    })
+  }
+  const { revenue, isError } = useCMSGetRevenue(
+    typeOrder,
+    moment(selectedDateRange.start).format('YYYY-MM-DD'),
+    moment(selectedDateRange.end).format('YYYY-MM-DD')
+  )
+
+  useEffect(() => {
+    if (revenue?.results) {
+      setOptions({
+        xaxis: {
+          categories: revenue?.results.map((item: { date: any }) => item.date)
+        }
+      })
+      setSeries([
+        {
+          name: 'Doanh thu',
+          data: revenue?.results.map((item: { total: number }) => currencyFormatterVND(item.total))
+        }
+      ])
+    }
+  }, [revenue])
+
+  if (isError) return <Box>error</Box>
+  if (!revenue) return <Box>Loading...</Box>
+
+  //handle change type order
+  const handleChange = (event: SelectChangeEvent) => {
+    setTypeOrder(event.target.value as STATUS_ORDER)
+  }
+
   return (
-    <Card>
+    <Card sx={{ p: 2 }}>
       <CardHeader
         title='Weekly Overview'
         titleTypographyProps={{
@@ -32,23 +96,56 @@ const WeeklyOverview = () => {
         }}
       />
 
-      {/* create view show total */}
-      <div className='d-flex justify-content-between align-items-center'>
-        <div className='d-flex align-items-center'>
-          <div className='d-flex flex-column align-items-center'>
-            <span className='font-weight-bold'>Doanh thu</span>
-            <h1 className='font-weight-bolder mb-25'>{currencyFormatterVND(cmsRevenue?.data.total)}</h1>
-          </div>
-          <div className='d-flex flex-column align-items-center ml-2'>
-            <span className='font-weight-bold'>Số đơn hàng</span>
-            <h1 className='font-weight-bolder mb-25'>{cmsRevenue?.data.quantity}</h1>
-          </div>
-        </div>
-      </div>
+      <Box>
+        <Grid container my={5}>
+          <Grid item xs={6} display='flex' justifyContent={'center'} alignItems='center'>
+            <Stack direction={'column'} justifyContent='center' alignItems={'center'} spacing={2}>
+              <Typography>Doanh thu</Typography>
+              <Typography variant='h4'>{currencyFormatterVND(revenue?.total)}</Typography>
+            </Stack>
+          </Grid>
+          <Grid item xs={6}>
+            <Stack direction={'column'} justifyContent='center' alignItems={'center'} spacing={2}>
+              <Typography>Tổng số đơn hàng</Typography>
+              <Typography variant='h4'>{revenue?.quantity}</Typography>
+            </Stack>
+          </Grid>
+        </Grid>
+
+        <Grid container my={5} justifyContent={'flex-end'} columnSpacing={2} spacing={2}>
+          <Grid item xs={8} display='flex'>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <DateRangePicker
+                sx={{ flex: 1 }}
+                value={[selectedDateRange.start, selectedDateRange.end]}
+                onChange={handleDateRangeChange}
+              />
+            </LocalizationProvider>
+          </Grid>
+          <Grid item xs={4} display='flex'>
+            <FormControl fullWidth>
+              <InputLabel id='demo-simple-select-label'>Status Order</InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={typeOrder}
+                label='Type chart'
+                onChange={handleChange}
+              >
+                {STATUS_ORDER_OPTIONS.map((item, index) => (
+                  <MenuItem key={index} value={item.value}>
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+      </Box>
 
       <div className='mixed-chart'>
         {typeof window !== 'undefined' && (
-          <Chart options={options} series={series} type='bar' width={'100%'} height={320} />
+          <Chart options={options} series={series} type={'bar'} width={'100%'} height={320} />
         )}
       </div>
     </Card>

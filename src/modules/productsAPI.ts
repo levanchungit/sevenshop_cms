@@ -26,6 +26,7 @@ const productsAPI = {
     return response
   },
   getProductDetail(id: string) {
+    console.log('CALL API')
     const response = axiosClient.get(API_ROUTES.getProductDetail + id)
 
     return response

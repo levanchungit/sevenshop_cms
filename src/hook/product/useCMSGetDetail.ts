@@ -1,6 +1,6 @@
 import { productsAPI } from 'modules'
 import useSWR from 'swr'
-import { useMemo } from 'react'
+import { useCallback } from 'react'
 
 const fetcher = async (id: string) => {
   const result = await productsAPI.getProductDetail(id)
@@ -9,7 +9,7 @@ const fetcher = async (id: string) => {
 }
 
 export default function useCMSGetProductDetail(id: string) {
-  const key = useMemo(() => [id], [id]) // sử dụng useMemo
+  const key = useCallback(() => id, [id])
   const swr = useSWR(key, fetcher, { revalidateOnFocus: true }) // sử dụng caching
   const { data, ...others } = swr
 

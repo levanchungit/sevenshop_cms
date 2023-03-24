@@ -229,7 +229,6 @@ export default function CMSProductFormEdit(props: Props) {
       return item
     })
     initialValues.stock = newStock
-    mutate()
   }
 
   //call api generate Stock
