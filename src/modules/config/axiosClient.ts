@@ -51,8 +51,7 @@ function createAxiosClient(): AxiosInstance {
       // Xóa các token nếu refresh token bị lỗi
       localStorage.removeItem('access_token')
       localStorage.removeItem('refresh_token')
-
-      Router.replace(APP_ROUTES.cmsLogin)
+      Router.push(APP_ROUTES.cmsLogin)
 
       return Promise.reject(error)
     }

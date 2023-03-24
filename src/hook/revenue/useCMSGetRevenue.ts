@@ -1,3 +1,5 @@
+import { API_ROUTES } from './../../global/constants/apiRoutes'
+import { API_URL } from 'global/config'
 import useSWR from 'swr'
 import { useMemo } from 'react'
 import revenueAPI from 'modules/revenueAPI'
@@ -17,7 +19,7 @@ export default function useCMSGetRevenue(status: string, start_date: string, end
       end_date
     })
 
-    return `http://localhost:3000/revenue?${params.toString()}`
+    return API_URL + API_ROUTES.getRevenue + `?${params.toString()}`
   }, [status, start_date, end_date])
 
   const { data, error } = useSWR(url, fetcher)

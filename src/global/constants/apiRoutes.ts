@@ -50,7 +50,7 @@ export const API_ROUTES = {
   updateStatusOrder: `/orders/`,
 
   //chart
-  getRevenue: `/revenue`,
+  getRevenue: `/dashboard/revenue_day`,
 
   //upload
   single: `/upload/single`,
