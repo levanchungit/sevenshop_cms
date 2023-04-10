@@ -24,7 +24,6 @@ export default function CMSSizeFormCreate() {
       console.log('onSubmit', data)
       try {
         const response = await sizesAPI.createSize(data)
-        console.log(response)
         if (response.status === 201) {
           setSnackbarAlert({ message: 'Add size successfully', severity: 'success' })
         }

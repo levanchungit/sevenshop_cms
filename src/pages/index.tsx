@@ -1,185 +1,34 @@
 // ** MUI Imports
-import { Box, Typography, Grid, CircularProgress } from '@mui/material'
+import { Box, Typography, Grid, CircularProgress, Fab, Stack, Avatar, CardContent } from '@mui/material'
 
 // ** Styled Component Import
 import ApexChartWrapper from '@core/styles/libs/react-apexcharts'
 
 // ** Demo Components Imports
 import WeeklyOverview from 'views/dashboard/WeeklyOverview'
-import { API_ROUTES } from 'global/constants'
+import { API_ROUTES, APP_ROUTES } from 'global/constants'
 import useSWR from 'swr'
 import { productsAPI } from 'modules'
 
-// import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
-// import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
-// import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
-// import { currencyFormatterVND } from 'utils/currencyFormatter'
-
-// const arrKeywordsSearch = [
-//   'Backpacks',
-//   'Totes',
-//   'Boots',
-//   'Totes',
-//   'Bootsasdasdsd',
-//   'Totasdases',
-//   'Boots',
-//   'Toteasdasdds',
-//   'Boots',
-//   'Totadsadadses',
-//   'Boots',
-//   'Totes',
-//   'Boasdasdaots',
-//   'Boots',
-//   'Totes',
-//   'Boots',
-//   'Boots',
-//   'Totes',
-//   'Bootsasdasd',
-//   'Boots',
-//   'Totes',
-//   'Boots',
-//   'Boots',
-//   'Totesasdasdasdd',
-//   'Boots'
-// ]
-
-// const arrBestSellers = [
-//   {
-//     _id: '1',
-//     name: 'Parisian Collage Jacquard Hoodie',
-//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-//     price: 1000000,
-//     sold: 151,
-//     profit: 151000000,
-//     view: 151,
-//     favorites: 151
-//   },
-//   {
-//     _id: '2',
-//     name: 'Parisian Collage Jacquard Hoodie',
-//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-//     price: 2000000,
-//     sold: 231,
-//     profit: 124000000,
-//     view: 12,
-//     favorites: 53
-//   },
-//   {
-//     _id: '3',
-//     name: 'Parisian Collage Jacquard Hoodie',
-//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-//     price: 123123,
-//     sold: 521324,
-//     profit: 123124432,
-//     view: 53,
-//     favorites: 643
-//   },
-//   {
-//     _id: '4',
-//     name: 'Parisian Collage Jacquard Hoodie',
-//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-//     price: 5352342,
-//     sold: 245,
-//     profit: 21314214,
-//     view: 53,
-//     favorites: 232
-//   },
-//   {
-//     _id: '5',
-//     name: 'Parisian Collage Jacquard Hoodie',
-//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-//     price: 2534654,
-//     sold: 24,
-//     profit: 23422423,
-//     view: 2343,
-//     favorites: 32
-//   },
-//   {
-//     _id: '6',
-//     name: 'Parisian Collage Jacquard Hoodie',
-//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-//     price: 233,
-//     sold: 23,
-//     profit: 21132,
-//     view: 134,
-//     favorites: 23
-//   },
-//   {
-//     _id: '7',
-//     name: 'Parisian Collage Jacquard Hoodie',
-//     images: ['https://res.cloudinary.com/dzhlsdyqv/image/upload/v1677641136/SevenShop/sjyrgbsgacfmdcgbh2uz.avif'],
-//     price: 223232,
-//     sold: 464,
-//     profit: 22323,
-//     view: 12321,
-//     favorites: 2132
-//   }
-// ]
-
-// const _rows = arrBestSellers.map((row: any) => {
-//   return {
-//     id: row._id,
-//     name: row.name,
-//     images: row.images,
-//     price: row.price,
-//     sold: row.sold,
-//     profit: row.profit,
-//     view: row.view,
-//     favorites: row.favorites
-//   }
-// })
-
-// const _columns: GridColDef[] = [
-//   {
-//     field: 'name',
-//     headerName: 'PRODUCT',
-//     width: 300,
-//     renderCell: (params: GridRenderCellParams) => (
-//       <>
-//         <Avatar alt='Avatar' src={params.row.images[0]} sx={{ width: 50, height: 50 }} />
-
-//         <Stack>
-//           <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{params.value}</Typography>
-
-//           <Typography>{currencyFormatterVND(params.row.price)}</Typography>
-//         </Stack>
-//       </>
-//     )
-//   },
-//   {
-//     field: 'sold',
-//     headerName: 'SOLD',
-//     width: 70
-//   },
-//   {
-//     field: 'profit',
-//     headerName: 'PROFIT',
-//     headerAlign: 'right',
-
-//     width: 150,
-//     renderCell: (params: GridRenderCellParams) => (
-//       <>
-//         <Box width={150}>
-//           <Box>
-//             <Typography>{currencyFormatterVND(params.value)}</Typography>
-//           </Box>
-
-//           <Box display='flex' flexDirection={'row'} justifyContent='flex-end' alignItems={'center'}>
-//             <Box display='flex' flexDirection={'row'} justifyContent='flex-end' alignItems={'center'} mx={2}>
-//               <Typography sx={{ fontSize: 12 }}>{params.row.view}</Typography>
-//               <RemoveRedEyeOutlinedIcon />
-//             </Box>
-//             <Typography sx={{ fontSize: 12 }}> {params.row.favorites}</Typography>
-//             <FavoriteBorderOutlinedIcon />
-//           </Box>
-//         </Box>
-//       </>
-//     )
-//   }
-// ]
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
+import AddCircleIcon from '@mui/icons-material/AddCircle'
+import { currencyFormatterVND } from 'utils/currencyFormatter'
+import useCMSGetCountQuantity from 'hook/dashboard/useCMSGetCountQuantity'
+import { useRouter } from 'next/router'
+import useCMSGetHistorySearch from 'hook/dashboard/useCMSGetHistorySearch'
+import { cmsHistorySearch, cmsProductsBestSellers } from 'interfaces/Dashboard'
+import useCMSGetProductsBestSellers from 'hook/dashboard/useCMSGetProductsBestSellers'
+import TableOrders from 'views/dashboard/TableOrders'
 
 const Dashboard = () => {
+  const router = useRouter()
   const { data, error } = useSWR(API_ROUTES.getProducts, productsAPI.getProducts)
+
+  const { cms_count_quantity, cms_err_count_quantity } = useCMSGetCountQuantity()
+  const { cms_history_search, cms_err_history_search } = useCMSGetHistorySearch()
+  const { cms_products_best_sellers, cms_err_products_best_sellers } = useCMSGetProductsBestSellers()
 
   if (error) return <Box>Failed to load</Box>
   if (!data)
@@ -190,10 +39,92 @@ const Dashboard = () => {
       </div>
     )
 
+  if (cms_err_count_quantity || cms_err_history_search || cms_err_products_best_sellers)
+    return <Box>Failed to load</Box>
+  if (!cms_count_quantity || !cms_history_search || !cms_products_best_sellers)
+    return (
+      <div style={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+        <CircularProgress />
+        <Typography mx={5}>Loading...</Typography>
+      </div>
+    )
+
+  const _rows = cms_products_best_sellers.map((row: cmsProductsBestSellers) => {
+    return {
+      id: row._id,
+      name: row.product_name,
+      image: row.image,
+      price: row.price,
+      price_sale: row.price_sale,
+      sold: row.sold_quantity,
+      profit: row.total_revenue,
+      view: row.views,
+      favorites: row.favorites
+    }
+  })
+
+  const _columns: GridColDef[] = [
+    {
+      field: 'name',
+      headerName: 'PRODUCT',
+      width: 300,
+      renderCell: (params: GridRenderCellParams) => (
+        <>
+          <Avatar alt='Avatar' src={params.row.image} sx={{ width: 50, height: 50 }} />
+
+          <Stack>
+            <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>{params.value}</Typography>
+
+            <Typography>{currencyFormatterVND(params.row.price)}</Typography>
+          </Stack>
+        </>
+      )
+    },
+    {
+      field: 'sold',
+      headerName: 'SOLD',
+      width: 50,
+      renderCell: (params: GridRenderCellParams) => (
+        <>
+          <Box width={150}>
+            <Box>
+              <Typography>{params.value}</Typography>
+            </Box>
+          </Box>
+        </>
+      )
+    },
+    {
+      field: 'profit',
+      headerName: 'PROFIT',
+      headerAlign: 'right',
+
+      width: 130,
+      renderCell: (params: GridRenderCellParams) => (
+        <>
+          <Box width={150}>
+            <Box>
+              <Typography>{currencyFormatterVND(params.value)}</Typography>
+            </Box>
+
+            <Box display='flex' flexDirection={'row'} justifyContent='flex-end' alignItems={'center'}>
+              <Box display='flex' flexDirection={'row'} justifyContent='flex-end' alignItems={'center'} mx={2}>
+                <Typography sx={{ fontSize: 12, mr: 0.5 }}>{params.row.view}</Typography>
+                <RemoveRedEyeOutlinedIcon />
+              </Box>
+              <Typography sx={{ fontSize: 12, ml: 2 }}> {params.row.favorites}</Typography>
+              <FavoriteBorderOutlinedIcon />
+            </Box>
+          </Box>
+        </>
+      )
+    }
+  ]
+
   return (
     <ApexChartWrapper>
       <Grid container spacing={2}>
-        {/* <Grid item xs={12} lg={4} display='flex' flexDirection={'column'}>
+        <Grid item xs={12} lg={4} display='flex' flexDirection={'column'}>
           <Box display='flex' flexDirection={'row'}>
             <Grid
               item
@@ -208,14 +139,22 @@ const Dashboard = () => {
               justifyContent={'center'}
               bgcolor='#29CC39'
             >
-              <Typography variant='caption' color={'white'} fontWeight='bold'>
-                Orders
+              <Typography variant='caption' color={'white'} fontWeight='bold' textTransform={'capitalize'}>
+                {Object.keys(cms_count_quantity)[0]}
               </Typography>
               <Typography my={1} variant='h6' color={'white'} fontWeight='bold'>
-                151 345
+                {cms_count_quantity.orders}
               </Typography>
               <Box display='flex' flexDirection={'row'} alignItems='center'>
-                <Fab size='small' color='secondary' aria-label='add' sx={{ bgcolor: '#13BF24', mr: 2 }}>
+                <Fab
+                  onClick={() => {
+                    router.push(APP_ROUTES.cmsOrders)
+                  }}
+                  size='small'
+                  color='secondary'
+                  aria-label='add'
+                  sx={{ bgcolor: '#13BF24', mr: 2 }}
+                >
                   <AddCircleIcon sx={{ color: 'white' }} />
                 </Fab>
                 <Fab
@@ -224,6 +163,9 @@ const Dashboard = () => {
                   color='secondary'
                   aria-label='add'
                   sx={{ bgcolor: '#13BF24', borderRadius: 20 }}
+                  onClick={() => {
+                    router.push(APP_ROUTES.cmsOrders)
+                  }}
                 >
                   <Stack sx={{ height: 'auto', color: 'white', fontWeight: 'bold', fontSize: 12 }}>View All</Stack>
                 </Fab>
@@ -242,14 +184,22 @@ const Dashboard = () => {
               justifyContent={'center'}
               bgcolor='#8833FF'
             >
-              <Typography variant='caption' color={'white'} fontWeight='bold'>
-                Products
+              <Typography variant='caption' color={'white'} fontWeight='bold' textTransform={'capitalize'}>
+                {Object.keys(cms_count_quantity)[1]}
               </Typography>
               <Typography my={1} variant='h6' color={'white'} fontWeight='bold'>
-                12 456
+                {cms_count_quantity.products}
               </Typography>
               <Box display='flex' flexDirection={'row'} alignItems='center'>
-                <Fab size='small' color='secondary' aria-label='add' sx={{ bgcolor: '#7919FF', mr: 2 }}>
+                <Fab
+                  onClick={() => {
+                    router.push(APP_ROUTES.cmsProductCreate)
+                  }}
+                  size='small'
+                  color='secondary'
+                  aria-label='add'
+                  sx={{ bgcolor: '#7919FF', mr: 2 }}
+                >
                   <AddCircleIcon sx={{ color: 'white' }} />
                 </Fab>
                 <Fab
@@ -258,6 +208,9 @@ const Dashboard = () => {
                   color='secondary'
                   aria-label='add'
                   sx={{ bgcolor: '#7919FF', borderRadius: 20 }}
+                  onClick={() => {
+                    router.push(APP_ROUTES.cmsProducts)
+                  }}
                 >
                   <Stack sx={{ height: 'auto', color: 'white', fontWeight: 'bold', fontSize: 12 }}>View All</Stack>
                 </Fab>
@@ -276,14 +229,22 @@ const Dashboard = () => {
               justifyContent={'center'}
               bgcolor='#FF6633'
             >
-              <Typography variant='caption' color={'white'} fontWeight='bold'>
-                Categories
+              <Typography variant='caption' color={'white'} fontWeight='bold' textTransform={'capitalize'}>
+                {Object.keys(cms_count_quantity)[2]}
               </Typography>
               <Typography my={1} variant='h6' color={'white'} fontWeight='bold'>
-                21
+                {cms_count_quantity.categories}
               </Typography>
               <Box display='flex' flexDirection={'row'} alignItems='center'>
-                <Fab size='small' color='secondary' aria-label='add' sx={{ bgcolor: '#E64B17', mr: 2 }}>
+                <Fab
+                  onClick={() => {
+                    router.push(APP_ROUTES.cmsCategoryCreate)
+                  }}
+                  size='small'
+                  color='secondary'
+                  aria-label='add'
+                  sx={{ bgcolor: '#E64B17', mr: 2 }}
+                >
                   <AddCircleIcon sx={{ color: 'white' }} />
                 </Fab>
                 <Fab
@@ -292,6 +253,9 @@ const Dashboard = () => {
                   color='secondary'
                   aria-label='add'
                   sx={{ bgcolor: '#E64B17', borderRadius: 20 }}
+                  onClick={() => {
+                    router.push(APP_ROUTES.cmsCategories)
+                  }}
                 >
                   <Stack sx={{ height: 'auto', color: 'white', fontWeight: 'bold', fontSize: 12 }}>View All</Stack>
                 </Fab>
@@ -313,14 +277,22 @@ const Dashboard = () => {
               justifyContent={'center'}
               bgcolor='#33BFFF'
             >
-              <Typography variant='caption' color={'white'} fontWeight='bold'>
-                Customers
+              <Typography variant='caption' color={'white'} fontWeight='bold' textTransform={'capitalize'}>
+                {Object.keys(cms_count_quantity)[3]}
               </Typography>
               <Typography my={1} variant='h6' color={'white'} fontWeight='bold'>
-                1 220
+                {cms_count_quantity.users}
               </Typography>
               <Box display='flex' flexDirection={'row'} alignItems='center'>
-                <Fab size='small' color='secondary' aria-label='add' sx={{ bgcolor: '#17A5E6', mr: 2 }}>
+                <Fab
+                  onClick={() => {
+                    router.push(APP_ROUTES.cmsUserCreate)
+                  }}
+                  size='small'
+                  color='secondary'
+                  aria-label='add'
+                  sx={{ bgcolor: '#17A5E6', mr: 2 }}
+                >
                   <AddCircleIcon sx={{ color: 'white' }} />
                 </Fab>
                 <Fab
@@ -329,6 +301,9 @@ const Dashboard = () => {
                   color='secondary'
                   aria-label='add'
                   sx={{ bgcolor: '#17A5E6', borderRadius: 20 }}
+                  onClick={() => {
+                    router.push(APP_ROUTES.cmsUsers)
+                  }}
                 >
                   <Stack sx={{ height: 'auto', color: 'white', fontWeight: 'bold', fontSize: 12 }}>View All</Stack>
                 </Fab>
@@ -348,14 +323,22 @@ const Dashboard = () => {
               justifyContent={'center'}
               bgcolor='#1A2233'
             >
-              <Typography variant='caption' color={'white'} fontWeight='bold'>
-                Notifications
+              <Typography variant='caption' color={'white'} fontWeight='bold' textTransform={'capitalize'}>
+                {Object.keys(cms_count_quantity)[4]}
               </Typography>
               <Typography my={1} variant='h6' color={'white'} fontWeight='bold'>
-                1
+                {cms_count_quantity.notifications}
               </Typography>
               <Box display='flex' flexDirection={'row'} alignItems='center'>
-                <Fab size='small' color='secondary' aria-label='add' sx={{ bgcolor: '#26334D', mr: 2 }}>
+                <Fab
+                  onClick={() => {
+                    router.push(APP_ROUTES.cmsNotificationCreate)
+                  }}
+                  size='small'
+                  color='secondary'
+                  aria-label='add'
+                  sx={{ bgcolor: '#26334D', mr: 2 }}
+                >
                   <AddCircleIcon sx={{ color: 'white' }} />
                 </Fab>
                 <Fab
@@ -364,6 +347,9 @@ const Dashboard = () => {
                   color='secondary'
                   aria-label='add'
                   sx={{ bgcolor: '#26334D', borderRadius: 20 }}
+                  onClick={() => {
+                    router.push(APP_ROUTES.cmsNotifications)
+                  }}
                 >
                   <Stack sx={{ height: 'auto', color: 'white', fontWeight: 'bold', fontSize: 12 }}>View All</Stack>
                 </Fab>
@@ -383,14 +369,22 @@ const Dashboard = () => {
               justifyContent={'center'}
               bgcolor='#FFFFFF'
             >
-              <Typography variant='caption' color={'#7D8FB3'} fontWeight='bold'>
-                Vouchers
+              <Typography variant='caption' color={'#7D8FB3'} fontWeight='bold' textTransform={'capitalize'}>
+                {Object.keys(cms_count_quantity)[5]}
               </Typography>
               <Typography my={1} variant='h6' color={'#7D8FB3'} fontWeight='bold'>
-                21
+                {cms_count_quantity.vouchers}
               </Typography>
               <Box display='flex' flexDirection={'row'} alignItems='center'>
-                <Fab size='small' color='secondary' aria-label='add' sx={{ bgcolor: '#F7F8FA', mr: 2 }}>
+                <Fab
+                  onClick={() => {
+                    router.push(APP_ROUTES.cmsVoucherCreate)
+                  }}
+                  size='small'
+                  color='secondary'
+                  aria-label='add'
+                  sx={{ bgcolor: '#F7F8FA', mr: 2 }}
+                >
                   <AddCircleIcon sx={{ color: '#7D8FB3' }} />
                 </Fab>
                 <Fab
@@ -399,6 +393,9 @@ const Dashboard = () => {
                   color='secondary'
                   aria-label='add'
                   sx={{ bgcolor: '#F7F8FA', borderRadius: 20 }}
+                  onClick={() => {
+                    router.push(APP_ROUTES.cmsVouchers)
+                  }}
                 >
                   <Stack sx={{ height: 'auto', color: '#7D8FB3', fontWeight: 'bold', fontSize: 12 }}>View All</Stack>
                 </Fab>
@@ -410,58 +407,50 @@ const Dashboard = () => {
               Top keywords search
             </Typography>
             <Box display='flex' flexWrap={'wrap'}>
-              {arrKeywordsSearch.map(keyword => (
-                <Typography key={keyword} mx={4} my={2} variant='caption' color='#888888'>
-                  {keyword}
+              {cms_history_search.map((item: cmsHistorySearch) => (
+                <Typography key={item._id} mx={4} my={2} variant='caption' color='#888888'>
+                  {item.keyword}
                 </Typography>
               ))}
             </Box>
           </Box>
-        </Grid> */}
-
-        <Grid item xs={12} lg={8} display='flex' flexDirection={'column'}>
-          Table Data
         </Grid>
 
-        <Grid item xs={12} md={6} lg={4}></Grid>
+        <Grid item xs={12} lg={8} display='flex' flexDirection={'column'}>
+          <TableOrders height={400} />
+        </Grid>
 
-        {/* <Grid item xs={12} md={8} lg={5}>
-          <Card>
-            <Grid container spacing={6}>
-              <Grid item xs={12} sm={12}>
-                <CardContent>
-                  <Typography color={'primary.main'} fontWeight={'bold'} variant='h6'>
-                    Best sellers
-                  </Typography>
-                  <Box>
-                    <DataGrid
-                      key={1}
-                      rows={_rows}
-                      columns={_columns}
-                      getRowHeight={() => 50}
-                      sx={{
-                        '& .MuiDataGrid-row:hover': {
-                          color: 'primary.main',
-                          border: '1px solid red'
-                        },
-                        height: 350
-                      }}
-                      initialState={{
-                        pagination: {
-                          paginationModel: {
-                            pageSize: 5
-                          }
+        <Grid item xs={12} md={6} lg={4}>
+          Stepper
+        </Grid>
+
+        <Grid item xs={12} md={8} lg={5}>
+          <Grid container spacing={6}>
+            <Grid item xs={12} sm={12}>
+              <CardContent sx={{ backgroundColor: 'white', borderRadius: 1 }}>
+                <Typography color={'primary.main'} fontWeight={'bold'} variant='h6'>
+                  Best sellers
+                </Typography>
+                <Box sx={{ height: 400, width: '100%' }}>
+                  <DataGrid
+                    rows={_rows}
+                    columns={_columns}
+                    initialState={{
+                      pagination: {
+                        paginationModel: {
+                          pageSize: 5
                         }
-                      }}
-                      pageSizeOptions={[5]}
-                      disableRowSelectionOnClick
-                    />
-                  </Box>
-                </CardContent>
-              </Grid>
+                      }
+                    }}
+                    pageSizeOptions={[5]}
+                    checkboxSelection
+                    disableRowSelectionOnClick
+                  />
+                </Box>
+              </CardContent>
             </Grid>
-          </Card>
-        </Grid> */}
+          </Grid>
+        </Grid>
 
         <Grid item xs={12} md={4} lg={3}>
           <WeeklyOverview />

@@ -1,5 +1,4 @@
 import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
 import useCMSGetRevenue from 'hook/revenue/useCMSGetRevenue'
 import { currencyFormatterVND } from 'utils/currencyFormatter'
 import dynamic from 'next/dynamic'
@@ -40,7 +39,6 @@ const WeeklyOverview = () => {
 
   const handleDateRangeChange = (newDateRange: [any, any]) => {
     const [start, end] = newDateRange
-    console.log(start, end)
 
     //check end date < start date => set default date range is today
     if (end < start) {
@@ -73,7 +71,7 @@ const WeeklyOverview = () => {
       setSeries([
         {
           name: 'Doanh thu',
-          data: revenue?.results.map((item: { total: number }) => currencyFormatterVND(item.total))
+          data: revenue?.results.map((item: { total: number }) => item.total)
         }
       ])
     }
@@ -89,13 +87,6 @@ const WeeklyOverview = () => {
 
   return (
     <Card sx={{ p: 2 }}>
-      <CardHeader
-        title='Weekly Overview'
-        titleTypographyProps={{
-          sx: { lineHeight: '2rem !important', letterSpacing: '0.15px !important' }
-        }}
-      />
-
       <Box>
         <Grid container my={5}>
           <Grid item xs={6} display='flex' justifyContent={'center'} alignItems='center'>

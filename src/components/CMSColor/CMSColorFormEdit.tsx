@@ -48,8 +48,7 @@ export default function CMSColorFormEdit(props: Props) {
       }
     }
   })
-  const { handleSubmit, getFieldPropsCustom, errors } = formik
-  console.log(errors)
+  const { handleSubmit, getFieldPropsCustom } = formik
   const handleBack = () => {
     router.back()
   }

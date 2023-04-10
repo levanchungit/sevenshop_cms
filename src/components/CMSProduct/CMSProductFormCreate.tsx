@@ -9,7 +9,8 @@ import {
   CircularProgress,
   Box,
   Autocomplete,
-  ButtonProps
+  ButtonProps,
+  MenuItem
 } from '@mui/material'
 import { Form, FormikProvider } from 'formik'
 import { useRouter } from 'next/router'
@@ -24,6 +25,7 @@ import { productsAPI } from 'modules'
 import { SettingsContext } from '@core/context/settingsContext'
 import { styled } from '@mui/material/styles'
 import uploadAPI from 'modules/uploadAPI'
+import { STATUS_PRODUCT_OPTIONS } from 'global/constants'
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 600 / 5 - 25,
@@ -70,7 +72,9 @@ export default function CMSProductFormCreate() {
     initialValues: {
       name: '',
       price: 0,
+      price_sale: 0,
       description: '',
+      status: STATUS_PRODUCT_OPTIONS[0].value,
       images: [],
       category_ids: [],
       color_ids: [],
@@ -78,8 +82,10 @@ export default function CMSProductFormCreate() {
     },
     validationSchema: yup.object().shape({
       name: yup.string().required(),
-      price: yup.number().required().min(1),
+      price: yup.number().required().min(0),
+      price_sale: yup.number().required().min(0),
       description: yup.string().required(),
+      status: yup.string().required(),
       images: yup.array().required().min(1, 'Min 1 element'),
       category_ids: yup.array().required().min(1, 'Min 1 element'),
       color_ids: yup.array().required().min(1, 'Min 1 element'),
@@ -142,7 +148,7 @@ export default function CMSProductFormCreate() {
 
       return response.data.secure_urls
     } catch (e: any) {
-      console.log('uploadImages', e)
+      console.error('uploadImages', e)
 
       return null
     }
@@ -157,7 +163,7 @@ export default function CMSProductFormCreate() {
         formData.append('files', files[i])
       }
       const secure_urls = await uploadImages(formData)
-      console.log('secure_urls', secure_urls)
+      console.info('secure_urls', secure_urls)
       setImages(secure_urls)
       formik.setFieldValue('images', secure_urls)
     }
@@ -208,10 +214,10 @@ export default function CMSProductFormCreate() {
                 1. PRODUCT
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <InputField label='Name' required placeholder='Name' fullWidth {...getFieldPropsCustom('name')} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <InputField
                 label='Price'
                 inputMode='numeric'
@@ -223,7 +229,19 @@ export default function CMSProductFormCreate() {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
+              <InputField
+                label='Price Sale'
+                inputMode='numeric'
+                required
+                placeholder='Price Sale'
+                fullWidth
+                type={'number'}
+                {...getFieldPropsCustom('price_sale')}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={4}>
               <InputField
                 label='Description'
                 required
@@ -233,7 +251,17 @@ export default function CMSProductFormCreate() {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
+              <InputField required select fullWidth label='Status' {...getFieldPropsCustom('status')}>
+                {STATUS_PRODUCT_OPTIONS.map(option => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </InputField>
+            </Grid>
+
+            <Grid item xs={12} sm={4}>
               <Autocomplete
                 id='category_ids'
                 open={openCategories}

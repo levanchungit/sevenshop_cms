@@ -80,7 +80,7 @@ export default function CMSCategoryFormCreate() {
 
       return response.data.secure_urls
     } catch (e: any) {
-      console.log('uploadImages', e)
+      console.error('uploadImages', e)
 
       return null
     }
@@ -95,7 +95,7 @@ export default function CMSCategoryFormCreate() {
         formData.append('files', files[i])
       }
       const secure_urls = await uploadImages(formData)
-      console.log('secure_urls', secure_urls[0])
+      console.info('secure_urls', secure_urls[0])
       setImages(secure_urls)
       formik.setFieldValue('image', secure_urls[0])
     }

@@ -60,8 +60,13 @@ const CustomToolbar = () => {
   )
 }
 
-const TableOrders = () => {
+type Props = {
+  height: number
+}
+
+const TableOrders = (props: Props) => {
   const router = useRouter()
+  const { height } = props
   const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
@@ -176,8 +181,8 @@ const TableOrders = () => {
         <Box display={'flex'} flexDirection={'row'}>
           <Box borderRadius={20} mx={2}>
             <ImageList sx={{ width: 100, height: 100 }} cols={2}>
-              {getProductsImage(params.row.products).map((item: React.Key | null | undefined) => (
-                <ImageListItem key={item}>
+              {getProductsImage(params.row.products).map((item: any, index: any) => (
+                <ImageListItem key={index}>
                   <img src={`${item}`} srcSet={`${item}`} alt={item?.toString()} loading='lazy' />
                 </ImageListItem>
               ))}
@@ -284,28 +289,26 @@ const TableOrders = () => {
   ]
 
   return (
-    <>
-      <Card style={{ width: '100%' }}>
-        <DataGrid
-          getRowId={row => row.id}
-          rows={_rows}
-          columns={_columns}
-          slots={{ toolbar: CustomToolbar }}
-          getRowHeight={() => 130}
-          sx={{
-            '& .MuiDataGrid-row:hover': {
-              color: 'primary.main',
-              border: '1px solid red'
-            },
-            minHeight: 800
-          }}
-          initialState={{
-            pagination: { paginationModel: { pageSize: 10, page: 0 } }
-          }}
-          pageSizeOptions={[10, 20, 30]}
-        />
-      </Card>
-    </>
+    <Card style={{ width: '100%' }}>
+      <DataGrid
+        getRowId={row => row.id}
+        rows={_rows}
+        columns={_columns}
+        slots={{ toolbar: CustomToolbar }}
+        getRowHeight={() => 130}
+        sx={{
+          '& .MuiDataGrid-row:hover': {
+            color: 'primary.main',
+            border: '1px solid red'
+          },
+          minHeight: height
+        }}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 10, page: 0 } }
+        }}
+        pageSizeOptions={[10, 20, 30]}
+      />
+    </Card>
   )
 }
 

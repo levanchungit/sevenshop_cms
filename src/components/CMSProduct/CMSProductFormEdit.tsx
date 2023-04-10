@@ -40,8 +40,6 @@ import { SettingsContext } from '@core/context/settingsContext'
 import { styled } from '@mui/material/styles'
 import uploadAPI from 'modules/uploadAPI'
 import { DeleteOutlineOutlined } from '@mui/icons-material'
-import { CmsColor } from 'interfaces/Color'
-import { CmsSize } from 'interfaces/Size'
 import IconButton from '@mui/material/IconButton'
 
 interface Props {
@@ -95,15 +93,24 @@ export default function CMSProductFormEdit(props: Props) {
     setDialogConfirm({ open: false, id: '' })
   }
   const handleDeleteStock = async (id: string) => {
-    //remove table row
-    const newStock = initialValues.stock.filter(item => item._id !== id)
-    initialValues.stock = newStock
+    //update product with new stock
+    initialValues.stock = initialValues.stock.filter(item => item._id !== id)
+    initialValues.color_ids = initialValues.color_ids.map((item: any) => item._id)
+    initialValues.size_ids = initialValues.size_ids.map((item: any) => item._id)
+    initialValues.stock = initialValues.stock.map((item: any) => {
+      return {
+        _id: item._id,
+        size_id: item.size_id._id,
+        color_id: item.color_id._id,
+        quantity: item.quantity
+      }
+    })
 
-    //update product
+    console.log('initialValues', initialValues)
+
     const response = await productsAPI.updateProduct(initialValues)
     if (response.status === 200) {
       setSnackbarAlert({ message: 'Delete Stock Successfully', severity: 'success' })
-      console.log(initialValues.stock)
     }
 
     handleCloseDialogConfirm()
@@ -121,12 +128,20 @@ export default function CMSProductFormEdit(props: Props) {
       price: initialValues.price,
       price_sale: initialValues.price_sale,
       images: initialValues.images,
-      stock: initialValues.stock,
+      stock: initialValues.stock.map((item: any) => {
+        return {
+          _id: item._id,
+          size_id: item.size_id._id,
+          color_id: item.color_id._id,
+          quantity: item.quantity
+        }
+      }),
+
       status: initialValues.status,
       description: initialValues.description,
       category_ids: initialValues.category_ids,
-      color_ids: initialValues.color_ids,
-      size_ids: initialValues.size_ids
+      color_ids: initialValues.color_ids.map((item: any) => item._id),
+      size_ids: initialValues.size_ids.map((item: any) => item._id)
     },
     validationSchema: yup.object().shape({
       // _id: yup.string().required(),
@@ -147,7 +162,6 @@ export default function CMSProductFormEdit(props: Props) {
         if (response.status === 200) {
           setSnackbarAlert({ message: 'Update product successfully', severity: 'success' })
         }
-        await router.back()
         mutate()
       } catch (e: any) {
         setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
@@ -184,9 +198,8 @@ export default function CMSProductFormEdit(props: Props) {
     )
 
   const defaultCategories = cms_categories.filter(c => initialValues?.category_ids.includes(c._id))
-  const defaultColors = cms_colors.filter(c => initialValues?.color_ids.includes(c._id))
-  const defaultSizes = cms_sizes.filter(c => initialValues?.size_ids.includes(c?._id))
-
+  const defaultColors = cms_colors.filter(c => initialValues?.color_ids.map((item: any) => item._id).includes(c?._id))
+  const defaultSizes = cms_sizes.filter(c => initialValues?.size_ids.map((item: any) => item._id).includes(c?._id))
   const handleBack = () => {
     router.back()
   }
@@ -199,7 +212,7 @@ export default function CMSProductFormEdit(props: Props) {
 
       return response.data.secure_urls
     } catch (e: any) {
-      console.log('uploadImages', e)
+      console.error('uploadImages', e)
 
       return null
     }
@@ -214,31 +227,39 @@ export default function CMSProductFormEdit(props: Props) {
         formData.append('files', files[i])
       }
       const secure_urls = await uploadImages(formData)
-      console.log('secure_urls', secure_urls)
+      console.info('secure_urls', secure_urls)
       setImages(secure_urls)
       formik.setFieldValue('images', secure_urls)
     }
   }
 
   const handleChangeQuantity = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: string) => {
-    const newStock = initialValues.stock.map(item => {
-      if (item._id === id) {
-        item.quantity = Number(event.target.value)
-      }
-
-      return item
-    })
-    initialValues.stock = newStock
+    const quantity = event.target.value
+    const stock = formik.values.stock
+    const index = stock.findIndex((item: any) => item._id === id)
+    if (index >= 0) {
+      stock[index].quantity = quantity
+      formik.setFieldValue('stock', stock)
+    }
   }
 
   //call api generate Stock
   const handleGenerateStock = async () => {
     try {
       const response = await productsAPI.generateStock(initialValues._id)
-      console.log(response)
       if (response.status === 200) {
         setSnackbarAlert({ message: 'Generate Stock Successfully', severity: 'success' })
-        initialValues.stock = response.data.stock
+        const data = response.data.stock.forEach((item: any) => {
+          return {
+            _id: item._id,
+            size_id: item.size_id._id,
+            color_id: item.color_id._id,
+            quantity: item.quantity
+          }
+        })
+
+        initialValues.stock = data
+        console.log('initialValues.stock', response.data.stock)
         mutate()
       }
     } catch (e: any) {
@@ -302,6 +323,7 @@ export default function CMSProductFormEdit(props: Props) {
                 placeholder='Price'
                 fullWidth
                 type={'number'}
+                InputProps={{ inputProps: { min: 0 } }}
                 {...getFieldPropsCustom('price')}
               />
             </Grid>
@@ -313,6 +335,7 @@ export default function CMSProductFormEdit(props: Props) {
                 placeholder='Price Sale'
                 fullWidth
                 type={'number'}
+                InputProps={{ inputProps: { min: 0 } }}
                 {...getFieldPropsCustom('price_sale')}
               />
             </Grid>
@@ -515,11 +538,13 @@ export default function CMSProductFormEdit(props: Props) {
               </Button>
             </Grid>
 
-            <TableContainer component={Paper}>
+            <TableContainer sx={{ maxHeight: 500 }} component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label='simple table'>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Color</TableCell>
+                    <TableCell colSpan={2} align='left'>
+                      Color
+                    </TableCell>
                     <TableCell>Size</TableCell>
                     <TableCell>Quantity</TableCell>
                     <TableCell align='right'>Action</TableCell>
@@ -536,28 +561,21 @@ export default function CMSProductFormEdit(props: Props) {
                           }
                         }}
                       >
+                        <TableCell>{row.color_id.name}</TableCell>
                         <TableCell>
-                          {cms_colors
-                            .filter(c => row.color_id.includes(c._id))
-                            .map((color: CmsColor) => {
-                              return (
-                                <Box
-                                  key={color._id}
-                                  mr={1}
-                                  sx={{
-                                    width: 30,
-                                    height: 30,
-                                    border: '0.1px solid #C4C4C4',
-                                    bgcolor: color.code,
-                                    borderRadius: 10
-                                  }}
-                                ></Box>
-                              )
-                            })}
+                          <Box
+                            key={row.color_id._id}
+                            mr={1}
+                            sx={{
+                              width: 30,
+                              height: 30,
+                              border: '0.1px solid #C4C4C4',
+                              bgcolor: row.color_id.code,
+                              borderRadius: 10
+                            }}
+                          ></Box>
                         </TableCell>
-                        <TableCell>
-                          {cms_sizes.filter(c => row.size_id.includes(c._id)).map((size: CmsSize) => size.name)}
-                        </TableCell>
+                        <TableCell>{row.size_id.size}</TableCell>
                         <TableCell>
                           {/* set stock quantity */}
                           <InputField
@@ -566,6 +584,7 @@ export default function CMSProductFormEdit(props: Props) {
                             placeholder='Quantity'
                             fullWidth
                             type={'number'}
+                            InputProps={{ inputProps: { min: 0 } }}
                             defaultValue={row.quantity}
                             onChange={e => handleChangeQuantity(e, row._id)}
                           />

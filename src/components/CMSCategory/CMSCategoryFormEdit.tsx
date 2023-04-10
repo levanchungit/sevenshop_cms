@@ -85,8 +85,7 @@ export default function CMSCategoryFormEdit(props: Props) {
       }
     }
   })
-  const { handleSubmit, getFieldPropsCustom, errors } = formik
-  console.log(errors)
+  const { handleSubmit, getFieldPropsCustom } = formik
   const handleBack = () => {
     router.back()
   }
@@ -114,7 +113,7 @@ export default function CMSCategoryFormEdit(props: Props) {
         formData.append('files', files[i])
       }
       const secure_urls = await uploadImages(formData)
-      console.log('secure_urls', secure_urls[0])
+      console.info('secure_urls', secure_urls[0])
       setImages(secure_urls)
       formik.setFieldValue('image', secure_urls[0])
     }

@@ -7,7 +7,7 @@ const CreateProduct = () => {
       <CardHeader title='CREATE PRODUCT' titleTypographyProps={{ variant: 'h6' }} />
       <Divider sx={{ margin: 0 }} />
       <Stack bgcolor={'white'} p={5} alignItems='center'>
-        <Box width={600}>
+        <Box width={1000}>
           <CMSProductFormCreate />
         </Box>
       </Stack>

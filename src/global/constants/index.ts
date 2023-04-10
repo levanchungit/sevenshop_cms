@@ -13,6 +13,10 @@ export const APP_ROUTES = {
   //User
   cmsAccountSettings: `/account-settings`,
 
+  cmsUsers: `/`,
+  cmsUserCreate: `/`,
+  cmsUserEdit: `/`,
+
   //Product
   cmsProducts: `/products`,
   cmsProductCreate: `/products/create`,
@@ -37,6 +41,15 @@ export const APP_ROUTES = {
   cmsSizes: `/sizes`,
   cmsSizeCreate: `/sizes/create`,
   cmsSizeEdit: `/sizes/[size_id]/edit`,
+
+  //Voucher
+  cmsVouchers: `/`,
+  cmsVoucherCreate: `/`,
+  cmsVoucherEdit: `/`,
+
+  //Notification
+  cmsNotifications: `/`,
+  cmsNotificationCreate: `/`,
 
   //Chart
   cmsChart: `/chart`,
@@ -64,8 +77,15 @@ export type IModify = {
 
 export type IStock = {
   _id: string
-  size_id: string
-  color_id: string
+  size_id: {
+    _id: string
+    size: string
+  }
+  color_id: {
+    _id: string
+    name: string
+    code: string
+  }
   quantity: number
 }
 

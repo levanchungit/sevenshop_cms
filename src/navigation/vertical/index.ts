@@ -45,6 +45,11 @@ const navigation = (): VerticalNavItemsType => {
       path: '/'
     },
     {
+      title: 'Vouchers',
+      icon: CreditCardOutline,
+      path: '/'
+    },
+    {
       sectionTitle: 'Properties'
     },
 

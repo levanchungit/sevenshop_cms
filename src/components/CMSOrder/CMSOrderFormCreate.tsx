@@ -142,7 +142,7 @@ export default function CMSProductFormCreate() {
 
       return response.data.secure_urls
     } catch (e: any) {
-      console.log('uploadImages', e)
+      console.error('uploadImages', e)
 
       return null
     }
@@ -157,7 +157,7 @@ export default function CMSProductFormCreate() {
         formData.append('files', files[i])
       }
       const secure_urls = await uploadImages(formData)
-      console.log('secure_urls', secure_urls)
+      console.info('secure_urls', secure_urls)
       setImages(secure_urls)
       formik.setFieldValue('images', secure_urls)
     }

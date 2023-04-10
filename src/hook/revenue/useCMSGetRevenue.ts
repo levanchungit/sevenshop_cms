@@ -2,10 +2,10 @@ import { API_ROUTES } from './../../global/constants/apiRoutes'
 import { API_URL } from 'global/config'
 import useSWR from 'swr'
 import { useMemo } from 'react'
-import revenueAPI from 'modules/revenueAPI'
+import dashboardAPI from 'modules/dashboardAPI'
 
 const fetcher = async (url: string) => {
-  const result = await revenueAPI.getRevenue(url)
+  const result = await dashboardAPI.getRevenue(url)
 
   return result
 }

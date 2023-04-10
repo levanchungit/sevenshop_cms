@@ -45,8 +45,7 @@ export default function CMSOrderFormEdit(props: Props) {
       setSnackbarAlert({ message: 'Change status fail', severity: 'error' })
     }
   }
-
-  const { _id, status } = cmsOrder?.data
+  const { _id, status, address } = cmsOrder?.data
 
   return (
     <Card>
@@ -81,9 +80,12 @@ export default function CMSOrderFormEdit(props: Props) {
           }}
         >
           <Typography variant='h6'>Delivery Address</Typography>
-          <Typography variant='subtitle1'>Chung OK 2</Typography>
+          <Typography variant='subtitle1'>{address.full_name}</Typography>
+          <Typography mx={20}>{address.phone}</Typography>
+          <Typography variant='body2'>{address.address}</Typography>
+          {/* <Typography variant='subtitle1'>Chung OK 2</Typography>
           <Typography mx={20}>0378484047</Typography>
-          <Typography variant='body2'>TPHCM</Typography>
+          <Typography variant='body2'>TPHCM</Typography> */}
         </CardContent>
       </Box>
       <Divider sx={{ margin: 0 }} />

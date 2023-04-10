@@ -49,11 +49,15 @@ export const API_ROUTES = {
   updateOrder: `/orders/`,
   updateStatusOrder: `/orders/`,
 
-  //chart
-  getRevenue: `/dashboard/revenue_day`,
-
   //upload
   single: `/upload/single`,
-  multiple: `/upload/multiple`
+  multiple: `/upload/multiple`,
+
+  //dashboard
+  getRevenue: `/dashboard/revenue_day`,
+  getCountQuantity: `/dashboard/count_quantity`,
+  getHistorySearch: `/dashboard/get_history_search`,
+  getProductsBestSellers: `/dashboard/get_products_best_seller`,
+  getFeed: `/dashboard/get_feed`
 }
 export default API_ROUTES

@@ -8,7 +8,7 @@ const Orders = () => {
     <ApexChartWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <TableOrders />
+          <TableOrders height={800} />
         </Grid>
       </Grid>
     </ApexChartWrapper>
