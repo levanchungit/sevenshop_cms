@@ -71,6 +71,7 @@ const LoginPage = () => {
       setSnackbarAlert({ message: response.data.message, severity: 'success' })
       Router.replace(APP_ROUTES.cmsDoashboard)
     } catch (e: any) {
+      console.log(e)
       setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
     }
     setBtnLoginLoading(false)

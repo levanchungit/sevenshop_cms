@@ -92,13 +92,13 @@ const WeeklyOverview = () => {
           <Grid item xs={6} display='flex' justifyContent={'center'} alignItems='center'>
             <Stack direction={'column'} justifyContent='center' alignItems={'center'} spacing={2}>
               <Typography>Doanh thu</Typography>
-              <Typography variant='h4'>{currencyFormatterVND(revenue?.total)}</Typography>
+              <Typography variant='h5'>{currencyFormatterVND(revenue?.total)}</Typography>
             </Stack>
           </Grid>
           <Grid item xs={6}>
             <Stack direction={'column'} justifyContent='center' alignItems={'center'} spacing={2}>
               <Typography>Tổng số đơn hàng</Typography>
-              <Typography variant='h4'>{revenue?.quantity}</Typography>
+              <Typography variant='h6'>{revenue?.quantity}</Typography>
             </Stack>
           </Grid>
         </Grid>

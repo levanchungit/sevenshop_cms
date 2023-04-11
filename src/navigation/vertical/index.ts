@@ -37,17 +37,17 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Customers',
       icon: AccountOutline,
-      path: '/'
+      path: APP_ROUTES.cmsCustomers
     },
     {
       title: 'Payments',
       icon: CreditCardOutline,
-      path: '/'
+      path: APP_ROUTES.cmsPayments
     },
     {
       title: 'Vouchers',
       icon: CreditCardOutline,
-      path: '/'
+      path: APP_ROUTES.cmsVouchers
     },
     {
       sectionTitle: 'Properties'

@@ -21,6 +21,7 @@ import useCMSGetHistorySearch from 'hook/dashboard/useCMSGetHistorySearch'
 import { cmsHistorySearch, cmsProductsBestSellers } from 'interfaces/Dashboard'
 import useCMSGetProductsBestSellers from 'hook/dashboard/useCMSGetProductsBestSellers'
 import TableOrders from 'views/dashboard/TableOrders'
+import StepperModify from 'views/dashboard/StepperModify'
 
 const Dashboard = () => {
   const router = useRouter()
@@ -421,7 +422,7 @@ const Dashboard = () => {
         </Grid>
 
         <Grid item xs={12} md={6} lg={4}>
-          Stepper
+          <StepperModify />
         </Grid>
 
         <Grid item xs={12} md={8} lg={5}>

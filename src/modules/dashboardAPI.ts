@@ -19,6 +19,11 @@ const dashboardAPI = {
     const response = await axiosClient.get(API_ROUTES.getProductsBestSellers)
 
     return response.data
+  },
+  async getFeed() {
+    const response = await axiosClient.get(API_ROUTES.getFeed)
+
+    return response.data
   }
 }
 

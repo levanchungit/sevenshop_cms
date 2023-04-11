@@ -1,6 +1,6 @@
 export const API_ROUTES = {
   // auth
-  login: `/auth/login`,
+  login: `/auth/login_cms`,
   logout: `/auth/logout`,
   check_otp: `/auth/check_otp`,
   set_password: `/auth/set_password`,
@@ -38,7 +38,7 @@ export const API_ROUTES = {
 
   //sizes
   getUsers: `/users`,
-  getUserDetail: `/users/`,
+  getUserDetail: `/users/get/`,
   createUser: `/users/`,
   updateUser: `/users/`,
   deleteUser: (id: string) => `/users/${id}`,

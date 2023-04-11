@@ -14,8 +14,6 @@ export interface CmsUser {
   status: STATUS_USER
   favorite_products: string[]
   recently_products: string[]
-  rated_products: string[]
-  unrated_products: string[]
   otp: IOTP
   access_token: string
   refresh_token: string
@@ -29,8 +27,10 @@ export interface CmsUser {
 }
 
 export interface CreateCmsUserPayload {
-  name: string
-  size: string
+  email: string
+  full_name: string
+  phone: string
+  avatar: string
 }
 
 export interface EditCmsUserPayload extends CreateCmsUserPayload {

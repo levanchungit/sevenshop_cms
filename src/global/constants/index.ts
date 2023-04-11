@@ -12,10 +12,9 @@ export const APP_ROUTES = {
 
   //User
   cmsAccountSettings: `/account-settings`,
-
-  cmsUsers: `/`,
-  cmsUserCreate: `/`,
-  cmsUserEdit: `/`,
+  cmsCustomers: `/users`,
+  cmsCustomerCreate: `/users/create`,
+  cmsCustomerEdit: `/users/[user_id]/edit`,
 
   //Product
   cmsProducts: `/products`,
@@ -43,9 +42,14 @@ export const APP_ROUTES = {
   cmsSizeEdit: `/sizes/[size_id]/edit`,
 
   //Voucher
-  cmsVouchers: `/`,
-  cmsVoucherCreate: `/`,
-  cmsVoucherEdit: `/`,
+  cmsVouchers: `/vouchers`,
+  cmsVoucherCreate: `/vouchers/create`,
+  cmsVoucherEdit: `/vouchers/[voucher_id]/edit`,
+
+  //Payment
+  cmsPayments: `/payments`,
+  cmsPaymentCreate: `/payments/create`,
+  cmsPaymentEdit: `/payments/[payment_id]/edit`,
 
   //Notification
   cmsNotifications: `/`,
@@ -95,17 +99,35 @@ export enum GENDER {
   other = 'other'
 }
 
+export const GENDER_OPTIONS = [
+  { value: GENDER.female, label: 'Female' },
+  { value: GENDER.male, label: 'Male' },
+  { value: GENDER.other, label: 'Other' }
+]
+
 export enum STATUS_USER {
   active = 'active',
   inactive = 'inactive',
   pending = 'pending'
 }
 
+export const STATUS_USER_OPTIONS = [
+  { value: STATUS_USER.active, label: 'Active' },
+  { value: STATUS_USER.inactive, label: 'Inactive' },
+  { value: STATUS_USER.pending, label: 'Pending' }
+]
+
 export enum ROLE {
   user = 'user',
   admin = 'admin',
   staff = 'staff'
 }
+
+export const ROLE_OPTIONS = [
+  { value: ROLE.user, label: 'User' },
+  { value: ROLE.admin, label: 'Admin' },
+  { value: ROLE.staff, label: 'Staff' }
+]
 
 export type IAddress = {
   _id?: string

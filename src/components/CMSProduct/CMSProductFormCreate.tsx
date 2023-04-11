@@ -173,7 +173,7 @@ export default function CMSProductFormCreate() {
     <FormikProvider value={formik}>
       <Form autoComplete='off' onSubmit={handleSubmit} noValidate>
         <CardActions sx={{ maxWidth: 1000 }}>
-          <Box sx={{ minWidth: 600 }}>
+          <Box sx={{ width: '100%' }}>
             <Box
               sx={{
                 width: '100%',
