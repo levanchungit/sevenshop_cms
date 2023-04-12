@@ -9,7 +9,8 @@ import {
   CircularProgress,
   Box,
   ButtonProps,
-  MenuItem
+  MenuItem,
+  Stack
 } from '@mui/material'
 import { Form, FormikProvider } from 'formik'
 import { useRouter } from 'next/router'
@@ -59,14 +60,6 @@ export default function CMSUserFormEdit(props: Props) {
 
   const [images, setImages] = useState(initialValues.avatar)
   const [isLoadingImages, setIsLoadingImages] = useState(false)
-  const [dialogConfirm, setDialogConfirm] = useState({ open: false, id: '' })
-
-  const handleOpenDialogConfirm = (id: string) => {
-    setDialogConfirm({ open: true, id: id })
-  }
-  const handleCloseDialogConfirm = () => {
-    setDialogConfirm({ open: false, id: '' })
-  }
 
   const formik = useFormikCustom({
     initialValues: {
@@ -180,10 +173,13 @@ export default function CMSUserFormEdit(props: Props) {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={4}>
+              <Stack direction='row' spacing='10px' alignItems='center' mb='10px'>
+                <Typography component='label' fontWeight='medium' fontSize={14}>
+                  Email
+                </Typography>
+              </Stack>
               <TextField
-                label='Email'
                 required
-                //how to disable
                 disabled={true}
                 placeholder='Email'
                 fullWidth
@@ -235,20 +231,6 @@ export default function CMSUserFormEdit(props: Props) {
 
             <Grid item xs={12}>
               <Divider sx={{ marginBottom: 0 }} />
-            </Grid>
-            <Grid item xs={12} display='flex' flexDirection='row'>
-              <Typography flex='1' variant='body2' sx={{ fontWeight: 600 }}>
-                2. STOCK
-              </Typography>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Divider sx={{ marginBottom: 0 }} />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                3. REVIEW
-              </Typography>
             </Grid>
           </Grid>
         </CardContent>

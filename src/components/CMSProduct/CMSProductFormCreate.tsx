@@ -10,7 +10,8 @@ import {
   Box,
   Autocomplete,
   ButtonProps,
-  MenuItem
+  MenuItem,
+  Stack
 } from '@mui/material'
 import { Form, FormikProvider } from 'formik'
 import { useRouter } from 'next/router'
@@ -26,6 +27,7 @@ import { SettingsContext } from '@core/context/settingsContext'
 import { styled } from '@mui/material/styles'
 import uploadAPI from 'modules/uploadAPI'
 import { STATUS_PRODUCT_OPTIONS } from 'global/constants'
+import Tag from 'components/Tag'
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 600 / 5 - 25,
@@ -262,6 +264,12 @@ export default function CMSProductFormCreate() {
             </Grid>
 
             <Grid item xs={12} sm={4}>
+              <Stack direction='row' spacing='10px' alignItems='center' mb='10px'>
+                <Typography component='label' fontWeight='medium' fontSize={14}>
+                  Categories
+                </Typography>
+                <Tag label='Required' backgroundColor={'gray'} textColor={'white'} />
+              </Stack>
               <Autocomplete
                 id='category_ids'
                 open={openCategories}

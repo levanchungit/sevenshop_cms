@@ -181,6 +181,7 @@ const TableUsers = () => {
         </>
       )
     },
+
     // {
     //   field: 'membership',
     //   headerName: 'Membership',
@@ -209,7 +210,7 @@ const TableUsers = () => {
           key={params.id}
           icon={<DeleteOutlineOutlined />}
           onClick={() => {
-            handleOpenDialogConfirm()
+            handleOpenDialogConfirm(), setIdUser(params.id)
           }}
           label='Delete'
         />

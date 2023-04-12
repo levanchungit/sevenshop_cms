@@ -1,20 +1,7 @@
 // ** MUI Imports
-import {
-  Box,
-  Card,
-  Typography,
-  Grid,
-  CircularProgress,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Avatar
-} from '@mui/material'
+import { Box, Card, Typography, CircularProgress } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
-import { useState, Fragment, useCallback, useContext } from 'react'
+import { Fragment, useCallback } from 'react'
 import {} from 'modules'
 import {
   GridRenderCellParams,
@@ -27,10 +14,8 @@ import {
   GridToolbarExport,
   GridToolbarQuickFilter
 } from '@mui/x-data-grid'
-import { currencyFormatterVND, formatDate } from 'utils/currencyFormatter'
-import { SettingsContext } from '@core/context/settingsContext'
 import { useRouter } from 'next/router'
-import { APP_ROUTES, TYPE_VOUCHER } from 'global/constants/index'
+import { APP_ROUTES } from 'global/constants/index'
 import { CmsPayment } from 'interfaces/Payment'
 import useCMSGetPayments from 'hook/payment/useCMSGetPayments'
 import moment from 'moment'
@@ -60,14 +45,11 @@ const CustomToolbar = () => {
 
 const TablePayments = () => {
   const router = useRouter()
-  const { setSnackbarAlert } = useContext(SettingsContext)
+
+  // const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
   const { cms_payments, error } = useCMSGetPayments()
-
-  //STATE
-  const [dialogConfirm, setDialogConfirm] = useState(false)
-  const [idPayment, setIdPayment] = useState<GridRowId>('')
 
   const handleEdit = useCallback(
     (_id: GridRowId) => () => {

@@ -1,5 +1,5 @@
 import { Button, Typography, Grid, CardContent, CardActions, MenuItem } from '@mui/material'
-import { Form, Formik, FormikProvider } from 'formik'
+import { Form, FormikProvider } from 'formik'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
 import { useContext, useState } from 'react'
@@ -49,6 +49,7 @@ export default function CMSVoucherFormCreate() {
     } else if (type === 'percent') {
       return value >= 0 && value <= 100
     }
+
     return true
   }
 
@@ -63,12 +64,12 @@ export default function CMSVoucherFormCreate() {
     validationSchema: yup.object().shape({
       name: yup.string().required(),
       type: yup.string().required(),
-      //validation value type = money => value > 0, type = percent => value > 0 && value < 100
       value: yup
         .number()
         .required()
         .test('check-value', 'Invalid value', function (value) {
           const { type } = this.parent
+
           return validateValue(value, type)
         }),
       start_date: yup.string().required(),

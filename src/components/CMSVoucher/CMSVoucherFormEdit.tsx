@@ -1,25 +1,13 @@
-import {
-  TextField,
-  Button,
-  Typography,
-  Grid,
-  Divider,
-  CardContent,
-  CardActions,
-  Box,
-  ButtonProps,
-  MenuItem
-} from '@mui/material'
+import { Button, Typography, Grid, Divider, CardContent, CardActions, MenuItem } from '@mui/material'
 import { Form, FormikProvider } from 'formik'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
-import { useState, useContext, ElementType } from 'react'
+import { useState, useContext } from 'react'
 import { useFormikCustom } from 'hook/lib'
 import { VOUCHER_OPTIONS } from 'global/constants/index'
 import { InputField } from 'components/CustomFields'
 import { vouchersAPI } from 'modules'
 import { SettingsContext } from '@core/context/settingsContext'
-import { styled } from '@mui/material/styles'
 import { CmsVoucher } from 'interfaces/Voucher'
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import { LocalizationProvider } from '@mui/x-date-pickers'
@@ -30,29 +18,6 @@ interface Props {
   initialValues: CmsVoucher
   mutate: any
 }
-
-const ImgStyled = styled('img')(({ theme }) => ({
-  width: 600 / 5 - 25,
-  marginRight: theme.spacing(5),
-  borderRadius: theme.shape.borderRadius
-}))
-
-const ButtonStyled = styled(Button)<ButtonProps & { component?: ElementType; htmlFor?: string }>(({ theme }) => ({
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    textAlign: 'center'
-  }
-}))
-
-const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
-  marginLeft: theme.spacing(4.5),
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    marginLeft: 0,
-    textAlign: 'center',
-    marginTop: theme.spacing(4)
-  }
-}))
 
 export default function CMSVoucherFormEdit(props: Props) {
   const { initialValues, mutate } = props
@@ -84,15 +49,6 @@ export default function CMSVoucherFormEdit(props: Props) {
 
     formik.setFieldValue('start_date', moment(start).format('YYYY-MM-DD'))
     formik.setFieldValue('end_date', moment(end).format('YYYY-MM-DD'))
-  }
-
-  const [dialogConfirm, setDialogConfirm] = useState({ open: false, id: '' })
-
-  const handleOpenDialogConfirm = (id: string) => {
-    setDialogConfirm({ open: true, id: id })
-  }
-  const handleCloseDialogConfirm = () => {
-    setDialogConfirm({ open: false, id: '' })
   }
 
   const formik = useFormikCustom({
