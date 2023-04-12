@@ -24,6 +24,11 @@ const dashboardAPI = {
     const response = await axiosClient.get(API_ROUTES.getFeed)
 
     return response.data
+  },
+  async getTransaction() {
+    const response = await axiosClient.get(API_ROUTES.getTransactions)
+
+    return response.data.data
   }
 }
 

@@ -49,9 +49,19 @@ export const API_ROUTES = {
   updateOrder: `/orders/`,
   updateStatusOrder: `/orders/`,
 
+  //payment
+  getTransactions: `/pay/transactions`,
+
   //upload
   single: `/upload/single`,
   multiple: `/upload/multiple`,
+
+  //vouchers
+  getVouchers: `/voucher`,
+  getVoucherDetail: `/voucher/`,
+  createVoucher: `/voucher/`,
+  updateVoucher: `/voucher/`,
+  deleteVoucher: (id: string) => `/voucher/${id}`,
 
   //dashboard
   getRevenue: `/dashboard/revenue_day`,

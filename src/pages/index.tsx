@@ -287,7 +287,7 @@ const Dashboard = () => {
               <Box display='flex' flexDirection={'row'} alignItems='center'>
                 <Fab
                   onClick={() => {
-                    router.push(APP_ROUTES.cmsUserCreate)
+                    router.push(APP_ROUTES.cmsCategoryCreate)
                   }}
                   size='small'
                   color='secondary'
@@ -303,7 +303,7 @@ const Dashboard = () => {
                   aria-label='add'
                   sx={{ bgcolor: '#17A5E6', borderRadius: 20 }}
                   onClick={() => {
-                    router.push(APP_ROUTES.cmsUsers)
+                    router.push(APP_ROUTES.cmsCustomerCreate)
                   }}
                 >
                   <Stack sx={{ height: 'auto', color: 'white', fontWeight: 'bold', fontSize: 12 }}>View All</Stack>

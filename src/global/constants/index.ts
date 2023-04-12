@@ -163,6 +163,11 @@ export enum TYPE_VOUCHER {
   money = 'money'
 }
 
+export const VOUCHER_OPTIONS = [
+  { value: TYPE_VOUCHER.percent, label: 'Percent' },
+  { value: TYPE_VOUCHER.money, label: 'Money' }
+]
+
 export type IProductCart = {
   _id: string
   product_id: string

@@ -8,39 +8,21 @@ import {
   CardActions,
   CircularProgress,
   Box,
-  Autocomplete,
   ButtonProps,
-  Paper,
-  Table,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-  TableContainer,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   MenuItem
 } from '@mui/material'
 import { Form, FormikProvider } from 'formik'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
-import { Fragment, useState, useContext, ElementType, ChangeEvent } from 'react'
-import { CmsUser } from 'interfaces/User'
+import { useState, useContext, ElementType, ChangeEvent } from 'react'
 import { useFormikCustom } from 'hook/lib'
-import { GENDER_OPTIONS, ROLE_OPTIONS, STATUS_PRODUCT_OPTIONS, STATUS_USER_OPTIONS } from 'global/constants/index'
+import { GENDER_OPTIONS, ROLE_OPTIONS, STATUS_USER_OPTIONS } from 'global/constants/index'
 import { InputField } from 'components/CustomFields'
-import useCMSGetCategories from 'hook/category/useCMSGetCategories'
-import useCMSGetColors from 'hook/color/useCMSGetColors'
-import useCMSGetSizes from 'hook/size/useCMSGetSizes'
 import { usersAPI } from 'modules'
 import { SettingsContext } from '@core/context/settingsContext'
 import { styled } from '@mui/material/styles'
 import uploadAPI from 'modules/uploadAPI'
-import { DeleteOutlineOutlined } from '@mui/icons-material'
-import IconButton from '@mui/material/IconButton'
+import { CmsUser } from 'interfaces/User'
 
 interface Props {
   initialValues: CmsUser
@@ -72,7 +54,6 @@ const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
 
 export default function CMSUserFormEdit(props: Props) {
   const { initialValues, mutate } = props
-  const check = true
   const router = useRouter()
   const { setSnackbarAlert } = useContext(SettingsContext)
 
