@@ -57,8 +57,8 @@ const LoginPage = () => {
   const { setSnackbarAlert } = useContext(SettingsContext)
   const [passwordVisible, setPasswordVisible] = useState(true)
   const [formData, setFormData] = useState<SignInPayload>({
-    email: 'levanchunq123@gmail.com',
-    password: '123456'
+    email: '',
+    password: ''
   })
   const [btnLoginLoading, setBtnLoginLoading] = useState(false)
 
