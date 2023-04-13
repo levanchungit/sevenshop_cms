@@ -10,8 +10,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  Avatar
+  DialogActions
 } from '@mui/material'
 import { EditOutlined, DeleteOutlineOutlined } from '@mui/icons-material'
 import { useState, Fragment, useCallback, useContext } from 'react'
@@ -30,7 +29,7 @@ import {
 import { currencyFormatterVND, formatDate } from 'utils/currencyFormatter'
 import { SettingsContext } from '@core/context/settingsContext'
 import { useRouter } from 'next/router'
-import { APP_ROUTES, STATUS_USER, TYPE_VOUCHER } from 'global/constants/index'
+import { APP_ROUTES, TYPE_VOUCHER } from 'global/constants/index'
 import { CmsVoucher } from 'interfaces/Voucher'
 import useCMSGetVouchers from 'hook/voucher/useCMSGetVouchers'
 

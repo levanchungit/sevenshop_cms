@@ -1,4 +1,4 @@
-import { categoriesAPI, usersAPI } from 'modules'
+import { usersAPI } from 'modules'
 import useSWR from 'swr'
 import { useMemo } from 'react'
 
