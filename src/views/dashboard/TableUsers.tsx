@@ -83,7 +83,7 @@ const TableUsers = () => {
     handleCloseDialogConfirm()
   }
 
-  const handleCreate = () => router.push(APP_ROUTES.cmsCustomerCreate)
+  const handleCreate = () => setSnackbarAlert({ message: 'Tính năng đang cập nhật', severity: 'success' })
   const handleEdit = useCallback(
     (_id: GridRowId) => () => {
       router.push({ pathname: APP_ROUTES.cmsCustomerEdit, query: { id: _id } })

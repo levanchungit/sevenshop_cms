@@ -220,7 +220,7 @@ export default function CMSUserFormEdit(props: Props) {
             </Grid>
 
             <Grid item xs={12} sm={4}>
-              <InputField required select fullWidth label='Status' {...getFieldPropsCustom('gender')}>
+              <InputField required select fullWidth label='Gender' {...getFieldPropsCustom('gender')}>
                 {GENDER_OPTIONS.map(option => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}

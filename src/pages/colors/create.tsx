@@ -4,7 +4,7 @@ import CMSColorFormCreate from 'components/CMSColor/CMSColorFormCreate'
 const CreateColor = () => {
   return (
     <Card>
-      <CardHeader title='CREATE CATEGORY' titleTypographyProps={{ variant: 'h6' }} />
+      <CardHeader title='CREATE COLOR' titleTypographyProps={{ variant: 'h6' }} />
       <Divider sx={{ margin: 0 }} />
       <Stack bgcolor={'white'} p={5} alignItems='center'>
         <Box width={600}>

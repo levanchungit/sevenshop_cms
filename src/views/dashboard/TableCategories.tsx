@@ -3,7 +3,6 @@ import {
   Box,
   Card,
   Typography,
-  Avatar,
   Grid,
   CircularProgress,
   Button,
@@ -84,7 +83,7 @@ const TableProducts = () => {
     handleCloseDialogConfirm()
   }
 
-  const handleCreate = () => router.back()
+  const handleCreate = () => router.push({ pathname: APP_ROUTES.cmsCategoryCreate })
   const handleEdit = useCallback(
     (_id: GridRowId) => () => {
       router.push({ pathname: APP_ROUTES.cmsCategoryEdit, query: { id: _id } })
@@ -121,7 +120,6 @@ const TableProducts = () => {
       id: row._id,
       name: row.name,
       description: row.description,
-      image: row.image,
       product_ids: row.product_ids,
       created_at: row.created_at,
       created_by: row.created_by,
@@ -130,18 +128,6 @@ const TableProducts = () => {
   })
 
   const _columns: GridColDef[] = [
-    // { field: 'id', headerName: 'ID', width: 250},
-    {
-      field: 'name',
-      headerName: 'Name',
-      width: 200,
-      renderCell: (params: GridRenderCellParams) => (
-        <>
-          <Avatar alt='Avatar' src={params.row.image} sx={{ mr: 2, width: 50, height: 50 }} />
-          {params.value}
-        </>
-      )
-    },
     {
       field: 'description',
       headerName: 'Description',

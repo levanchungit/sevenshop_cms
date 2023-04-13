@@ -51,7 +51,7 @@ export default function CMSUserFormCreate() {
           <Grid container spacing={5} justifyContent='center'>
             <Grid item xs={12}>
               <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                1. COLOR
+                1. USER
               </Typography>
             </Grid>
             <ColorPicker
