@@ -25,8 +25,9 @@ export default function CMSVoucherFormEdit(props: Props) {
   const { setSnackbarAlert } = useContext(SettingsContext)
 
   const [selectedDateRange, setSelectedDateRange] = useState({
-    start: moment(),
-    end: moment()
+    //get value from initialValues.start_date, initialValues.end_date
+    start: moment(initialValues.start_date),
+    end: moment(initialValues.end_date)
   })
 
   const handleDateRangeChange = (newDateRange: [any, any]) => {
