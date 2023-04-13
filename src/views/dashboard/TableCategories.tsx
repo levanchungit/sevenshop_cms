@@ -120,7 +120,6 @@ const TableProducts = () => {
       id: row._id,
       name: row.name,
       description: row.description,
-      product_ids: row.product_ids,
       created_at: row.created_at,
       created_by: row.created_by,
       modify: row.modify
