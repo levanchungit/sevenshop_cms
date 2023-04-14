@@ -130,7 +130,7 @@ export default function CMSUserFormEdit(props: Props) {
       const secure_urls = await uploadImages(formData)
       console.info('secure_urls', secure_urls)
       setImages(secure_urls)
-      formik.setFieldValue('images', secure_urls)
+      formik.setFieldValue('avatar', secure_urls[0])
     }
   }
 
