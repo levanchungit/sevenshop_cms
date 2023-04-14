@@ -9,7 +9,7 @@ const Chart = () => {
     <ApexChartWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <WeeklyOverview />
+          <WeeklyOverview height={550} />
         </Grid>
 
         <Grid item xs={12} md={4} lg={3}></Grid>

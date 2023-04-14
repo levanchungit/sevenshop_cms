@@ -57,6 +57,22 @@ function createAxiosClient(): AxiosInstance {
     }
   })
 
+  axiosClient.interceptors.response.use(
+    response => {
+      return response
+    },
+    error => {
+      if (error.response.status === 401) {
+        // Xóa các token và chuyển đến trang đăng nhập
+        localStorage.removeItem('access_token')
+        localStorage.removeItem('refresh_token')
+        Router.push(APP_ROUTES.cmsLogin)
+      }
+
+      return Promise.reject(error)
+    }
+  )
+
   return axiosClient
 }
 

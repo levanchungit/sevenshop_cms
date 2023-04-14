@@ -97,15 +97,23 @@ export default function CustomizedSteppers() {
 
   return (
     <Stack
-      sx={{ width: '100%', maxHeight: 550, overflow: 'scroll', padding: 2, background: 'white', borderRadius: 2 }}
+      sx={{
+        width: '100%',
+        minHeight: 420,
+        maxHeight: 550,
+        overflow: 'scroll',
+        padding: 2,
+        background: 'white',
+        borderRadius: 2
+      }}
       spacing={4}
     >
       <Typography color={'primary.main'} fontWeight={'bold'} variant='h6'>
         Feed
       </Typography>
       <Stepper activeStep={cms_feed.orders.length} connector={<ColorlibConnector />} orientation='vertical'>
-        {cms_feed.orders.map((item: any) => (
-          <Step key={item}>
+        {cms_feed.orders.map((item: any, index: any) => (
+          <Step key={index}>
             <StepLabel StepIconComponent={ColorlibStepIcon}>
               <Typography color={'primary.main'} fontWeight={'bold'} variant='h6'>
                 Order create at &nbsp;

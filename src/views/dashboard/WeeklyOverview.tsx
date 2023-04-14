@@ -18,7 +18,12 @@ import moment from 'moment'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
-const WeeklyOverview = () => {
+type Props = {
+  height: number
+}
+
+const WeeklyOverview = (props: Props) => {
+  const { height } = props
   const [options, setOptions] = useState({
     xaxis: {
       categories: []
@@ -86,7 +91,7 @@ const WeeklyOverview = () => {
   }
 
   return (
-    <Card sx={{ p: 2 }}>
+    <Card sx={{ p: 2, maxHeight: 1000 }}>
       <Box>
         <Grid container my={5}>
           <Grid item xs={6} display='flex' justifyContent={'center'} alignItems='center'>
@@ -136,7 +141,7 @@ const WeeklyOverview = () => {
 
       <div className='mixed-chart'>
         {typeof window !== 'undefined' && (
-          <Chart options={options} series={series} type={'bar'} width={'100%'} height={320} />
+          <Chart options={options} series={series} type={'bar'} width={'100%'} height={height} />
         )}
       </div>
     </Card>

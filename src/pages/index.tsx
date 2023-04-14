@@ -432,7 +432,7 @@ const Dashboard = () => {
                 <Typography color={'primary.main'} fontWeight={'bold'} variant='h6'>
                   Best sellers
                 </Typography>
-                <Box sx={{ height: 400, width: '100%' }}>
+                <Box sx={{ height: 350, width: '100%' }}>
                   <DataGrid
                     rows={_rows}
                     columns={_columns}
@@ -454,7 +454,7 @@ const Dashboard = () => {
         </Grid>
 
         <Grid item xs={12} md={4} lg={3}>
-          <WeeklyOverview />
+          <WeeklyOverview height={200} />
         </Grid>
       </Grid>
     </ApexChartWrapper>

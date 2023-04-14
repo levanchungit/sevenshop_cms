@@ -96,7 +96,10 @@ export default function CMSUserFormEdit(props: Props) {
       }
     }
   })
-  const { handleSubmit, getFieldPropsCustom } = formik
+  const { handleSubmit, getFieldPropsCustom, errors } = formik
+
+  //errros have console.log
+  console.log('Errors onSubmit', errors)
 
   const handleBack = () => {
     router.back()
