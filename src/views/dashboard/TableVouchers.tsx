@@ -97,6 +97,7 @@ const TableVouchers = () => {
       id: row._id,
       name: row.name,
       type: row.type,
+      quantity: row.quantity,
       value: row.value,
       start_date: row.start_date,
       end_date: row.end_date,
@@ -122,6 +123,12 @@ const TableVouchers = () => {
       field: 'type',
       headerName: 'Type',
       width: 200,
+      renderCell: (params: GridRenderCellParams) => <Typography variant='body1'>{params.value}</Typography>
+    },
+    {
+      field: 'quantity',
+      headerName: 'Quantity',
+      width: 100,
       renderCell: (params: GridRenderCellParams) => <Typography variant='body1'>{params.value}</Typography>
     },
     {

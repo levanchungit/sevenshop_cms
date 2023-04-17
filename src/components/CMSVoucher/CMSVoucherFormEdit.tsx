@@ -57,6 +57,7 @@ export default function CMSVoucherFormEdit(props: Props) {
       _id: initialValues._id,
       name: initialValues.name,
       type: initialValues.type,
+      quantity: initialValues.quantity,
       value: initialValues.value,
       start_date: initialValues.start_date,
       end_date: initialValues.end_date
@@ -64,6 +65,7 @@ export default function CMSVoucherFormEdit(props: Props) {
     validationSchema: yup.object().shape({
       name: yup.string().required(),
       type: yup.string().required(),
+      quantity: yup.number().min(0).required(),
       value: yup.number().min(0).required(),
       start_date: yup.string().required(),
       end_date: yup.string().required()
@@ -112,6 +114,19 @@ export default function CMSVoucherFormEdit(props: Props) {
                   </MenuItem>
                 ))}
               </InputField>
+            </Grid>
+
+            <Grid item xs={12} sm={4}>
+              <InputField
+                type='number'
+                inputMode='numeric'
+                label='Quantity'
+                required
+                placeholder='Quantity'
+                fullWidth
+                InputProps={{ inputProps: { min: 0 } }}
+                {...getFieldPropsCustom('quantity')}
+              />
             </Grid>
 
             <Grid item xs={12} sm={4}>

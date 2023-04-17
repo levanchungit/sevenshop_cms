@@ -57,6 +57,7 @@ export default function CMSVoucherFormCreate() {
     initialValues: {
       name: '',
       type: TYPE_VOUCHER.money,
+      quantity: 0,
       value: 0,
       start_date: moment().format('YYYY-MM-DD'),
       end_date: moment().format('YYYY-MM-DD')
@@ -64,6 +65,14 @@ export default function CMSVoucherFormCreate() {
     validationSchema: yup.object().shape({
       name: yup.string().required(),
       type: yup.string().required(),
+      quantity: yup
+        .number()
+        .required()
+        .test('check-value', 'Invalid value', function (value) {
+          const { type } = this.parent
+
+          return validateValue(value, type)
+        }),
       value: yup
         .number()
         .required()
@@ -122,6 +131,19 @@ export default function CMSVoucherFormCreate() {
                   </MenuItem>
                 ))}
               </InputField>
+            </Grid>
+
+            <Grid item xs={12} sm={4}>
+              <InputField
+                type='number'
+                inputMode='numeric'
+                label='Quantity'
+                required
+                placeholder='Quantity'
+                fullWidth
+                InputProps={{ inputProps: { min: 0 } }}
+                {...getFieldPropsCustom('quantity')}
+              />
             </Grid>
 
             <Grid item xs={12} sm={4}>
