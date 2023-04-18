@@ -196,7 +196,8 @@ export const STATUS_ORDER_OPTIONS = [
   { value: STATUS_ORDER.verified, label: 'Verified' },
   { value: STATUS_ORDER.shipping, label: 'Shipping' },
   { value: STATUS_ORDER.completed, label: 'Completed' },
-  { value: STATUS_ORDER.rated, label: 'Rated' },
+
+  // { value: STATUS_ORDER.rated, label: 'Rated' },
   { value: STATUS_ORDER.cancelled, label: 'Cancelled' }
 ]
 
