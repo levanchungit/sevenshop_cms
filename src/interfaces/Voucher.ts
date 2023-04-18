@@ -4,7 +4,7 @@ export interface CmsVoucher {
   _id: string
   name: string
   type: TYPE_VOUCHER
-  code: string
+  code?: string
   quantity: number
   value: number
   start_date: string
@@ -18,7 +18,7 @@ export interface CreateCmsVoucherPayload {
   name: string
   type: string
   quantity: number
-  code: string
+  code?: string
   value: number
   start_date: string
   end_date: string
