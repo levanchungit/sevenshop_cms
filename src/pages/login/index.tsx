@@ -1,5 +1,5 @@
 // ** React Imports
-import { MouseEvent, ReactNode, useState, useContext } from 'react'
+import { MouseEvent, ReactNode, useState, useContext, useEffect } from 'react'
 
 // ** Next Imports
 import Router from 'next/router'
@@ -58,12 +58,31 @@ const LoginPage = () => {
   const [passwordVisible, setPasswordVisible] = useState(true)
   const [formData, setFormData] = useState<SignInPayload>({
     email: '',
-    password: ''
+    password: '',
+    device_id: ''
   })
+
   const [btnLoginLoading, setBtnLoginLoading] = useState(false)
+
+  let token = ''
+  useEffect(() => {
+    if (localStorage.getItem('fcm_token')) {
+      token = localStorage.getItem('fcm_token')
+      console.log('TOKEN', token)
+      setFormData({ ...formData, device_id: token })
+    }
+  }, [token])
 
   const onSubmit = async () => {
     setBtnLoginLoading(true)
+
+    if (typeof window !== 'undefined') {
+      console.log('TOKEN', token)
+      setFormData({ ...formData, device_id: token })
+      console.log(formData)
+    } else {
+      console.log('You are on the server')
+    }
     try {
       const response = await authAPI.login(formData)
       localStorage.setItem('access_token', response.data.access_token)

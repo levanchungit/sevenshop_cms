@@ -32,7 +32,12 @@ function requestPermission() {
           })
             .then(currentToken => {
               if (currentToken) {
-                console.log(currentToken)
+                if (typeof window !== 'undefined') {
+                  localStorage.setItem('fcm_token', currentToken)
+                  console.log('TOKEN FCM', currentToken)
+                } else {
+                  console.log('You are on the server')
+                }
               } else {
                 console.log('No registration token available. Request permission to generate one.')
               }
