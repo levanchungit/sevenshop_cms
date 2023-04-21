@@ -8,6 +8,8 @@ import ViewInArIcon from '@mui/icons-material/ViewInAr'
 import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined'
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined'
 import FormatSizeOutlinedIcon from '@mui/icons-material/FormatSizeOutlined'
+import CircleNotificationsOutlinedIcon from '@mui/icons-material/CircleNotificationsOutlined'
+import LoyaltyOutlinedIcon from '@mui/icons-material/LoyaltyOutlined'
 
 // ** Type import
 import { VerticalNavItemsType } from '@core/layouts/types'
@@ -41,13 +43,18 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'Vouchers',
-      icon: CreditCardOutline,
+      icon: LoyaltyOutlinedIcon,
       path: APP_ROUTES.cmsVouchers
     },
     {
       title: 'Payments',
       icon: CreditCardOutline,
       path: APP_ROUTES.cmsPayments
+    },
+    {
+      title: 'Notifications',
+      icon: CircleNotificationsOutlinedIcon,
+      path: APP_ROUTES.cmsNotifications
     },
     {
       sectionTitle: 'Properties'

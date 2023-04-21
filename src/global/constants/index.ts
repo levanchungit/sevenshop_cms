@@ -52,8 +52,8 @@ export const APP_ROUTES = {
   cmsPaymentEdit: `/payments/[payment_id]/edit`,
 
   //Notification
-  cmsNotifications: `/`,
-  cmsNotificationCreate: `/`,
+  cmsNotifications: `/notifications`,
+  cmsNotificationCreate: `/notifications/create`,
 
   //Chart
   cmsChart: `/chart`,

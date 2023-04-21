@@ -68,6 +68,10 @@ export const API_ROUTES = {
   getCountQuantity: `/dashboard/count_quantity`,
   getHistorySearch: `/dashboard/get_history_search`,
   getProductsBestSellers: `/dashboard/get_products_best_seller`,
-  getFeed: `/dashboard/get_feed`
+  getFeed: `/dashboard/get_feed`,
+
+  //notification
+  getNotifications: `/notification/get`,
+  pushNotifications: `/notification/push_notifications`
 }
 export default API_ROUTES

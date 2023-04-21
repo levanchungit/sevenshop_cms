@@ -29,6 +29,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 // ** Global css styles
 import '../../styles/globals.css'
 import type { Page } from '../types/page'
+import '../utils/firebase'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
