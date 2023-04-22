@@ -5,7 +5,7 @@ export const APP_ROUTES = {
   cmsLogin: `/login`,
   cmsRegister: `/register`,
 
-  cmsDoashboard: `/`,
+  cmsDashboard: `/`,
   cmsCards: `/cards`,
   cmsFormLayouts: `/form-layouts`,
   cmsTables: `/tables`,

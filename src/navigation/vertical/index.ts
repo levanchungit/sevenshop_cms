@@ -19,7 +19,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Dashboard',
       icon: DashboardIcon,
-      path: APP_ROUTES.cmsDoashboard
+      path: APP_ROUTES.cmsDashboard
     },
     {
       title: 'Orders',

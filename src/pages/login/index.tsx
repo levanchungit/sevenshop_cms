@@ -61,34 +61,31 @@ const LoginPage = () => {
     password: '',
     device_id: ''
   })
-
   const [btnLoginLoading, setBtnLoginLoading] = useState(false)
+  const [token, setToken] = useState('')
 
-  let token = ''
   useEffect(() => {
-    if (localStorage.getItem('fcm_token')) {
-      token = localStorage.getItem('fcm_token')
-      console.log('TOKEN', token)
-      setFormData({ ...formData, device_id: token })
+    const storedToken = localStorage.getItem('fcm_token')
+    if (storedToken !== null) {
+      setToken(storedToken)
+      setFormData({ ...formData, device_id: storedToken })
     }
-  }, [token])
+  }, [])
 
   const onSubmit = async () => {
     setBtnLoginLoading(true)
-
     if (typeof window !== 'undefined') {
-      console.log('TOKEN', token)
       setFormData({ ...formData, device_id: token })
-      console.log(formData)
     } else {
       console.log('You are on the server')
     }
+
     try {
       const response = await authAPI.login(formData)
       localStorage.setItem('access_token', response.data.access_token)
       localStorage.setItem('refresh_token', response.data.refresh_token)
       setSnackbarAlert({ message: response.data.message, severity: 'success' })
-      Router.replace(APP_ROUTES.cmsDoashboard)
+      Router.replace(APP_ROUTES.cmsDashboard)
     } catch (e: any) {
       console.log(e)
       setSnackbarAlert({ message: e?.response.data.message, severity: 'error' })
