@@ -1,22 +1,8 @@
 // ** MUI Imports
-import {
-  Box,
-  Card,
-  Typography,
-  Grid,
-  CircularProgress,
-  Button,
-  Link,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
-} from '@mui/material'
-import { EditOutlined, DeleteOutlineOutlined } from '@mui/icons-material'
-import { useState, Fragment, useCallback, useContext } from 'react'
+import { Box, Card, Typography, Grid, CircularProgress, Button, Link } from '@mui/material'
+import { EditOutlined } from '@mui/icons-material'
+import { Fragment, useCallback } from 'react'
 import * as React from 'react'
-import { categoriesAPI } from 'modules'
 import {
   GridRenderCellParams,
   GridRowParams,
@@ -29,7 +15,6 @@ import {
   GridToolbarQuickFilter
 } from '@mui/x-data-grid'
 import { formatDate } from 'utils/currencyFormatter'
-import { SettingsContext } from '@core/context/settingsContext'
 import { useRouter } from 'next/router'
 import { APP_ROUTES } from 'global/constants/index'
 import { CmsCategory } from 'interfaces/Category'
@@ -60,28 +45,29 @@ const CustomToolbar = () => {
 
 const TableProducts = () => {
   const router = useRouter()
-  const { setSnackbarAlert } = useContext(SettingsContext)
+
+  // const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
-  const { cms_categories, error: cms_err_categories, mutate } = useCMSGetCategories()
+  const { cms_categories, error: cms_err_categories } = useCMSGetCategories()
 
   //STATE
-  const [dialogConfirm, setDialogConfirm] = useState(false)
-  const [idCategory, setIdCategory] = useState<GridRowId>('')
+  // const [dialogConfirm, setDialogConfirm] = useState(false)
+  // const [idCategory, setIdCategory] = useState<GridRowId>('')
 
-  //HANDLER
-  const handleOpenDialogConfirm = () => {
-    setDialogConfirm(true)
-  }
-  const handleCloseDialogConfirm = () => {
-    setDialogConfirm(false)
-  }
-  const handleDeleteCategory = async () => {
-    await categoriesAPI.deleteCategory(idCategory as string)
-    mutate()
-    setSnackbarAlert({ message: 'Delete Category Successfully', severity: 'success' })
-    handleCloseDialogConfirm()
-  }
+  // //HANDLER
+  // const handleOpenDialogConfirm = () => {
+  //   setDialogConfirm(true)
+  // }
+  // const handleCloseDialogConfirm = () => {
+  //   setDialogConfirm(false)
+  // }
+  // const handleDeleteCategory = async () => {
+  //   await categoriesAPI.deleteCategory(idCategory as string)
+  //   mutate()
+  //   setSnackbarAlert({ message: 'Delete Category Successfully', severity: 'success' })
+  //   handleCloseDialogConfirm()
+  // }
 
   const handleCreate = () => router.push({ pathname: APP_ROUTES.cmsCategoryCreate })
   const handleEdit = useCallback(
@@ -156,15 +142,6 @@ const TableProducts = () => {
           icon={<EditOutlined />}
           onClick={handleEdit(params.id)}
           label='Edit'
-        />,
-        <GridActionsCellItem
-          color='primary'
-          key={params.id}
-          icon={<DeleteOutlineOutlined />}
-          onClick={() => {
-            handleOpenDialogConfirm(), setIdCategory(params.id)
-          }}
-          label='Delete'
         />
       ]
     }
@@ -199,7 +176,7 @@ const TableProducts = () => {
         />
       </Card>
 
-      <Dialog
+      {/* <Dialog
         open={dialogConfirm}
         onClose={handleCloseDialogConfirm}
         aria-labelledby='alert-dialog-title'
@@ -215,7 +192,7 @@ const TableProducts = () => {
             Agree
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </>
   )
 }

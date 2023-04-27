@@ -1,22 +1,8 @@
 // ** MUI Imports
-import {
-  Box,
-  Card,
-  Typography,
-  Grid,
-  CircularProgress,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Avatar
-} from '@mui/material'
-import { EditOutlined, DeleteOutlineOutlined } from '@mui/icons-material'
-import { useState, Fragment, useCallback, useContext } from 'react'
+import { Box, Card, Typography, Grid, CircularProgress, Button, Avatar } from '@mui/material'
+import { EditOutlined } from '@mui/icons-material'
+import { Fragment, useCallback, useContext } from 'react'
 import * as React from 'react'
-import { usersAPI } from 'modules'
 import {
   GridRenderCellParams,
   GridRowParams,
@@ -63,25 +49,25 @@ const TableUsers = () => {
   const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
-  const { cms_users, error, mutate } = useCMSGetUsers()
+  const { cms_users, error } = useCMSGetUsers()
 
-  //STATE
-  const [dialogConfirm, setDialogConfirm] = useState(false)
-  const [idUser, setIdUser] = useState<GridRowId>('')
+  // //STATE
+  // const [dialogConfirm, setDialogConfirm] = useState(false)
+  // const [idUser, setIdUser] = useState<GridRowId>('')
 
-  //HANDLER
-  const handleOpenDialogConfirm = () => {
-    setDialogConfirm(true)
-  }
-  const handleCloseDialogConfirm = () => {
-    setDialogConfirm(false)
-  }
-  const handleDelete = async () => {
-    await usersAPI.deleteUser(idUser as string)
-    mutate()
-    setSnackbarAlert({ message: 'Delete User Successfully', severity: 'success' })
-    handleCloseDialogConfirm()
-  }
+  // //HANDLER
+  // const handleOpenDialogConfirm = () => {
+  //   setDialogConfirm(true)
+  // }
+  // const handleCloseDialogConfirm = () => {
+  //   setDialogConfirm(false)
+  // }
+  // const handleDelete = async () => {
+  //   await usersAPI.deleteUser(idUser as string)
+  //   mutate()
+  //   setSnackbarAlert({ message: 'Delete User Successfully', severity: 'success' })
+  //   handleCloseDialogConfirm()
+  // }
 
   const handleCreate = () => setSnackbarAlert({ message: 'Tính năng đang cập nhật', severity: 'success' })
   const handleEdit = useCallback(
@@ -204,15 +190,6 @@ const TableUsers = () => {
           icon={<EditOutlined />}
           onClick={handleEdit(params.id)}
           label='Edit'
-        />,
-        <GridActionsCellItem
-          color='primary'
-          key={params.id}
-          icon={<DeleteOutlineOutlined />}
-          onClick={() => {
-            handleOpenDialogConfirm(), setIdUser(params.id)
-          }}
-          label='Delete'
         />
       ]
     }
@@ -247,7 +224,7 @@ const TableUsers = () => {
         />
       </Card>
 
-      <Dialog
+      {/* <Dialog
         open={dialogConfirm}
         onClose={handleCloseDialogConfirm}
         aria-labelledby='alert-dialog-title'
@@ -263,7 +240,7 @@ const TableUsers = () => {
             Agree
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </>
   )
 }

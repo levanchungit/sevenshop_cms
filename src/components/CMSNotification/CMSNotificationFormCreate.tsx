@@ -43,16 +43,12 @@ export default function CMSNotificationFormCreate() {
     initialValues: {
       title: '',
       body: '',
-      image: '',
-      to_user_id: [],
-      tokens: []
+      image: ''
     },
     validationSchema: yup.object().shape({
       title: yup.string().required('Title is required'),
       body: yup.string().required('Body is required'),
-      image: yup.string().required('Image is required'),
-      to_user_id: yup.array().required('To user id is required'),
-      tokens: yup.array().required('Tokens is required')
+      image: yup.string().required('Image is required')
     }),
     onSubmit: async (data, actions) => {
       console.log('onSubmit', data)
@@ -101,7 +97,7 @@ export default function CMSNotificationFormCreate() {
       const secure_urls = await uploadImages(formData)
       console.info('secure_urls', secure_urls[0])
       setImages(secure_urls[0])
-      formik.setFieldValue('images', secure_urls[0])
+      formik.setFieldValue('image', secure_urls[0])
     }
   }
 
@@ -130,7 +126,7 @@ export default function CMSNotificationFormCreate() {
                   {isLoadingImages ? (
                     <CircularProgress />
                   ) : (
-                    images.map((img, index) => <ImgStyled key={index.toString()} src={img} alt='Profile Pic' />)
+                    <ImgStyled key={images.toString()} src={images.toString() || ''} alt='Profile Pic' />
                   )}
                 </Box>
                 <Box width={'100%'} mt={2} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>

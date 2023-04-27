@@ -1,23 +1,8 @@
 // ** MUI Imports
-import {
-  Box,
-  Card,
-  Typography,
-  Avatar,
-  Grid,
-  CircularProgress,
-  Button,
-  Link,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
-} from '@mui/material'
-import { EditOutlined, DeleteOutlineOutlined } from '@mui/icons-material'
-import { useState, Fragment, useCallback, useContext } from 'react'
+import { Box, Card, Typography, Avatar, Grid, CircularProgress, Button, Link } from '@mui/material'
+import { EditOutlined } from '@mui/icons-material'
+import { Fragment, useCallback } from 'react'
 import * as React from 'react'
-import { productsAPI } from 'modules'
 import {
   GridRenderCellParams,
   GridRowParams,
@@ -30,7 +15,6 @@ import {
   GridToolbarQuickFilter
 } from '@mui/x-data-grid'
 import { currencyFormatterVND, formatDate } from 'utils/currencyFormatter'
-import { SettingsContext } from '@core/context/settingsContext'
 import { useRouter } from 'next/router'
 import { APP_ROUTES, STATUS_PRODUCT } from 'global/constants/index'
 import useCMSGetProducts from 'hook/product/useCMSGetProducts'
@@ -67,31 +51,32 @@ const CustomToolbar = () => {
 
 const TableProducts = () => {
   const router = useRouter()
-  const { setSnackbarAlert } = useContext(SettingsContext)
+
+  // const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
-  const { cms_products, cms_err_products, cms_mutate_product } = useCMSGetProducts()
+  const { cms_products, cms_err_products } = useCMSGetProducts()
   const { cms_categories, error: cms_err_categories } = useCMSGetCategories()
   const { cms_colors, error: cms_err_colors } = useCMSGetColors()
   const { cms_sizes, error: cms_err_sizes } = useCMSGetSizes()
 
   //STATE
-  const [dialogConfirm, setDialogConfirm] = useState(false)
-  const [idProduct, setIdProduct] = useState<GridRowId>('')
+  // const [dialogConfirm, setDialogConfirm] = useState(false)
+  // const [idProduct, setIdProduct] = useState<GridRowId>('')
 
-  //HANDLER
-  const handleOpenDialogConfirm = () => {
-    setDialogConfirm(true)
-  }
-  const handleCloseDialogConfirm = () => {
-    setDialogConfirm(false)
-  }
-  const handleDeleteProduct = async () => {
-    await productsAPI.deleteProduct(idProduct as string)
-    cms_mutate_product()
-    setSnackbarAlert({ message: 'Delete Product Successfully', severity: 'success' })
-    handleCloseDialogConfirm()
-  }
+  // //HANDLER
+  // const handleOpenDialogConfirm = () => {
+  //   setDialogConfirm(true)
+  // }
+  // const handleCloseDialogConfirm = () => {
+  //   setDialogConfirm(false)
+  // }
+  // const handleDeleteProduct = async () => {
+  //   await productsAPI.deleteProduct(idProduct as string)
+  //   cms_mutate_product()
+  //   setSnackbarAlert({ message: 'Delete Product Successfully', severity: 'success' })
+  //   handleCloseDialogConfirm()
+  // }
 
   const handleCreate = () => router.push(APP_ROUTES.cmsProductCreate)
   const handleEdit = useCallback(
@@ -297,15 +282,6 @@ const TableProducts = () => {
           icon={<EditOutlined />}
           onClick={handleEdit(params.id)}
           label='Edit'
-        />,
-        <GridActionsCellItem
-          color='primary'
-          key={params.id}
-          icon={<DeleteOutlineOutlined />}
-          onClick={() => {
-            handleOpenDialogConfirm(), setIdProduct(params.id)
-          }}
-          label='Delete'
         />
       ]
     }
@@ -340,7 +316,7 @@ const TableProducts = () => {
         />
       </Card>
 
-      <Dialog
+      {/* <Dialog
         open={dialogConfirm}
         onClose={handleCloseDialogConfirm}
         aria-labelledby='alert-dialog-title'
@@ -356,7 +332,7 @@ const TableProducts = () => {
             Agree
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </>
   )
 }

@@ -1,21 +1,8 @@
 // ** MUI Imports
-import {
-  Box,
-  Card,
-  Typography,
-  Grid,
-  CircularProgress,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
-} from '@mui/material'
-import { EditOutlined, DeleteOutlineOutlined } from '@mui/icons-material'
-import { useState, Fragment, useCallback, useContext } from 'react'
+import { Box, Card, Typography, Grid, CircularProgress, Button } from '@mui/material'
+import { EditOutlined } from '@mui/icons-material'
+import { Fragment, useCallback } from 'react'
 import * as React from 'react'
-import { colorsAPI } from 'modules'
 import {
   GridRenderCellParams,
   GridRowParams,
@@ -28,7 +15,6 @@ import {
   GridToolbarQuickFilter
 } from '@mui/x-data-grid'
 import { formatDate } from 'utils/currencyFormatter'
-import { SettingsContext } from '@core/context/settingsContext'
 import { useRouter } from 'next/router'
 import { APP_ROUTES } from 'global/constants/index'
 import { CmsColor } from 'interfaces/Color'
@@ -59,28 +45,29 @@ const CustomToolbar = () => {
 
 const TableColors = () => {
   const router = useRouter()
-  const { setSnackbarAlert } = useContext(SettingsContext)
+
+  // const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
-  const { cms_colors, error, mutate } = useCMSGetColors()
+  const { cms_colors, error } = useCMSGetColors()
 
   //STATE
-  const [dialogConfirm, setDialogConfirm] = useState(false)
-  const [idColor, setIdColor] = useState<GridRowId>('')
+  // const [dialogConfirm, setDialogConfirm] = useState(false)
+  // const [idColor, setIdColor] = useState<GridRowId>('')
 
-  //HANDLER
-  const handleOpenDialogConfirm = () => {
-    setDialogConfirm(true)
-  }
-  const handleCloseDialogConfirm = () => {
-    setDialogConfirm(false)
-  }
-  const handleDelete = async () => {
-    await colorsAPI.deleteColor(idColor as string)
-    mutate()
-    setSnackbarAlert({ message: 'Delete Color Successfully', severity: 'success' })
-    handleCloseDialogConfirm()
-  }
+  // //HANDLER
+  // const handleOpenDialogConfirm = () => {
+  //   setDialogConfirm(true)
+  // }
+  // const handleCloseDialogConfirm = () => {
+  //   setDialogConfirm(false)
+  // }
+  // const handleDelete = async () => {
+  //   await colorsAPI.deleteColor(idColor as string)
+  //   mutate()
+  //   setSnackbarAlert({ message: 'Delete Color Successfully', severity: 'success' })
+  //   handleCloseDialogConfirm()
+  // }
 
   const handleCreate = () => router.push(APP_ROUTES.cmsColorCreate)
   const handleEdit = useCallback(
@@ -159,15 +146,6 @@ const TableColors = () => {
           icon={<EditOutlined />}
           onClick={handleEdit(params.id)}
           label='Edit'
-        />,
-        <GridActionsCellItem
-          color='primary'
-          key={params.id}
-          icon={<DeleteOutlineOutlined />}
-          onClick={() => {
-            handleOpenDialogConfirm(), setIdColor(params.id)
-          }}
-          label='Delete'
         />
       ]
     }
@@ -202,7 +180,7 @@ const TableColors = () => {
         />
       </Card>
 
-      <Dialog
+      {/* <Dialog
         open={dialogConfirm}
         onClose={handleCloseDialogConfirm}
         aria-labelledby='alert-dialog-title'
@@ -218,7 +196,7 @@ const TableColors = () => {
             Agree
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </>
   )
 }

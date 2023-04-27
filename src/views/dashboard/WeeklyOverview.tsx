@@ -76,7 +76,7 @@ const WeeklyOverview = (props: Props) => {
       setSeries([
         {
           name: 'Doanh thu',
-          data: revenue?.results.map((item: { total: number }) => item.total)
+          data: revenue?.results.map((item: { total: number }) => item.total.toFixed(5))
         }
       ])
     }

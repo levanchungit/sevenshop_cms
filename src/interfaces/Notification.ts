@@ -18,6 +18,7 @@ export interface CreateCmsNotificationPayload {
   title: string
   body: string
   image: string
-  to_user_id: string[]
-  tokens: string[]
+
+  // to_user_id: string[]
+  // tokens: string[]
 }

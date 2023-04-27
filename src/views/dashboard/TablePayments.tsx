@@ -1,21 +1,18 @@
 // ** MUI Imports
 import { Box, Card, Typography, CircularProgress } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
-import { Fragment, useCallback } from 'react'
+import { Fragment } from 'react'
 import {} from 'modules'
 import {
   GridRenderCellParams,
   GridRowParams,
   DataGrid,
   GridActionsCellItem,
-  GridRowId,
   GridColDef,
   GridToolbarContainer,
   GridToolbarExport,
   GridToolbarQuickFilter
 } from '@mui/x-data-grid'
-import { useRouter } from 'next/router'
-import { APP_ROUTES } from 'global/constants/index'
 import { CmsPayment } from 'interfaces/Payment'
 import useCMSGetPayments from 'hook/payment/useCMSGetPayments'
 import moment from 'moment'
@@ -44,19 +41,10 @@ const CustomToolbar = () => {
 }
 
 const TablePayments = () => {
-  const router = useRouter()
-
   // const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
   const { cms_payments, error } = useCMSGetPayments()
-
-  const handleEdit = useCallback(
-    (_id: GridRowId) => () => {
-      router.push({ pathname: APP_ROUTES.cmsPaymentEdit, query: { id: _id } })
-    },
-    [router]
-  )
 
   if (error) return <div>Failed to load</div>
   if (!cms_payments) return <CircularProgress />
@@ -130,7 +118,7 @@ const TablePayments = () => {
           color='primary'
           key={params.id}
           icon={<InfoIcon />}
-          onClick={handleEdit(params.id)}
+          onClick={() => console.log('INFO PAYMENT')}
           label='Info'
         />
       ]

@@ -72,6 +72,6 @@ export const API_ROUTES = {
 
   //notification
   getNotifications: `/notification/get`,
-  pushNotifications: `/notification/push_notifications`
+  pushNotifications: `/notification/push_notifications_all`
 }
 export default API_ROUTES

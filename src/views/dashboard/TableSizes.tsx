@@ -1,21 +1,8 @@
 // ** MUI Imports
-import {
-  Box,
-  Card,
-  Typography,
-  Grid,
-  CircularProgress,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
-} from '@mui/material'
-import { EditOutlined, DeleteOutlineOutlined } from '@mui/icons-material'
-import { useState, Fragment, useCallback, useContext } from 'react'
+import { Box, Card, Typography, Grid, CircularProgress, Button } from '@mui/material'
+import { EditOutlined } from '@mui/icons-material'
+import { Fragment, useCallback } from 'react'
 import * as React from 'react'
-import { sizesAPI } from 'modules'
 import {
   GridRenderCellParams,
   GridRowParams,
@@ -28,7 +15,6 @@ import {
   GridToolbarQuickFilter
 } from '@mui/x-data-grid'
 import { formatDate } from 'utils/currencyFormatter'
-import { SettingsContext } from '@core/context/settingsContext'
 import { useRouter } from 'next/router'
 import { APP_ROUTES } from 'global/constants/index'
 import { CmsSize } from 'interfaces/Size'
@@ -59,28 +45,29 @@ const CustomToolbar = () => {
 
 const TableSizes = () => {
   const router = useRouter()
-  const { setSnackbarAlert } = useContext(SettingsContext)
+
+  // const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
-  const { cms_sizes, error, mutate } = useCMSGetSizes()
+  const { cms_sizes, error } = useCMSGetSizes()
 
   //STATE
-  const [dialogConfirm, setDialogConfirm] = useState(false)
-  const [idSize, setIdSize] = useState<GridRowId>('')
+  // const [dialogConfirm, setDialogConfirm] = useState(false)
+  // const [idSize, setIdSize] = useState<GridRowId>('')
 
-  //HANDLER
-  const handleOpenDialogConfirm = () => {
-    setDialogConfirm(true)
-  }
-  const handleCloseDialogConfirm = () => {
-    setDialogConfirm(false)
-  }
-  const handleDelete = async () => {
-    await sizesAPI.deleteSize(idSize as string)
-    mutate()
-    setSnackbarAlert({ message: 'Delete Size Successfully', severity: 'success' })
-    handleCloseDialogConfirm()
-  }
+  // //HANDLER
+  // const handleOpenDialogConfirm = () => {
+  //   setDialogConfirm(true)
+  // }
+  // const handleCloseDialogConfirm = () => {
+  //   setDialogConfirm(false)
+  // }
+  // const handleDelete = async () => {
+  //   await sizesAPI.deleteSize(idSize as string)
+  //   mutate()
+  //   setSnackbarAlert({ message: 'Delete Size Successfully', severity: 'success' })
+  //   handleCloseDialogConfirm()
+  // }
 
   const handleCreate = () => router.push(APP_ROUTES.cmsSizeCreate)
   const handleEdit = useCallback(
@@ -141,15 +128,6 @@ const TableSizes = () => {
           icon={<EditOutlined />}
           onClick={handleEdit(params.id)}
           label='Edit'
-        />,
-        <GridActionsCellItem
-          color='primary'
-          key={params.id}
-          icon={<DeleteOutlineOutlined />}
-          onClick={() => {
-            handleOpenDialogConfirm(), setIdSize(params.id)
-          }}
-          label='Delete'
         />
       ]
     }
@@ -184,7 +162,7 @@ const TableSizes = () => {
         />
       </Card>
 
-      <Dialog
+      {/* <Dialog
         open={dialogConfirm}
         onClose={handleCloseDialogConfirm}
         aria-labelledby='alert-dialog-title'
@@ -200,7 +178,7 @@ const TableSizes = () => {
             Agree
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </>
   )
 }

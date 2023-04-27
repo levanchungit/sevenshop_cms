@@ -1,20 +1,7 @@
 // ** MUI Imports
-import {
-  Box,
-  Card,
-  Typography,
-  Grid,
-  CircularProgress,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
-} from '@mui/material'
-import { EditOutlined, DeleteOutlineOutlined } from '@mui/icons-material'
-import { useState, Fragment, useCallback, useContext } from 'react'
-import { vouchersAPI } from 'modules'
+import { Box, Card, Typography, Grid, CircularProgress, Button } from '@mui/material'
+import { EditOutlined } from '@mui/icons-material'
+import { Fragment, useCallback } from 'react'
 import {
   GridRenderCellParams,
   GridRowParams,
@@ -27,7 +14,6 @@ import {
   GridToolbarQuickFilter
 } from '@mui/x-data-grid'
 import { currencyFormatterVND, formatDate } from 'utils/currencyFormatter'
-import { SettingsContext } from '@core/context/settingsContext'
 import { useRouter } from 'next/router'
 import { APP_ROUTES, TYPE_VOUCHER } from 'global/constants/index'
 import { CmsVoucher } from 'interfaces/Voucher'
@@ -58,28 +44,29 @@ const CustomToolbar = () => {
 
 const TableVouchers = () => {
   const router = useRouter()
-  const { setSnackbarAlert } = useContext(SettingsContext)
+
+  // const { setSnackbarAlert } = useContext(SettingsContext)
 
   //SWR
-  const { cms_vouchers, error, mutate } = useCMSGetVouchers()
+  const { cms_vouchers, error } = useCMSGetVouchers()
 
   //STATE
-  const [dialogConfirm, setDialogConfirm] = useState(false)
-  const [idVoucher, setIdVoucher] = useState<GridRowId>('')
+  // const [dialogConfirm, setDialogConfirm] = useState(false)
+  // const [idVoucher, setIdVoucher] = useState<GridRowId>('')
 
-  //HANDLER
-  const handleOpenDialogConfirm = () => {
-    setDialogConfirm(true)
-  }
-  const handleCloseDialogConfirm = () => {
-    setDialogConfirm(false)
-  }
-  const handleDelete = async () => {
-    await vouchersAPI.deleteVoucher(idVoucher as string)
-    mutate()
-    setSnackbarAlert({ message: 'Delete Voucher Successfully', severity: 'success' })
-    handleCloseDialogConfirm()
-  }
+  // //HANDLER
+  // const handleOpenDialogConfirm = () => {
+  //   setDialogConfirm(true)
+  // }
+  // const handleCloseDialogConfirm = () => {
+  //   setDialogConfirm(false)
+  // }
+  // const handleDelete = async () => {
+  //   await vouchersAPI.deleteVoucher(idVoucher as string)
+  //   mutate()
+  //   setSnackbarAlert({ message: 'Delete Voucher Successfully', severity: 'success' })
+  //   handleCloseDialogConfirm()
+  // }
 
   const handleCreate = () => router.push(APP_ROUTES.cmsVoucherCreate)
   const handleEdit = useCallback(
@@ -185,15 +172,6 @@ const TableVouchers = () => {
           icon={<EditOutlined />}
           onClick={handleEdit(params.id)}
           label='Edit'
-        />,
-        <GridActionsCellItem
-          color='primary'
-          key={params.id}
-          icon={<DeleteOutlineOutlined />}
-          onClick={() => {
-            handleOpenDialogConfirm(), setIdVoucher(params.id)
-          }}
-          label='Delete'
         />
       ]
     }
@@ -227,24 +205,6 @@ const TableVouchers = () => {
           pageSizeOptions={[10, 20, 30]}
         />
       </Card>
-
-      <Dialog
-        open={dialogConfirm}
-        onClose={handleCloseDialogConfirm}
-        aria-labelledby='alert-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='alert-dialog-title'>{'INFO'}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id='alert-dialog-description'>Do you want remove ?</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialogConfirm}>Disagree</Button>
-          <Button onClick={handleDelete} autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   )
 }
