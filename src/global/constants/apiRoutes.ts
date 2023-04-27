@@ -8,8 +8,8 @@ export const API_ROUTES = {
   me: `/auth/me`,
 
   // product
-  getProducts: `/products`,
-  getProductDetail: `/products/`,
+  getProducts: `/cms/products`,
+  getProductDetail: `/cms/products/`,
   createProduct: `/products/`,
   updateProduct: `/products/`,
   deleteProduct: (id: string) => `/products/${id}`,
